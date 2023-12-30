@@ -355,613 +355,511 @@ class _create_orderState extends State<create_order> {
             height: 60,
             child: HeaderWidget(60),
           ),
-          Padding(
-            padding: const EdgeInsets.all(50),
-            child: Form(
-                key: formState5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Recipient Name',
-                        style: TextStyle(fontSize: 16),
+          Center(
+            child: Container(
+              width: 400,
+              child: Form(
+                  key: formState5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Recipient Name',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-                    ),
-                    Visibility(
-                      visible: true,
-                      child: SearchField(
-                        controller: _textControllerName,
-                        onSearchTextChanged: (query) {
-                          rec_userName = '';
-                          if (!query.isEmpty) {
-                            final filter = suggestions
-                                .where((element) => element['Fname']
+                      Visibility(
+                        visible: true,
+                        child: SearchField(
+                          controller: _textControllerName,
+                          onSearchTextChanged: (query) {
+                            rec_userName = '';
+                            if (!query.isEmpty) {
+                              final filter = suggestions
+                                  .where((element) => element['Fname']
+                                      .toLowerCase()
+                                      .startsWith(query.toLowerCase()))
+                                  .toList();
+                              return filter
+                                  .map((e) => SearchFieldListItem<String>(
+                                      e['userName'].toString(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: ListTile(
+                                          title: Text(e['Fname'] +
+                                              " " +
+                                              e['Lname'].toString()),
+                                          trailing:
+                                              Text(e['userName'].toString()),
+                                        ),
+                                      )))
+                                  .toList();
+                            }
+                            return null;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty)
+                              return "please enter the recipient's name";
+                            return null;
+                          },
+                          onSaved: (newValue) {
+                            selectedName = newValue.toString();
+                            print(newValue);
+                          },
+                          scrollbarDecoration: ScrollbarDecoration(),
+                          searchInputDecoration: theme_helper().text_form_style(
+                              "The recipient's name",
+                              "Enter The recipient's name",
+                              Icons.person_outline_sharp),
+                          itemHeight: 50,
+                          suggestions: []
+                              .map((e) => SearchFieldListItem<String>(e,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0),
+                                    child:
+                                        Text(e, style: TextStyle(fontSize: 16)),
+                                  )))
+                              .toList(),
+                          suggestionState: Suggestion.hidden,
+                          focusNode: focus,
+                          onSuggestionTap: (SearchFieldListItem<String> x) {
+                            setState(() {
+                              focus.unfocus();
+                              selectedName = x.searchKey;
+                              print(selectedName);
+                              final filter = suggestions.where((element) {
+                                return element['userName']
                                     .toLowerCase()
-                                    .startsWith(query.toLowerCase()))
-                                .toList();
-                            return filter
-                                .map((e) => SearchFieldListItem<String>(
-                                    e['userName'].toString(),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(0.0),
-                                      child: ListTile(
-                                        title: Text(e['Fname'] +
-                                            " " +
-                                            e['Lname'].toString()),
-                                        trailing:
-                                            Text(e['userName'].toString()),
-                                      ),
-                                    )))
-                                .toList();
-                          }
-                          return null;
-                        },
+                                    .startsWith(selectedName.toLowerCase());
+                              }).toList();
+                              rec_name =
+                                  filter[0]['Fname'] + " " + filter[0]['Lname'];
+                              rec_phone =
+                                  "0" + filter[0]['phoneNumber'].toString();
+                              rec_email = filter[0]['email'];
+                              selectedName = rec_name.toString();
+                              _textControllerphone.text = rec_phone.toString();
+                              _textControllerName.text = rec_name.toString();
+                              _textControllerEmail.text = rec_email.toString();
+                              rec_userName = filter[0]['userName'];
+                              print(rec_userName);
+                            });
+                          },
+                        ),
+                      ),
+                      // SizedBox(height: 10),
+                      // TextFormField(
+                      //   controller: _textControllerName,
+                      //   decoration: theme_helper().text_form_style(
+                      //       "The recipient's Username",
+                      //       "Enter The recipient's Username",
+                      //       Icons.abc),
+                      //   validator: (value) {
+                      //     if (value!.isEmpty) return "The recipient's Username";
+                      //     return null;
+                      //   },
+                      //   onSaved: (newValue) {
+                      //     rec_name = newValue;
+                      //   },
+                      // ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Recipient Phone',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      TextFormField(
+                        controller: _textControllerphone,
+                        //initialValue: widget.phone != '' ? widget.phone : null,
+                        keyboardType: TextInputType.phone,
+                        decoration: theme_helper().text_form_style(
+                            "The recipient's Phone",
+                            "Enter The recipient's phone",
+                            Icons.phone),
                         validator: (value) {
-                          if (value!.isEmpty)
-                            return "please enter the recipient's name";
+                          String res = isValidPhone(value.toString());
+                          if (!res.isEmpty) {
+                            return res;
+                          }
                           return null;
                         },
                         onSaved: (newValue) {
-                          selectedName = newValue.toString();
-                          print(newValue);
-                        },
-                        scrollbarDecoration: ScrollbarDecoration(),
-                        searchInputDecoration: theme_helper().text_form_style(
-                            "The recipient's name",
-                            "Enter The recipient's name",
-                            Icons.person_outline_sharp),
-                        itemHeight: 50,
-                        suggestions: []
-                            .map((e) => SearchFieldListItem<String>(e,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 4.0),
-                                  child:
-                                      Text(e, style: TextStyle(fontSize: 16)),
-                                )))
-                            .toList(),
-                        suggestionState: Suggestion.hidden,
-                        focusNode: focus,
-                        onSuggestionTap: (SearchFieldListItem<String> x) {
-                          setState(() {
-                            focus.unfocus();
-                            selectedName = x.searchKey;
-                            print(selectedName);
-                            final filter = suggestions.where((element) {
-                              return element['userName']
-                                  .toLowerCase()
-                                  .startsWith(selectedName.toLowerCase());
-                            }).toList();
-                            rec_name =
-                                filter[0]['Fname'] + " " + filter[0]['Lname'];
-                            rec_phone =
-                                "0" + filter[0]['phoneNumber'].toString();
-                            rec_email = filter[0]['email'];
-                            selectedName = rec_name.toString();
-                            _textControllerphone.text = rec_phone.toString();
-                            _textControllerName.text = rec_name.toString();
-                            _textControllerEmail.text = rec_email.toString();
-                            rec_userName = filter[0]['userName'];
-                            print(rec_userName);
-                          });
+                          rec_phone = newValue;
                         },
                       ),
-                    ),
-                    // SizedBox(height: 10),
-                    // TextFormField(
-                    //   controller: _textControllerName,
-                    //   decoration: theme_helper().text_form_style(
-                    //       "The recipient's Username",
-                    //       "Enter The recipient's Username",
-                    //       Icons.abc),
-                    //   validator: (value) {
-                    //     if (value!.isEmpty) return "The recipient's Username";
-                    //     return null;
-                    //   },
-                    //   onSaved: (newValue) {
-                    //     rec_name = newValue;
-                    //   },
-                    // ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Recipient Phone',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    TextFormField(
-                      controller: _textControllerphone,
-                      //initialValue: widget.phone != '' ? widget.phone : null,
-                      keyboardType: TextInputType.phone,
-                      decoration: theme_helper().text_form_style(
-                          "The recipient's Phone",
-                          "Enter The recipient's phone",
-                          Icons.phone),
-                      validator: (value) {
-                        String res = isValidPhone(value.toString());
-                        if (!res.isEmpty) {
-                          return res;
-                        }
-                        return null;
-                      },
-                      onSaved: (newValue) {
-                        rec_phone = newValue;
-                      },
-                    ),
-                    Visibility(
-                      visible: true, //accountSelectedValue == "Doesn't have",
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Recipient Email',
-                              style: TextStyle(fontSize: 16),
+                      Visibility(
+                        visible: true, //accountSelectedValue == "Doesn't have",
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Recipient Email',
+                                style: TextStyle(fontSize: 16),
+                              ),
                             ),
+                            TextFormField(
+                              controller: _textControllerEmail,
+                              //initialValue: rec_email,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: theme_helper().text_form_style(
+                                  "The recipient's email",
+                                  "Enter The recipient's email",
+                                  Icons.email),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Please enter recipient's email";
+                                }
+                                if (!isValidEmail(value)) {
+                                  return 'Please enter a valid email address';
+                                }
+                                return null;
+                              },
+                              onSaved: (newValue) {
+                                rec_email = newValue;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Package Price',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      TextFormField(
+                        initialValue: package_price,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                        ],
+                        decoration: theme_helper().text_form_style(
+                            "package price(or enter 0 if payment done)",
+                            "Enter The package price",
+                            Icons.price_change),
+                        validator: (value) {
+                          if (value!.isEmpty) return "The package price";
+                          return null;
+                        },
+                        onSaved: (newValue) {
+                          package_price = newValue;
+                        },
+                      ),
+                      SizedBox(height: 20),
+
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 10,
                           ),
-                          TextFormField(
-                            controller: _textControllerEmail,
-                            //initialValue: rec_email,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: theme_helper().text_form_style(
-                                "The recipient's email",
-                                "Enter The recipient's email",
-                                Icons.email),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please enter recipient's email";
-                              }
-                              if (!isValidEmail(value)) {
-                                return 'Please enter a valid email address';
-                              }
-                              return null;
-                            },
-                            onSaved: (newValue) {
-                              rec_email = newValue;
-                            },
+                          Text(
+                            'Who will pay the delivery costs?',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Package Price',
-                        style: TextStyle(fontSize: 16),
+                      Row(
+                        children: [
+                          Radio(
+                            activeColor: primarycolor,
+                            value: "The recipient",
+                            groupValue: paySelectedValue,
+                            onChanged: (value) {
+                              setState(() {
+                                paySelectedValue = value.toString();
+                              });
+                            },
+                          ),
+                          Text("The recipient"),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Radio(
+                            activeColor: primarycolor,
+                            value: "The sender",
+                            groupValue: paySelectedValue,
+                            onChanged: (value) {
+                              setState(() {
+                                paySelectedValue = value.toString();
+                              });
+                            },
+                          ),
+                          Text("I'll pay"),
+                        ],
                       ),
-                    ),
-                    TextFormField(
-                      initialValue: package_price,
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-                      ],
-                      decoration: theme_helper().text_form_style(
-                          "package price(or enter 0 if payment done)",
-                          "Enter The package price",
-                          Icons.price_change),
-                      validator: (value) {
-                        if (value!.isEmpty) return "The package price";
-                        return null;
-                      },
-                      onSaved: (newValue) {
-                        package_price = newValue;
-                      },
-                    ),
-                    SizedBox(height: 20),
-
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Who will pay the delivery costs?',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Radio(
-                          activeColor: primarycolor,
-                          value: "The recipient",
-                          groupValue: paySelectedValue,
-                          onChanged: (value) {
-                            setState(() {
-                              paySelectedValue = value.toString();
-                            });
-                          },
-                        ),
-                        Text("The recipient"),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Radio(
-                          activeColor: primarycolor,
-                          value: "The sender",
-                          groupValue: paySelectedValue,
-                          onChanged: (value) {
-                            setState(() {
-                              paySelectedValue = value.toString();
-                            });
-                          },
-                        ),
-                        Text("I'll pay"),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'What are you shipping ?',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Radio(
-                          activeColor: primarycolor,
-                          value: "Document",
-                          groupValue: shippingType,
-                          onChanged: (value) {
-                            setState(() {
-                              shippingType = value.toString();
-                              calaulateTotalPrice();
-                            });
-                          },
-                        ),
-                        Text('Document'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Radio(
-                          activeColor: primarycolor,
-                          value: "Package",
-                          groupValue: shippingType,
-                          onChanged: (value) {
-                            setState(() {
-                              shippingType = value.toString();
-                            });
-                          },
-                        ),
-                        Text('Package'),
-                      ],
-                    ),
-                    Visibility(
-                      visible: shippingType == "Package",
-                      child: Container(
-                        height: 200.0,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: items.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedIdx = index;
-                                  calaulateTotalPrice();
-                                });
-                                print('${items[index].name}');
-                              },
-                              child: Card(
-                                margin: EdgeInsets.all(8.0),
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: selectedIdx == index
-                                        ? primarycolor
-                                        : Colors.transparent,
-                                    width: 5.0,
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'What are you shipping ?',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Radio(
+                            activeColor: primarycolor,
+                            value: "Document",
+                            groupValue: shippingType,
+                            onChanged: (value) {
+                              setState(() {
+                                shippingType = value.toString();
+                                calaulateTotalPrice();
+                              });
+                            },
+                          ),
+                          Text('Document'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Radio(
+                            activeColor: primarycolor,
+                            value: "Package",
+                            groupValue: shippingType,
+                            onChanged: (value) {
+                              setState(() {
+                                shippingType = value.toString();
+                              });
+                            },
+                          ),
+                          Text('Package'),
+                        ],
+                      ),
+                      Visibility(
+                        visible: shippingType == "Package",
+                        child: Container(
+                          height: 200.0,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: items.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedIdx = index;
+                                    calaulateTotalPrice();
+                                  });
+                                  print('${items[index].name}');
+                                },
+                                child: Card(
+                                  margin: EdgeInsets.all(8.0),
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: selectedIdx == index
+                                          ? primarycolor
+                                          : Colors.transparent,
+                                      width: 5.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30.0),
                                   ),
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                child: Center(
-                                  child: Container(
-                                    width: 150,
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Image(
-                                          height: 140,
-                                          image: AssetImage(
-                                              items[index].img), // ),
-                                        ),
-                                        Text('${items[index].name}')
-                                      ],
+                                  child: Center(
+                                    child: Container(
+                                      width: 150,
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Image(
+                                            height: 140,
+                                            image: AssetImage(
+                                                items[index].img), // ),
+                                          ),
+                                          Text('${items[index].name}')
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Shipping From',
-                        style: TextStyle(fontSize: 16),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Shipping From',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-                    ),
-                    DropdownButtonFormField(
-                      isExpanded: true,
-                      hint: Text('Choose shipping from location',
-                          style: TextStyle(color: Colors.grey)),
-                      items: Locations.map((value) {
-                        return DropdownMenuItem(
-                          value: value['id'],
-                          child: Text(
-                            value['name'].toString(),
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        );
-                      }).toList(),
-                      value: payment_method,
-                      decoration: theme_helper().text_form_style(
-                        '',
-                        '',
-                        Icons.not_listed_location_outlined,
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          if (99999999 == value) {
-                            isSetLocationAllow = true;
-                          } else {
-                            isSetLocationAllow = false;
-                            Locations.map((value1) {
-                              if (value == value1['id']) {
-                                latfrom = value1['latTo'];
-                                longfrom = value1['longTo'];
-                                locationFromInfo = value1['location'];
-                                _textController.text =
-                                    locationFromInfo.toString();
-                                reCalculateDistance(
-                                    latfrom, longfrom, latto, longto);
-                              }
-                            }).toString();
+                      DropdownButtonFormField(
+                        isExpanded: true,
+                        hint: Text('Choose shipping from location',
+                            style: TextStyle(color: Colors.grey)),
+                        items: Locations.map((value) {
+                          return DropdownMenuItem(
+                            value: value['id'],
+                            child: Text(
+                              value['name'].toString(),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          );
+                        }).toList(),
+                        value: payment_method,
+                        decoration: theme_helper().text_form_style(
+                          '',
+                          '',
+                          Icons.not_listed_location_outlined,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            if (99999999 == value) {
+                              isSetLocationAllow = true;
+                            } else {
+                              isSetLocationAllow = false;
+                              Locations.map((value1) {
+                                if (value == value1['id']) {
+                                  latfrom = value1['latTo'];
+                                  longfrom = value1['longTo'];
+                                  locationFromInfo = value1['location'];
+                                  _textController.text =
+                                      locationFromInfo.toString();
+                                  reCalculateDistance(
+                                      latfrom, longfrom, latto, longto);
+                                }
+                              }).toString();
+                            }
+
+                            print(isSetLocationAllow);
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return "Please choose location";
                           }
+                          return null;
+                        },
+                      ),
+                      //SizedBox(height: 10),
+                      TextFormField(
+                        controller: _textController,
+                        style: TextStyle(fontSize: 12.0),
+                        validator: (val) {
+                          if (val!.isEmpty)
+                            return 'Please set location shipping from';
+                          return null;
+                        },
+                        readOnly: true,
+                        onSaved: (val) {
+                          locationFromInfo = val;
+                        },
+                        enabled: isSetLocationAllow,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => set_location(
+                                      onDataReceived: getlocationfrom))));
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon:
+                              Icon(Icons.location_on, color: Colors.red),
+                          hintText: 'Set Location Shipping From',
+                          hintStyle: TextStyle(fontSize: 16.0),
+                          filled: true,
+                          fillColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: Colors.grey)),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade400)),
+                          errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide:
+                                  BorderSide(color: Colors.red, width: 2)),
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide:
+                                  BorderSide(color: Colors.red, width: 2)),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Shipping From',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      TextFormField(
+                        controller: _textController2,
+                        style: TextStyle(fontSize: 12.0),
+                        validator: (val) {
+                          if (val!.isEmpty)
+                            return 'Please set location shipping to';
+                          return null;
+                        },
+                        readOnly: true,
+                        onSaved: (val) {
+                          locationToInfo = val;
+                        },
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => set_location(
+                                      onDataReceived: getlocationto))));
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon:
+                              Icon(Icons.location_on, color: Colors.red),
+                          hintText: 'Set Location Shipping To',
+                          hintStyle: TextStyle(fontSize: 16.0),
+                          filled: true,
+                          fillColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(color: Colors.grey)),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide:
+                                  BorderSide(color: Colors.grey.shade400)),
+                          errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide:
+                                  BorderSide(color: Colors.red, width: 2)),
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide:
+                                  BorderSide(color: Colors.red, width: 2)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
 
-                          print(isSetLocationAllow);
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return "Please choose location";
-                        }
-                        return null;
-                      },
-                    ),
-                    //SizedBox(height: 10),
-                    TextFormField(
-                      controller: _textController,
-                      style: TextStyle(fontSize: 12.0),
-                      validator: (val) {
-                        if (val!.isEmpty)
-                          return 'Please set location shipping from';
-                        return null;
-                      },
-                      readOnly: true,
-                      onSaved: (val) {
-                        locationFromInfo = val;
-                      },
-                      enabled: isSetLocationAllow,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => set_location(
-                                    onDataReceived: getlocationfrom))));
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.location_on, color: Colors.red),
-                        hintText: 'Set Location Shipping From',
-                        hintStyle: TextStyle(fontSize: 16.0),
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.grey)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade400)),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 2)),
-                        focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 2)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Delivery Price',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Shipping From',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    TextFormField(
-                      controller: _textController2,
-                      style: TextStyle(fontSize: 12.0),
-                      validator: (val) {
-                        if (val!.isEmpty)
-                          return 'Please set location shipping to';
-                        return null;
-                      },
-                      readOnly: true,
-                      onSaved: (val) {
-                        locationToInfo = val;
-                      },
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => set_location(
-                                    onDataReceived: getlocationto))));
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.location_on, color: Colors.red),
-                        hintText: 'Set Location Shipping To',
-                        hintStyle: TextStyle(fontSize: 16.0),
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.grey)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade400)),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 2)),
-                        focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 2)),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Delivery Price',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '+ Opening price:',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 20),
-                                ),
-                                Text(
-                                  openingPrice.toString() + '\$',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '+ Package size price:',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 20),
-                                ),
-                                Text(
-                                  boxSizePrice.toString() + '\$',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '   Delivery Price/Km:',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 20),
-                                ),
-                                Text(
-                                  pricePerKm.toStringAsFixed(2),
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '   Distance:',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 20),
-                                ),
-                                distance > 0
-                                    ? Text(
-                                        '${distance.toStringAsFixed(2)} km',
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 20),
-                                      )
-                                    : Text('---'),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '+ Distance delivery price:',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 20),
-                                ),
-                                distance > 0
-                                    ? Text(
-                                        '${distancePrice.toStringAsFixed(2)}\$',
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 20),
-                                      )
-                                    : Text(
-                                        '---',
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 20),
-                                      ),
-                              ],
-                            ),
-                          ),
-                          Visibility(
-                            visible: discount > 0,
-                            child: Container(
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
                               padding: EdgeInsets.all(10),
                               color: Colors.white,
                               child: Row(
@@ -969,88 +867,201 @@ class _create_orderState extends State<create_order> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '% Discount:',
+                                    '+ Opening price:',
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 20),
                                   ),
-                                  Text('${discount}%',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 20)),
+                                  Text(
+                                    openingPrice.toString() + '\$',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 20),
+                                  ),
                                 ],
                               ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Total Price:',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 20),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '+ Package size price:',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 20),
+                                  ),
+                                  Text(
+                                    boxSizePrice.toString() + '\$',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 20),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '   Delivery Price/Km:',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 20),
+                                  ),
+                                  Text(
+                                    pricePerKm.toStringAsFixed(2),
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 20),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '   Distance:',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 20),
+                                  ),
+                                  distance > 0
+                                      ? Text(
+                                          '${distance.toStringAsFixed(2)} km',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        )
+                                      : Text('---'),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '+ Distance delivery price:',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 20),
+                                  ),
+                                  distance > 0
+                                      ? Text(
+                                          '${distancePrice.toStringAsFixed(2)}\$',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        )
+                                      : Text(
+                                          '---',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                              visible: discount > 0,
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                color: Colors.white,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '% Discount:',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 20),
+                                    ),
+                                    Text('${discount}%',
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 20)),
+                                  ],
                                 ),
-                                Text(
-                                  totalPrice.toStringAsFixed(2) + "\$",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 20),
-                                )
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Center(
-                      child: Container(
-                        child: MaterialButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                          color: primarycolor,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
-                            child: Text(
-                              "Save Package",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Total Price:',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 20),
+                                  ),
+                                  Text(
+                                    totalPrice.toStringAsFixed(2) + "\$",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 20),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            if (formState5.currentState!.validate()) {
-                              formState5.currentState!.save();
-                              if (widget.title == "Edit Package") {
-                                print("Edit Package");
-                                print("have");
-                                postSendPackageUser(
-                                    "/customer/editPackageUser?packageId=" +
-                                        widget.packageId.toString(),
-                                    "The package is edited successfully");
-                              } else {
-                                print("have");
-                                postSendPackageUser("/customer/sendPackageUser",
-                                    "The package is created successfully, now it is in review status you can edit it");
-                              }
-                            }
-                          },
+                          ],
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                )),
+
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Center(
+                        child: Container(
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            color: primarycolor,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+                              child: Text(
+                                "Save Package",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                            onPressed: () {
+                              if (formState5.currentState!.validate()) {
+                                formState5.currentState!.save();
+                                if (widget.title == "Edit Package") {
+                                  print("Edit Package");
+                                  print("have");
+                                  postSendPackageUser(
+                                      "/customer/editPackageUser?packageId=" +
+                                          widget.packageId.toString(),
+                                      "The package is edited successfully");
+                                } else {
+                                  print("have");
+                                  postSendPackageUser(
+                                      "/customer/sendPackageUser",
+                                      "The package is created successfully, now it is in review status you can edit it");
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  )),
+            ),
           )
         ]),
       ),
