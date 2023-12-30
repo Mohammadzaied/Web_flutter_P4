@@ -1,11 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/employee/drawer_function/edit_profile.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomDrawer extends StatelessWidget {
-  String username = 'employee';
-  String email = 'employee@gmail.com';
+  String username = GetStorage().read("userName");
+  String email = GetStorage().read("email");
+  var imgUrl = urlStarter +
+      '/image/' +
+      GetStorage().read("userName") +
+      GetStorage().read("url");
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,15 +32,23 @@ class CustomDrawer extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
                 accountEmail: Text(
-                  '${username}',
+                  '${email}',
                   style: TextStyle(fontSize: 14),
                 ),
-                currentAccountPicture: Container(
-                  decoration: BoxDecoration(
+                currentAccountPicture: CachedNetworkImage(
+                  imageUrl: imgUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage("assets/f3.png"))),
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) =>
+                      Image.asset('assets/default.jpg'),
                 ),
               ),
               Padding(padding: EdgeInsets.only(top: 20)),
