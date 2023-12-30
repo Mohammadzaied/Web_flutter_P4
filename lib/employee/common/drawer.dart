@@ -37,6 +37,8 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 currentAccountPicture: CachedNetworkImage(
                   imageUrl: imgUrl,
+                  width: 130,
+                  height: 130,
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
