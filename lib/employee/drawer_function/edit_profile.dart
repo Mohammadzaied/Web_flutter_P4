@@ -138,30 +138,23 @@ class _edit_profileState extends State<edit_profile> {
     if (pickedFile != null) {
       setState(() {
         _image = pickedFile;
-        uploadImage();
+        //   uploadImage();
       });
     }
   }
 
-  Future<void> _pickFile() async {
-    print(
-        "*******************************************************************");
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.image, allowMultiple: false);
-    print(
-        "----------------------------------------------------------------------------------------");
-    if (result != null) {
-      String filePath = result.files.single.path!;
+  // Future<void> _pickFile() async {
+  //   FilePickerResult? result =
+  //       await FilePicker.platform.pickFiles(type: FileType.image);
 
-      // Do something with the selected file path, e.g., upload it
-
-      print('Selected file: $filePath');
-    } else {
-      // User canceled the file picker
-
-      print('File picking canceled.');
-    }
-  }
+  //   if (result != null) {
+  //     String filePath = result.files.single.path!;
+  //     print('Selected file: $filePath');
+  //   } else {
+  //     // User canceled the file picker
+  //     print('File picking canceled.');
+  //   }
+  // }
 
   var imgUrl = urlStarter +
       '/image/' +
@@ -255,8 +248,8 @@ class _edit_profileState extends State<edit_profile> {
                                       ),
                                       child: IconButton(
                                         onPressed: () {
-                                          _pickFile();
-                                          //getImage();
+                                          //_pickFile();
+                                          getImage();
                                         },
                                         icon: Icon(Icons.edit),
                                         color: Colors.white,
