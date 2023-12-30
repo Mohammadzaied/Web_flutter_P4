@@ -146,6 +146,7 @@ void _onItemTapped(int index, BuildContext context) {
       break;
     case 6:
       GoRouter.of(context).go('/edit_driver');
+
       break;
   }
 }
