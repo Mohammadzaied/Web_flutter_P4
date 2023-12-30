@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_application_1/style/showDialogShared/show_dialog.dart';
+//import 'package:image_picker/image_picker.dart';
 
 class edit_profile extends StatefulWidget {
   @override
@@ -235,7 +236,7 @@ class _edit_profileState extends State<edit_profile> {
                                       child: IconButton(
                                         onPressed: () {
                                           _pickFile();
-                                          //getImage();
+                                          // getImage();
                                         },
                                         icon: Icon(Icons.edit),
                                         color: Colors.white,

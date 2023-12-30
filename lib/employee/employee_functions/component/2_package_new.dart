@@ -3,7 +3,7 @@ import 'package:flutter_application_1/style/common/theme_h.dart';
 
 class package_new extends StatefulWidget {
   final String photo_cus;
-  final int package_type; // 0 Delivery of a package , 1 Receiving a package
+  //final int package_type; // 0 Delivery of a package , 1 Receiving a package
   final String from;
   final String to;
   final int id;
@@ -18,7 +18,7 @@ class package_new extends StatefulWidget {
     required this.from,
     required this.to,
     required this.name,
-    required this.package_type,
+    //required this.package_type,
     required this.id,
     required this.price,
   });
@@ -54,32 +54,32 @@ class _package_newState extends State<package_new> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(20),
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(widget.photo_cus))),
-                    ),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Package Type : ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: widget.package_type == 0
-                                ? 'Package Delivery '
-                                : 'Package Received ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
+                    // Container(
+                    //   height: 80,
+                    //   width: 80,
+                    //   decoration: BoxDecoration(
+                    //       shape: BoxShape.rectangle,
+                    //       borderRadius: BorderRadius.circular(20),
+                    //       image: DecorationImage(
+                    //         fit: BoxFit.cover,
+                    //         image: NetworkImage(widget.photo_cus),
+                    //       )),
+                    // ),
+                    // Spacer(),
+                    // Text.rich(TextSpan(
+                    //     text: 'Package Type : ',
+                    //     style: TextStyle(fontSize: 12, color: Colors.grey),
+                    //     children: <InlineSpan>[
+                    //       TextSpan(
+                    //         text:
+                    //              'Package Delivery '
+                    //         style: TextStyle(
+                    //           fontSize: 14,
+                    //           color: Colors.black,
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //       )
+                    //     ])),
                     Spacer(),
                     Text.rich(TextSpan(
                         text: 'Package ID : ',
@@ -96,9 +96,7 @@ class _package_newState extends State<package_new> {
                         ])),
                     Spacer(),
                     Text.rich(TextSpan(
-                        text: widget.package_type == 0
-                            ? 'Recipient Name : '
-                            : 'Sender Name : ',
+                        text: 'Sender Name : ',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                         children: <InlineSpan>[
                           TextSpan(
@@ -113,13 +111,26 @@ class _package_newState extends State<package_new> {
 
                     Spacer(),
                     Text.rich(TextSpan(
-                        text: widget.package_type == 0 ? 'to: ' : 'from: ',
+                        text: 'from: ',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                         children: <InlineSpan>[
                           TextSpan(
-                            text: widget.package_type == 0
-                                ? '${widget.to}'
-                                : '${widget.from}',
+                            text: '${widget.from}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ])),
+
+                    Spacer(),
+                    Text.rich(TextSpan(
+                        text: 'to: ',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        children: <InlineSpan>[
+                          TextSpan(
+                            text: '${widget.to}',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,
