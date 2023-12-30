@@ -28,8 +28,8 @@ class ForgetPassword extends StatelessWidget {
       print(responceBody);
       if (responceBody['message'] == "done") {
         GetStorage().write("email", email);
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => Verification()));
+
+        GoRouter.of(context).go('/Verification');
       } else if (responceBody['message'] == "email not found") {
         showDialog(
             context: context,
@@ -160,9 +160,7 @@ class ForgetPassword extends StatelessWidget {
                                     onPressed: () {
                                       if (formState2.currentState!.validate()) {
                                         formState2.currentState!.save();
-                                        //postForgot();
-                                        GoRouter.of(context)
-                                            .go('/Verification');
+                                        postForgot();
                                       }
                                     },
                                   ),

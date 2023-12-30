@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:flutter_application_1/style/header/header.dart';
-import 'package:flutter_application_1/sign_in_pages/1_sign_in.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
@@ -58,8 +57,7 @@ class _NewPassState extends State<NewPass> {
                 TextButton(
                     onPressed: () {
                       GetStorage().remove("email");
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => sign_in()));
+                      GoRouter.of(context).go('/');
                     },
                     child: Text(
                       "Ok",
@@ -167,6 +165,7 @@ class _NewPassState extends State<NewPass> {
                                           !_hasPasswordOneNumber ||
                                           !_hasPasswordOneCapitalchar)
                                         return "Please follow the password writing rules";
+                                      return null;
                                     },
                                     onSaved: (newvalue) {
                                       pass = newvalue;
@@ -234,6 +233,8 @@ class _NewPassState extends State<NewPass> {
 
                                       if (test != value)
                                         return "dosen\'t match";
+
+                                      return null;
                                     },
                                   ),
                                   SizedBox(height: 30.0),
@@ -384,8 +385,7 @@ class _NewPassState extends State<NewPass> {
                                           if (formState3.currentState!
                                               .validate()) {
                                             formState3.currentState!.save();
-                                            //postForgotSetPass();
-                                            GoRouter.of(context).go('/');
+                                            postForgotSetPass();
                                           }
                                         }),
                                   ),

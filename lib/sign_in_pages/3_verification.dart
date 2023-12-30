@@ -33,8 +33,7 @@ class _VerificationState extends State<Verification> {
     responceBody = jsonDecode(responce.body);
     print(responceBody);
     if (responceBody['message'] == "done") {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => NewPass()));
+      GoRouter.of(context).go('/New_Password');
     } else if (responceBody['message'] ==
         "We're sorry, but the verification code you entered is incorrect.") {
       showDialog(
@@ -156,13 +155,13 @@ class _VerificationState extends State<Verification> {
                         alignment: Alignment.center,
                         margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               'Verification',
                               style: TextStyle(
-                                  fontSize: 35,
+                                  fontSize: 38,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
@@ -170,6 +169,7 @@ class _VerificationState extends State<Verification> {
                             Text(
                               'Enter the verification code we just sent you on your email address.',
                               style: TextStyle(
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
@@ -263,11 +263,7 @@ class _VerificationState extends State<Verification> {
                                 ),
                                 onPressed: _pinSuccess
                                     ? () {
-                                        //postForgotCode();
-                                        GoRouter.of(context)
-                                            .go('/New_Password');
-
-                                        // context.go('/New_Password');
+                                        postForgotCode();
                                       }
                                     : null,
                               ),
