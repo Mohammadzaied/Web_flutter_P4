@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_application_1/style/common/theme_h.dart';
-import 'package:flutter_application_1/sign_in_pages/2_forget_pass.dart';
+import 'package:flutter_application_1/style/showDialogShared/show_dialog.dart';
 import 'package:flutter_application_1/style/header/header.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +17,7 @@ class _sign_inState extends State<sign_in> {
   GlobalKey<FormState> formState = GlobalKey();
   var responceBody;
   String? userName;
-
+  bool isLoginFaild = false;
   String? password;
 
   Future postSignin() async {
@@ -46,55 +45,42 @@ class _sign_inState extends State<sign_in> {
       GetStorage().write("town", responceBody['user']['town']);
       GetStorage().write("street", responceBody['user']['street']);
       GetStorage().write("url", responceBody['user']['url']);
-      // if (responceBody['user']['userType'] == "customer")
-      //   Navigator.of(context).pushReplacement(
-      //       MaterialPageRoute(builder: (context) => home_page_customer()));
-      // if (responceBody['user']['userType'] == "manager")
-      //   Navigator.of(context).pushReplacement(
-      //       MaterialPageRoute(builder: (context) => home_page_manager()));
       if (responceBody['user']['userType'] == "employee")
-        Navigator.pushNamed(context, '/main');
-      //Navigator()
-      // Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(builder: (context) => main_page()));
-      // if (responceBody['user']['userType'] == "driver")
-      //   Navigator.of(context).pushReplacement(
-      //       MaterialPageRoute(builder: (context) => home_page_driver()));
-    } else {
-      showDialog(
+        GoRouter.of(context).go('/new_orders');
+      else {
+        print("not allowed");
+        showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "Ok",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    )),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => ForgetPassword())));
-                    },
-                    child: Text("Forgot Password",
-                        style: TextStyle(color: Colors.white, fontSize: 18))),
-              ],
-              title: Text("Log In failed"),
-              content:
-                  Text("The username or password you entered is incorrect"),
-              titleTextStyle: TextStyle(color: Colors.white, fontSize: 25),
-              contentTextStyle: TextStyle(color: Colors.white, fontSize: 16),
-              backgroundColor: primarycolor,
-            );
-          });
+            return show_dialog().alartDialog(
+                "Not allowed",
+                "You cannot access your account using the web application. Please log in from the mobile application",
+                context);
+          },
+        );
+      }
+    } else {
+      setState(() {
+        isLoginFaild = true;
+      });
+
+      formState.currentState!.validate();
+      showValidationMessage("Incorrect username or password");
       print("user not found");
     }
     return responceBody;
+  }
+
+  void showValidationMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(fontSize: 16),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   @override
@@ -163,6 +149,10 @@ class _sign_inState extends State<sign_in> {
                                     if (value!.isEmpty) {
                                       return "Please the enter username";
                                     }
+                                    if (isLoginFaild) {
+                                      return "Incorrect username or password";
+                                    }
+                                    return null;
                                   },
                                   decoration: theme_helper().text_form_style(
                                     'Username',
@@ -180,6 +170,10 @@ class _sign_inState extends State<sign_in> {
                                     if (value!.isEmpty) {
                                       return "Please enter password";
                                     }
+                                    if (isLoginFaild) {
+                                      return "Incorrect username or password";
+                                    }
+                                    return null;
                                   },
                                   obscureText: !passwordVisible,
                                   decoration: InputDecoration(
@@ -256,10 +250,10 @@ class _sign_inState extends State<sign_in> {
                                       ),
                                     ),
                                     onPressed: () {
+                                      isLoginFaild = false;
                                       if (formState.currentState!.validate()) {
                                         formState.currentState!.save();
-                                        //var res = postSignin();
-                                        GoRouter.of(context).go('/new_orders');
+                                        postSignin();
                                       }
                                     },
                                   ),
