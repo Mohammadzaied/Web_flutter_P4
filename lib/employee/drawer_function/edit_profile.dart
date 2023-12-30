@@ -5,6 +5,7 @@ import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:flutter_application_1/style/header/header.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_application_1/style/showDialogShared/show_dialog.dart';
 import 'package:image_picker/image_picker.dart';
@@ -129,50 +130,36 @@ class _edit_profileState extends State<edit_profile> {
     return responceBody;
   }
 
-  XFile? _image;
-
-  Future getImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = pickedFile;
-        //   uploadImage();
-      });
+  Future<void> _pickFile() async {
+    var result = await FilePicker.platform
+        .pickFiles(type: FileType.image, allowMultiple: false);
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      uploadImage(file.bytes);
     }
   }
-
-  // Future<void> _pickFile() async {
-  //   FilePickerResult? result =
-  //       await FilePicker.platform.pickFiles(type: FileType.image);
-
-  //   if (result != null) {
-  //     String filePath = result.files.single.path!;
-  //     print('Selected file: $filePath');
-  //   } else {
-  //     // User canceled the file picker
-  //     print('File picking canceled.');
-  //   }
-  // }
 
   var imgUrl = urlStarter +
       '/image/' +
       GetStorage().read("userName") +
       GetStorage().read("url");
 
-  Future uploadImage() async {
+  Future uploadImage(Uint8List? imageData) async {
     final uri = Uri.parse(urlStarter + "/users/imm");
     var request = http.MultipartRequest('POST', uri);
     request.fields['userName'] = GetStorage().read("userName");
+    var byteStream = http.ByteStream.fromBytes(imageData!);
+    var file = http.MultipartFile(
+      'image',
+      byteStream,
+      imageData.length,
+      filename: 'image.jpg',
+    );
 
-    var file = await http.MultipartFile.fromPath('image', _image!.path);
     request.files.add(file);
 
     var response = await request.send();
     if (response.statusCode == 200) {
-      print(_image!.name.split('.')[1]);
-      GetStorage().write("url", "." + _image!.name.split('.')[1]);
       print('Image uploaded successfully');
       final respStr = await response.stream.bytesToString();
       var res = jsonDecode(respStr);

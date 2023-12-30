@@ -27,7 +27,7 @@ class CustomDrawer extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
                 accountEmail: Text(
-                  '${email}',
+                  '${username}',
                   style: TextStyle(fontSize: 14),
                 ),
                 currentAccountPicture: Container(
