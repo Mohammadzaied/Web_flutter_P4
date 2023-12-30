@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
+import 'package:go_router/go_router.dart';
 
 const String Titleapp = 'Package4U';
 
@@ -52,16 +53,8 @@ class show_dialog {
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),
           onPressed: () {
-            if (name == "customer")
-              Navigator.of(context).pushNamed("customerHome");
-            else if (name == "manager")
-              Navigator.of(context).pushNamed("managerHome");
-            else if (name == "driver")
-              Navigator.of(context).pushNamed("driverHome");
-            else if (name == "employee")
-              Navigator.of(context).pushNamed("employeeHome");
-            else
-              Navigator.of(context).pushNamed(name);
+            Navigator.of(context).pop();
+            GoRouter.of(context).go(name);
           },
         ),
       ],
