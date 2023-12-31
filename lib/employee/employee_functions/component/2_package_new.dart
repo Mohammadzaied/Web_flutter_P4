@@ -54,17 +54,21 @@ class _package_newState extends State<package_new> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // Container(
-                    //   height: 80,
-                    //   width: 80,
-                    //   decoration: BoxDecoration(
-                    //       shape: BoxShape.rectangle,
-                    //       borderRadius: BorderRadius.circular(20),
-                    //       image: DecorationImage(
-                    //         fit: BoxFit.cover,
-                    //         image: NetworkImage(widget.photo_cus),
-                    //       )),
-                    // ),
+                    Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(widget.photo_cus,
+                                scale: 1,
+                                headers: {
+                                  'ngrok-skip-browser-warning': 'true'
+                                }),
+                          )),
+                    ),
                     // Spacer(),
                     // Text.rich(TextSpan(
                     //     text: 'Package Type : ',

@@ -12,6 +12,7 @@ import 'package:flutter_application_1/employee/employee_functions/8_edit_page.da
 import 'package:flutter_application_1/employee/employee_functions/1_new_orders.dart';
 import 'package:flutter_application_1/employee/employee_functions/5_receiving_money.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
+import 'package:flutter_application_1/employee/employee_functions/component/2_package_new.dart';
 import 'package:flutter_application_1/sign_in_pages/2_forget_pass.dart';
 import 'package:flutter_application_1/sign_in_pages/4_new_password.dart';
 import 'package:flutter_application_1/sign_in_pages/1_sign_in.dart';
@@ -46,9 +47,10 @@ class _main_pageState extends State<main_page>
   int counter_assign = 0;
 
   void initState() {
+    widget2 = new_order();
     widget1 = all_orders(pk_all: buildMy_package_edit());
-    widget2 = new_order(pk_new: buildMy_new_orders());
-    counter_new = buildMy_new_orders().length;
+
+    counter_new = 2; //buildMy_new_orders().length;
     widget3 = create_order(
       title: 'Create order',
     );

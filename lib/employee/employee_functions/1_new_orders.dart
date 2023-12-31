@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/2_package_new.dart';
 import 'package:flutter_application_1/employee/main_page_employee.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class new_order extends StatefulWidget {
-  final List<package_new> pk_new;
-
-  const new_order({super.key, required this.pk_new});
-
   @override
   State<new_order> createState() => _new_orderState();
 }
 
 class _new_orderState extends State<new_order> {
+  List<package_new> pk_new = [];
   List citylist = [
     'Nablus',
     'Tulkarm',
@@ -25,15 +24,68 @@ class _new_orderState extends State<new_order> {
   ];
   //List packagetypes = ['Delivery', 'Receiving', 'None'];
   List searchtypes = ['Search by Name', 'Search by ID'];
-
+  List<dynamic> new_orders = [];
   String? selectedCity;
   // String? selectedtype;
   String? searchtype;
   String? serach_content;
 
+  Future<void> fetchData_new_orders() async {
+    var url = urlStarter + "/employee/getNewOrders";
+    print(url);
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      new_orders = data['result'];
+      print(new_orders);
+      setState(() {
+        pk_new = buildMy_new_orders();
+      });
+    } else {
+      print('new_orders error');
+      throw Exception('Failed to load data');
+    }
+  }
+
+  List<package_new> buildMy_new_orders() {
+    List<package_new> orders = [];
+    print(new_orders);
+    for (int i = 0; i < new_orders.length; i++) {
+      orders.add(
+        package_new(
+          id: new_orders[i]['packageId'],
+          photo_cus: urlStarter +
+              '/image/' +
+              new_orders[i]['send_user']['userName'] +
+              new_orders[i]['send_user']['url'],
+
+          name: new_orders[i]['send_user']['Fname'] +
+              ' ' +
+              new_orders[i]['send_user']['Lname'],
+
+          from: 'Nablus', // new_orders[i]['packageId'],
+          to: 'Tulkarm', //new_orders[i]['packageId'],
+
+          price: new_orders[i]['packagePrice'],
+
+          package_size: new_orders[i]['shippingType'] == 'Document0'
+              ? 0
+              : new_orders[i]['shippingType'] == 'Package0'
+                  ? 1
+                  : new_orders[i]['shippingType'] == 'Package1'
+                      ? 2
+                      : 3,
+        ),
+      );
+    }
+    return orders;
+  }
+
   @override
   void initState() {
     super.initState();
+    fetchData_new_orders();
     setState(() {
       TabController_.index = 0;
     });
@@ -45,10 +97,10 @@ class _new_orderState extends State<new_order> {
 
   List<package_new> _filterOrders() {
     if (selectedCity!.isEmpty && searchtype!.isEmpty) {
-      return widget.pk_new;
+      return pk_new;
     }
 
-    return widget.pk_new.where((order) {
+    return pk_new.where((order) {
       if (selectedCity!.isNotEmpty && (order.to != selectedCity)) {
         return false;
       }
