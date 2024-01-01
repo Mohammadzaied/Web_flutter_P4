@@ -22,11 +22,9 @@ class _new_orderState extends State<new_order> {
     'Hebron',
     'None',
   ];
-  //List packagetypes = ['Delivery', 'Receiving', 'None'];
   List searchtypes = ['Search by Name', 'Search by ID'];
   List<dynamic> new_orders = [];
   String? selectedCity;
-  // String? selectedtype;
   String? searchtype;
   String? serach_content;
 
@@ -90,7 +88,6 @@ class _new_orderState extends State<new_order> {
       TabController_.index = 0;
     });
     selectedCity = '';
-    //selectedtype = '';
     searchtype = 'Search by Name';
     serach_content = '';
   }
@@ -101,28 +98,13 @@ class _new_orderState extends State<new_order> {
     }
 
     return pk_new.where((order) {
-      if (selectedCity!.isNotEmpty && (order.to != selectedCity)) {
+      if (selectedCity!.isNotEmpty && (order.from != selectedCity)) {
         return false;
       }
 
       if (selectedCity!.isNotEmpty && (order.from != selectedCity)) {
         return false;
       }
-
-      if (selectedCity!.isNotEmpty && order.to != selectedCity) {
-        return false;
-      }
-      if (selectedCity!.isNotEmpty && order.from != selectedCity) {
-        return false;
-      }
-
-      // if (selectedtype == 'Delivery' && order.package_type != 0) {
-      //   return false;
-      // }
-
-      // if (selectedtype == 'Receiving' && order.package_type != 1) {
-      //   return false;
-      // }
 
       if (searchtype == 'Search by Name' &&
           serach_content!.isNotEmpty &&
@@ -155,7 +137,6 @@ class _new_orderState extends State<new_order> {
                   onChanged: (value) {
                     setState(() {
                       serach_content = value;
-                      //print(value);
                     });
                   },
                   onSaved: (newValue) {},
@@ -202,9 +183,9 @@ class _new_orderState extends State<new_order> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Container(
-                  width: 200,
+                  width: 250,
                   child: DropdownButtonFormField(
-                    hint: Text('Filterd by city',
+                    hint: Text('Filterd by city from',
                         style: TextStyle(color: Colors.grey)),
                     decoration: theme_helper().text_form_style(
                       '',
@@ -229,36 +210,6 @@ class _new_orderState extends State<new_order> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(20.0),
-              //   child: Container(
-              //     width: 200,
-              //     child: DropdownButtonFormField(
-              //       hint: Text('Filterd by type',
-              //           style: TextStyle(color: Colors.grey)),
-              //       decoration: theme_helper().text_form_style(
-              //         '',
-              //         '',
-              //         null,
-              //       ),
-              //       borderRadius: BorderRadius.circular(10),
-              //       onChanged: (newValue) {
-              //         setState(() {
-              //           if (newValue == 'None')
-              //             selectedtype = '';
-              //           else
-              //             selectedtype = newValue as String?;
-              //         });
-              //       },
-              //       items: packagetypes.map((value) {
-              //         return DropdownMenuItem(
-              //           value: value,
-              //           child: Text(value),
-              //         );
-              //       }).toList(),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ],

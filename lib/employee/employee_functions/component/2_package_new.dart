@@ -3,7 +3,6 @@ import 'package:flutter_application_1/style/common/theme_h.dart';
 
 class package_new extends StatefulWidget {
   final String photo_cus;
-  //final int package_type; // 0 Delivery of a package , 1 Receiving a package
   final String from;
   final String to;
   final int id;
@@ -18,7 +17,6 @@ class package_new extends StatefulWidget {
     required this.from,
     required this.to,
     required this.name,
-    //required this.package_type,
     required this.id,
     required this.price,
   });
@@ -28,7 +26,6 @@ class package_new extends StatefulWidget {
 }
 
 class _package_newState extends State<package_new> {
-  List drivers = ['mohammad', 'ahmad'];
   String selecteddriver = '';
 
   @override

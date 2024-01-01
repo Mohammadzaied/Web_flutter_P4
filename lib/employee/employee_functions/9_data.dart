@@ -1,22 +1,7 @@
 // here load data from database
 import 'package:flutter_application_1/employee/employee_functions/component/3_package_assign.dart';
-import 'package:flutter_application_1/employee/employee_functions/component/2_package_new.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
 import 'package:flutter_application_1/employee/employee_functions/6_distribution_orders.dart';
-import 'package:flutter_application_1/style/common/theme_h.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-//import 'package:get_storage/get_storage.dart';
-
-List<dynamic> new_orders = [];
-
-//String? userName;
-
-//String customerUserName = GetStorage().read('userName');
-//String customerPassword = GetStorage().read('password');
-
-
-
 
 List<package_assign> buildMy_assign_orders() {
   List<package_assign> orders = [];
