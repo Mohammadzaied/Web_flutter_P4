@@ -53,6 +53,11 @@ class _new_orderState extends State<new_order> {
     for (int i = 0; i < new_orders.length; i++) {
       orders.add(
         package_new(
+          refreshdata: () {
+            //setState(() {
+            fetchData_new_orders();
+            // });
+          },
           id: new_orders[i]['packageId'],
           photo_cus: urlStarter +
               '/image/' +

@@ -15,11 +15,14 @@ class _chang_passState extends State<chang_pass> {
   bool passwordVisible1 = false;
   bool passwordVisible2 = false;
   bool passwordVisible3 = false;
+  bool _hasPasswordsMached = false;
+
   bool _isPasswordEightCharacters = false;
   bool _hasPasswordOneNumber = false;
   bool _hasPasswordOneCapitalchar = false;
   var responceBody;
   String? pass;
+  String? pass_conf;
   String? oldPass;
 
   Future postchangePassword() async {
@@ -75,6 +78,9 @@ class _chang_passState extends State<chang_pass> {
     final numericRegex1 = RegExp(r'[A-Z]');
 
     setState(() {
+      pass = password;
+      onConfermPasswordChanged();
+
       _isPasswordEightCharacters = false;
       if (password.length >= 8) _isPasswordEightCharacters = true;
 
@@ -83,6 +89,14 @@ class _chang_passState extends State<chang_pass> {
 
       _hasPasswordOneCapitalchar = false;
       if (numericRegex1.hasMatch(password)) _hasPasswordOneCapitalchar = true;
+    });
+  }
+
+  onConfermPasswordChanged() {
+    setState(() {
+      _hasPasswordsMached = false;
+      if (pass_conf == pass && pass_conf!.isNotEmpty)
+        _hasPasswordsMached = true;
     });
   }
 
@@ -95,7 +109,11 @@ class _chang_passState extends State<chang_pass> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('Change Password'),
+        centerTitle: true,
+        title: Text(
+          'Change Password',
+          style: TextStyle(fontSize: 25),
+        ),
         backgroundColor: primarycolor,
       ),
       body: SingleChildScrollView(
@@ -111,7 +129,7 @@ class _chang_passState extends State<chang_pass> {
                   key: formState5,
                   child: Column(
                     children: [
-                      SizedBox(height: 80),
+                      SizedBox(height: 20),
                       TextFormField(
                         obscureText: !passwordVisible1,
                         decoration: InputDecoration(
@@ -137,18 +155,18 @@ class _chang_passState extends State<chang_pass> {
                           labelStyle: TextStyle(color: Colors.grey),
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                           focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(color: Colors.grey)),
                           enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.grey.shade400)),
                           errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.red, width: 2)),
                           focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.red, width: 2)),
                         ),
@@ -202,24 +220,30 @@ class _chang_passState extends State<chang_pass> {
                           labelStyle: TextStyle(color: Colors.grey),
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                           focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(color: Colors.grey)),
                           enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.grey.shade400)),
                           errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.red, width: 2)),
                           focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.red, width: 2)),
                         ),
                       ),
                       SizedBox(height: 30),
                       TextFormField(
+                        onChanged: (value) {
+                          setState(() {
+                            pass_conf = value;
+                            onConfermPasswordChanged();
+                          });
+                        },
                         obscureText: !passwordVisible3,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
@@ -244,18 +268,18 @@ class _chang_passState extends State<chang_pass> {
                           labelStyle: TextStyle(color: Colors.grey),
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                           focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(color: Colors.grey)),
                           enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.grey.shade400)),
                           errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.red, width: 2)),
                           focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide:
                                   BorderSide(color: Colors.red, width: 2)),
                         ),
@@ -368,6 +392,40 @@ class _chang_passState extends State<chang_pass> {
                                     width: 10,
                                   ),
                                   Text("Contains at least 1 capital character")
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  AnimatedContainer(
+                                    duration: Duration(milliseconds: 500),
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                        color: _hasPasswordsMached
+                                            ? Colors.green
+                                            : Colors.transparent,
+                                        border: _hasPasswordsMached
+                                            ? Border.all(
+                                                color: Colors.transparent)
+                                            : Border.all(
+                                                color: Colors.grey.shade400),
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text("Both passwords matched")
                                 ],
                               ),
                             ],

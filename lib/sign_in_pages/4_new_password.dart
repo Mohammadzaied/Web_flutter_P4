@@ -16,12 +16,23 @@ class _NewPassState extends State<NewPass> {
   bool _isPasswordEightCharacters = false;
   bool _hasPasswordOneNumber = false;
   bool _hasPasswordOneCapitalchar = false;
+  bool _hasPasswordsMached = false;
+
+  onConfermPasswordChanged() {
+    setState(() {
+      _hasPasswordsMached = false;
+      if (pass_conf == pass && pass_conf!.isNotEmpty)
+        _hasPasswordsMached = true;
+    });
+  }
 
   onPasswordChanged(String password) {
     final numericRegex = RegExp(r'[0-9]');
     final numericRegex1 = RegExp(r'[A-Z]');
 
     setState(() {
+      pass = password;
+      onConfermPasswordChanged();
       _isPasswordEightCharacters = false;
       if (password.length >= 8) _isPasswordEightCharacters = true;
 
@@ -36,6 +47,7 @@ class _NewPassState extends State<NewPass> {
   final formState3 = GlobalKey<FormState>();
 
   String? pass;
+  String? pass_conf;
   var responceBody;
   String? test;
   Future postForgotSetPass() async {
@@ -222,6 +234,12 @@ class _NewPassState extends State<NewPass> {
                                   ),
                                   SizedBox(height: 10),
                                   TextFormField(
+                                    onChanged: (value) {
+                                      setState(() {
+                                        pass_conf = value;
+                                        onConfermPasswordChanged();
+                                      });
+                                    },
                                     obscureText: true,
                                     decoration: theme_helper().text_form_style(
                                         "confirm password",
@@ -357,6 +375,44 @@ class _NewPassState extends State<NewPass> {
                                               ),
                                               Text(
                                                   "Contains at least 1 capital character")
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              AnimatedContainer(
+                                                duration:
+                                                    Duration(milliseconds: 500),
+                                                width: 20,
+                                                height: 20,
+                                                decoration: BoxDecoration(
+                                                    color: _hasPasswordsMached
+                                                        ? Colors.green
+                                                        : Colors.transparent,
+                                                    border: _hasPasswordsMached
+                                                        ? Border.all(
+                                                            color: Colors
+                                                                .transparent)
+                                                        : Border.all(
+                                                            color: Colors
+                                                                .grey.shade400),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50)),
+                                                child: Center(
+                                                  child: Icon(
+                                                    Icons.check,
+                                                    color: Colors.white,
+                                                    size: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text("Both passwords matched")
                                             ],
                                           ),
                                         ],

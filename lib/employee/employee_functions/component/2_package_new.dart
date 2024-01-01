@@ -1,3 +1,6 @@
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:get_storage/get_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 
@@ -9,6 +12,7 @@ class package_new extends StatefulWidget {
   final int price;
   final String name;
   final int package_size; //0 doc  , 1 small ,2 meduim , 3 large
+  final Function() refreshdata;
 
   package_new({
     super.key,
@@ -19,6 +23,7 @@ class package_new extends StatefulWidget {
     required this.name,
     required this.id,
     required this.price,
+    required this.refreshdata,
   });
 
   @override
@@ -27,6 +32,44 @@ class package_new extends StatefulWidget {
 
 class _package_newState extends State<package_new> {
   String selecteddriver = '';
+  String reason = '';
+  final formGlobalKey = GlobalKey<FormState>();
+
+  String username = GetStorage().read("userName");
+  String password = GetStorage().read("password");
+
+  Future post_accepet_order(int id) async {
+    var url = urlStarter + "/employee/acceptPackage";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "packageId": id
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      widget.refreshdata();
+    }
+  }
+
+  Future post_reject_order(int id) async {
+    var url = urlStarter + "/employee/rejectPackage";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "packageId": id,
+          "comment": reason
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      widget.refreshdata();
+    }
+  }
 
   @override
   Widget build(BuildContext) {
@@ -194,7 +237,7 @@ class _package_newState extends State<package_new> {
                               ),
                             ),
                             onPressed: () {
-                              print(widget.name);
+                              post_accepet_order(widget.id);
                             },
                           ),
                         ),
@@ -218,6 +261,92 @@ class _package_newState extends State<package_new> {
                               ),
                             ),
                             onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        // Customize the border color
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              if (formGlobalKey.currentState!
+                                                  .validate()) {
+                                                formGlobalKey.currentState!
+                                                    .save();
+                                                post_reject_order(widget.id);
+                                                Navigator.of(context).pop();
+                                              }
+                                            },
+                                            child: Text(
+                                              "Reject Package",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            )),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 18),
+                                            )),
+                                      ],
+                                      title: Text("Reject Package"),
+                                      content: Container(
+                                        width: 500,
+                                        child: Form(
+                                          key: formGlobalKey,
+                                          child: TextFormField(
+                                            onSaved: (newValue) {
+                                              reason = newValue!;
+                                            },
+                                            maxLines: 5,
+                                            validator: (val) {
+                                              if (val!.isEmpty)
+                                                return "Please Enter Reason";
+                                            },
+                                            decoration: InputDecoration(
+                                                focusedBorder: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        20),
+                                                    borderSide: BorderSide(
+                                                        color: Colors.grey)),
+                                                enabledBorder: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        20),
+                                                    borderSide: BorderSide(
+                                                        color: Colors
+                                                            .grey.shade400)),
+                                                errorBorder: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    borderSide: BorderSide(
+                                                        color: Colors.red,
+                                                        width: 2)),
+                                                focusedErrorBorder: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(20),
+                                                    borderSide: BorderSide(color: Colors.red, width: 2)),
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                hintText: 'Enter the Reason'),
+                                          ),
+                                        ),
+                                      ),
+                                      titleTextStyle: TextStyle(
+                                          color: Colors.white, fontSize: 25),
+                                      contentTextStyle: TextStyle(
+                                          color: Colors.white, fontSize: 16),
+                                      backgroundColor: primarycolor,
+                                    );
+                                  });
                               print(widget.name);
                             },
                           ),
