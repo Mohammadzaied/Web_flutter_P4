@@ -37,6 +37,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 currentAccountPicture: CachedNetworkImage(
                   imageUrl: imgUrl,
+                  httpHeaders: {'ngrok-skip-browser-warning': 'true'},
                   width: 130,
                   height: 130,
                   imageBuilder: (context, imageProvider) => Container(

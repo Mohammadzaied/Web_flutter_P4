@@ -206,6 +206,9 @@ class _edit_profileState extends State<edit_profile> {
                               children: [
                                 CachedNetworkImage(
                                   imageUrl: imgUrl,
+                                  httpHeaders: {
+                                    'ngrok-skip-browser-warning': 'true'
+                                  },
                                   width: 130,
                                   height: 130,
                                   imageBuilder: (context, imageProvider) =>

@@ -24,7 +24,8 @@ class _new_orderState extends State<new_order> {
   ];
   List searchtypes = ['Search by Name', 'Search by ID'];
   List<dynamic> new_orders = [];
-  String? selectedCity;
+  String? selectedCity_from;
+  String? selectedCity_to;
   String? searchtype;
   String? serach_content;
 
@@ -77,6 +78,15 @@ class _new_orderState extends State<new_order> {
         ),
       );
     }
+    // orders.add(package_new(
+    //   id: 12345,
+    //   photo_cus: '',
+    //   name: 'ahh',
+    //   from: 'Ramallah',
+    //   to: 'Tulkarm',
+    //   price: 234,
+    //   package_size: 0,
+    // ));
     return orders;
   }
 
@@ -87,22 +97,25 @@ class _new_orderState extends State<new_order> {
     setState(() {
       TabController_.index = 0;
     });
-    selectedCity = '';
+    selectedCity_from = '';
+    selectedCity_to = '';
     searchtype = 'Search by Name';
     serach_content = '';
   }
 
   List<package_new> _filterOrders() {
-    if (selectedCity!.isEmpty && searchtype!.isEmpty) {
+    if (selectedCity_from!.isEmpty &&
+        searchtype!.isEmpty &&
+        selectedCity_to!.isNotEmpty) {
       return pk_new;
     }
 
     return pk_new.where((order) {
-      if (selectedCity!.isNotEmpty && (order.from != selectedCity)) {
+      if (selectedCity_from!.isNotEmpty && (order.from != selectedCity_from)) {
         return false;
       }
 
-      if (selectedCity!.isNotEmpty && (order.from != selectedCity)) {
+      if (selectedCity_to!.isNotEmpty && (order.to != selectedCity_to)) {
         return false;
       }
 
@@ -196,9 +209,42 @@ class _new_orderState extends State<new_order> {
                     onChanged: (newValue) {
                       setState(() {
                         if (newValue == 'None')
-                          selectedCity = '';
+                          selectedCity_from = '';
                         else
-                          selectedCity = newValue as String?;
+                          selectedCity_from = newValue as String?;
+                      });
+                    },
+                    items: citylist.map((value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  width: 250,
+                  child: DropdownButtonFormField(
+                    hint: Text('Filterd by city to',
+                        style: TextStyle(color: Colors.grey)),
+                    decoration: theme_helper().text_form_style(
+                      '',
+                      '',
+                      null,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    onChanged: (newValue) {
+                      setState(() {
+                        if (newValue == 'None')
+                          selectedCity_to = '';
+                        else
+                          selectedCity_to = newValue as String?;
                       });
                     },
                     items: citylist.map((value) {
