@@ -42,22 +42,11 @@ class _distribution_ordersState extends State<distribution_orders> {
           address: new_p[i]['address'],
           package_type: new_p[i]['packageType'],
           customer_name: new_p[i]['customerName'],
-          customer_phone: new_p[i]['phoneNumber'],
-          package_id: new_p[i]['packageId'],
+          customer_phone: new_p[i]['phoneNumber'].toString(),
+          package_id: new_p[i]['packageId'].toString(),
         ),
       );
     }
-    // p.add(
-    //   packages(
-    //     driver_name: "Lacy R. Caldwell",
-    //     address: "Tulkarm",
-    //     package_type: '12',
-    //     customer_name: 'dff',
-    //     customer_phone: '12344',
-    //     package_id: '111',
-    //   ),
-    // );
-
     return p;
   }
 
@@ -108,7 +97,6 @@ class _distribution_ordersState extends State<distribution_orders> {
   @override
   Widget build(BuildContext context) {
     List<packages> filteredOrders = _filterOrders();
-    //print(all_p);
 
     return SingleChildScrollView(
       child: Column(
