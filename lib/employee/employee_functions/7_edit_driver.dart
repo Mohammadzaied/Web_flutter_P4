@@ -5,6 +5,8 @@ import 'package:flutter_application_1/employee/main_page_employee.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class edit_driver extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class edit_driver extends StatefulWidget {
 
 class _edit_driverState extends State<edit_driver> {
   TextEditingController controller = new TextEditingController();
+  List<dynamic> drivers_ = [];
   ////////////////
   int _selectedTabIndex =
       1; //1 edit time , 2 Add vacation ,3 edit Transmission line
@@ -36,7 +39,7 @@ class _edit_driverState extends State<edit_driver> {
   String? selectedCity;
 
   //////
-  late List<driver> drivers;
+  List<driver> drivers = [];
   late driver driver_selcted =
       driver(username: '', name: '', img: '', working_days: [], city: '');
   //////
@@ -74,37 +77,80 @@ class _edit_driverState extends State<edit_driver> {
     ),
   ];
 
-  void loadData() async {
-    drivers = [
-      driver(
-        city: 'Tulkarm',
-        username: '111111',
-        name: 'mohammad',
-        working_days: ['Sunday', 'Monday'],
-        img: "assets/f3.png",
-      ),
-      driver(
-        city: 'Tulkarm',
-        username: '222222222222',
-        name: 'rami',
-        working_days: ['Thursday', 'Monday'],
-        img: "assets/add-friend.png",
-      ),
-      driver(
-        city: 'Ramallah',
-        username: '555555',
-        name: 'zain',
-        working_days: ['Sunday', 'Friday', 'Thursday'],
-        img: "assets/driver.png",
-      ),
-      driver(
-        city: 'Nablus',
-        username: '4532233',
-        name: 'ahmad',
-        working_days: ['Thursday', 'Monday', 'Saturday'],
-        img: "",
-      ),
-    ];
+  // void loadData() async {
+  //   drivers = [
+  //     driver(
+  //       city: 'Tulkarm',
+  //       username: '111111',
+  //       name: 'mohammad',
+  //       working_days: ['Sunday', 'Monday'],
+  //       img: "assets/f3.png",
+  //     ),
+  //     driver(
+  //       city: 'Tulkarm',
+  //       username: '222222222222',
+  //       name: 'rami',
+  //       working_days: ['Thursday', 'Monday'],
+  //       img: "assets/add-friend.png",
+  //     ),
+  //     driver(
+  //       city: 'Ramallah',
+  //       username: '555555',
+  //       name: 'zain',
+  //       working_days: ['Sunday', 'Friday', 'Thursday'],
+  //       img: "assets/driver.png",
+  //     ),
+  //     driver(
+  //       city: 'Nablus',
+  //       username: '4532233',
+  //       name: 'ahmad',
+  //       working_days: ['Thursday', 'Monday', 'Saturday'],
+  //       img: "",
+  //     ),
+  //   ];
+  // }
+
+  Future<void> fetchData_drivers() async {
+    var url = urlStarter + "/employee/GetDriverListEmployee";
+    print(url);
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      drivers_ = data;
+      print(data);
+      setState(() {
+        drivers = buildMy_drivers();
+      });
+    } else {
+      print('new_orders error');
+      throw Exception('Failed to load data');
+    }
+  }
+
+  List<driver> buildMy_drivers() {
+    List<driver> new_drivers = [];
+    //print(new_orders);
+    for (int i = 0; i < drivers_.length; i++) {
+      // List<String> daysList = drivers_[i]['working_days']
+      //     .replaceAll('[', '')
+      //     .replaceAll(']', '')
+      //     .split(', ')
+      //     .map((day) => day.trim())
+      //     .toList();
+      drivers.add(
+        driver(
+          city: drivers_[i]['city'],
+          username: drivers_[i]['username'],
+          name: drivers_[i]['name'],
+          working_days: ['Sunday'],
+          // working_days: drivers_[i]['working_days'],
+          img: urlStarter + drivers_[i]['img'],
+        ),
+      );
+    }
+
+    return new_drivers;
   }
 
   @override
@@ -112,7 +158,8 @@ class _edit_driverState extends State<edit_driver> {
     setState(() {
       TabController_.index = 6;
     });
-    loadData();
+    //loadData();
+    fetchData_drivers();
     selectedCity = '';
 
     super.initState();
@@ -311,7 +358,12 @@ class _edit_driverState extends State<edit_driver> {
                               backgroundColor: primarycolor,
                               backgroundImage: suggestion.img == ""
                                   ? null
-                                  : AssetImage("${suggestion.img}"),
+                                  : NetworkImage(suggestion.img,
+                                      scale: 1,
+                                      headers: {
+                                          'ngrok-skip-browser-warning': 'true'
+                                        }),
+                              // AssetImage("${suggestion.img}"),
                               child: suggestion.img == ""
                                   ? Text(
                                       suggestion.name[0]
