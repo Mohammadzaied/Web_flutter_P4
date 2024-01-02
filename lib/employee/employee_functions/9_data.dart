@@ -69,41 +69,6 @@ List<package_assign> buildMy_assign_orders() {
   return orders;
 }
 
-List<drivers> buildMy_drivers() {
-  List<drivers> deiver = [];
-
-  deiver.add(
-    drivers(
-      packages_id: ["7531045269", "111111111"],
-      driver_name: "Lacy R. Caldwell",
-      address: "Tulkarm",
-    ),
-  );
-  deiver.add(
-    drivers(
-      packages_id: ["7359627951"],
-      driver_name: "Shirley R. Simmons",
-      address: "Nablus",
-    ),
-  );
-  deiver.add(
-    drivers(
-      packages_id: ["6831318839"],
-      driver_name: "Todd M. Akers",
-      address: "Nablus",
-    ),
-  );
-  deiver.add(
-    drivers(
-      packages_id: ["123455"],
-      driver_name: "Mohammad",
-      address: "Tulkarm",
-    ),
-  );
-
-  return deiver;
-}
-
 List<package_edit> buildMy_package_edit() {
   List<package_edit> orders = [];
 

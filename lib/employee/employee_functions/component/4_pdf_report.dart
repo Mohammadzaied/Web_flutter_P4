@@ -5,9 +5,9 @@ import 'package:flutter_application_1/employee/employee_functions/6_distribution
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PdfService {
-  Future<void> printCustomersPdf(List<drivers> data) async {
-    int totalCustomers = data.length;
-    int count = 0;
+  Future<void> printCustomersPdf(List<packages> data) async {
+    // int totalCustomers = data.length;
+    // int count = 0;
 
     PdfDocument document = PdfDocument();
     PdfPage page = document.pages.add();
@@ -30,12 +30,15 @@ class PdfService {
     /////////////////////
     PdfGrid grid = PdfGrid();
 
-    grid.columns.add(count: 3);
+    grid.columns.add(count: 6);
     grid.headers.add(1);
     PdfGridRow header = grid.headers[0];
-    header.cells[0].value = "Name";
-    header.cells[1].value = "Id";
-    header.cells[2].value = "Address";
+    header.cells[0].value = "Driver Name";
+    header.cells[1].value = "Package ID";
+    header.cells[2].value = "Customer name";
+    header.cells[3].value = "Customer phone";
+    header.cells[4].value = "Type";
+    header.cells[5].value = "Address";
 
     //Add header style
     header.style = PdfGridCellStyle(
@@ -46,20 +49,23 @@ class PdfService {
 
     //Add rows to grid
     for (final customer in data) {
-      count++;
-      for (int i = 0; i < customer.packages_id.length; i++) {
-        PdfGridRow row = grid.rows.add();
-        row.cells[0].value = customer.driver_name;
-        row.cells[1].value = customer.packages_id[i];
-        row.cells[2].value = customer.address;
-      }
-      if (count != totalCustomers) {
-        PdfGridRow row2 = grid.rows.add();
-        row2.cells[0].value = "Name";
-        row2.cells[1].value = "Id";
-        row2.cells[2].value = "Address";
-        row2.style.backgroundBrush = PdfBrushes.lightGray;
-      }
+      // count++;
+      //for (int i = 0; i < customer.packages.length; i++) {
+      PdfGridRow row = grid.rows.add();
+      row.cells[0].value = customer.driver_name;
+      row.cells[1].value = customer.package_id;
+      row.cells[2].value = customer.customer_name;
+      row.cells[3].value = customer.customer_phone;
+      row.cells[4].value = customer.package_type;
+      row.cells[5].value = customer.address;
+      // }
+      // if (count != totalCustomers) {
+      //   PdfGridRow row2 = grid.rows.add();
+      //   row2.cells[0].value = "Name";
+      //   row2.cells[1].value = "Id";
+      //   row2.cells[2].value = "Address";
+      //   row2.style.backgroundBrush = PdfBrushes.lightGray;
+      // }
     }
     //Add rows style
     grid.style = PdfGridStyle(

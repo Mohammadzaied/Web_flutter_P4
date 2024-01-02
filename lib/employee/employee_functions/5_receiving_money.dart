@@ -272,7 +272,7 @@ class _receiving_moneyState extends State<receiving_money> {
                     height: 20,
                   ),
                   Text.rich(TextSpan(
-                      text: 'Total balance: ',
+                      text: 'Total amount: ',
                       style: TextStyle(fontSize: 20, color: Colors.red),
                       children: <InlineSpan>[
                         TextSpan(

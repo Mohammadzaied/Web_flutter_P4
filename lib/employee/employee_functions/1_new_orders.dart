@@ -281,7 +281,6 @@ class _new_orderState extends State<new_order> {
                   ),
                 )
               ])),
-          //  Text('${filteredOrders.length}'),
         ],
       ),
       ...filteredOrders.map((order) {

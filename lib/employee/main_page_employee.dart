@@ -56,9 +56,7 @@ class _main_pageState extends State<main_page>
     counter_assign = buildMy_assign_orders().length;
     widget5 = receiving_money();
     widget6 = edit_driver();
-    widget7 = distribution_orders(
-      driver_with_packages: buildMy_drivers(),
-    );
+    widget7 = distribution_orders();
     TabController_ = TabController(length: 7, vsync: this);
     super.initState();
   }
