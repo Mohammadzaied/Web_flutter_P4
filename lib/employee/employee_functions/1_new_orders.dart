@@ -63,16 +63,12 @@ class _new_orderState extends State<new_order> {
               '/image/' +
               new_orders[i]['send_user']['userName'] +
               new_orders[i]['send_user']['url'],
-
           name: new_orders[i]['send_user']['Fname'] +
               ' ' +
               new_orders[i]['send_user']['Lname'],
-
-          from: 'Nablus', // new_orders[i]['packageId'],
-          to: 'Tulkarm', //new_orders[i]['packageId'],
-
+          from: new_orders[i]['fromCity'],
+          to: new_orders[i]['toCity'],
           price: new_orders[i]['packagePrice'],
-
           package_size: new_orders[i]['shippingType'] == 'Document0'
               ? 0
               : new_orders[i]['shippingType'] == 'Package0'
