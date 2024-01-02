@@ -132,18 +132,20 @@ class _edit_driverState extends State<edit_driver> {
     List<driver> new_drivers = [];
     //print(new_orders);
     for (int i = 0; i < drivers_.length; i++) {
-      // List<String> daysList = drivers_[i]['working_days']
-      //     .replaceAll('[', '')
-      //     .replaceAll(']', '')
-      //     .split(', ')
-      //     .map((day) => day.trim())
-      //     .toList();
-      drivers.add(
+      List<String> daysList = drivers_[i]['working_days']
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', '')
+          .split(', ')
+          .map((day) => day.trim())
+          .toList();
+      print(daysList);
+      new_drivers.add(
         driver(
           city: drivers_[i]['city'],
           username: drivers_[i]['username'],
           name: drivers_[i]['name'],
-          working_days: ['Sunday'],
+          working_days: daysList,
           // working_days: drivers_[i]['working_days'],
           img: urlStarter + drivers_[i]['img'],
         ),
