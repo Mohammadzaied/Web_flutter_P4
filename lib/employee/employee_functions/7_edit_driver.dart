@@ -4,6 +4,7 @@ import 'package:flutter_application_1/employee/main_page_employee.dart';
 
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -77,39 +78,6 @@ class _edit_driverState extends State<edit_driver> {
     ),
   ];
 
-  // void loadData() async {
-  //   drivers = [
-  //     driver(
-  //       city: 'Tulkarm',
-  //       username: '111111',
-  //       name: 'mohammad',
-  //       working_days: ['Sunday', 'Monday'],
-  //       img: "assets/f3.png",
-  //     ),
-  //     driver(
-  //       city: 'Tulkarm',
-  //       username: '222222222222',
-  //       name: 'rami',
-  //       working_days: ['Thursday', 'Monday'],
-  //       img: "assets/add-friend.png",
-  //     ),
-  //     driver(
-  //       city: 'Ramallah',
-  //       username: '555555',
-  //       name: 'zain',
-  //       working_days: ['Sunday', 'Friday', 'Thursday'],
-  //       img: "assets/driver.png",
-  //     ),
-  //     driver(
-  //       city: 'Nablus',
-  //       username: '4532233',
-  //       name: 'ahmad',
-  //       working_days: ['Thursday', 'Monday', 'Saturday'],
-  //       img: "",
-  //     ),
-  //   ];
-  // }
-
   Future<void> fetchData_drivers() async {
     var url = urlStarter + "/employee/GetDriverListEmployee";
     print(url);
@@ -118,7 +86,7 @@ class _edit_driverState extends State<edit_driver> {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       drivers_ = data;
-      print(data);
+      // print(data);
       setState(() {
         drivers = buildMy_drivers();
       });
@@ -130,7 +98,6 @@ class _edit_driverState extends State<edit_driver> {
 
   List<driver> buildMy_drivers() {
     List<driver> new_drivers = [];
-    //print(new_orders);
     for (int i = 0; i < drivers_.length; i++) {
       List<String> daysList = drivers_[i]['working_days']
           .toString()
@@ -139,14 +106,13 @@ class _edit_driverState extends State<edit_driver> {
           .split(', ')
           .map((day) => day.trim())
           .toList();
-      print(daysList);
+      // print(daysList);
       new_drivers.add(
         driver(
           city: drivers_[i]['city'],
           username: drivers_[i]['username'],
           name: drivers_[i]['name'],
           working_days: daysList,
-          // working_days: drivers_[i]['working_days'],
           img: urlStarter + drivers_[i]['img'],
         ),
       );
@@ -155,12 +121,42 @@ class _edit_driverState extends State<edit_driver> {
     return new_drivers;
   }
 
+  String username = GetStorage().read("userName");
+  String password = GetStorage().read("password");
+
+  Future post_edit_working_days(String username_driver) async {
+    var url = urlStarter + "/employee/editDriverWorkingDays";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "driverUsername": username_driver,
+          "workingDays": new_working_day.toString()
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      setState(() {
+        print(new_working_day);
+        new_working_day.clear();
+        print(new_working_day);
+        _days.forEach((day) {
+          day.isSelected = false;
+        });
+        controller.text = '';
+        driver_selcted =
+            driver(username: '', name: '', img: '', working_days: [], city: '');
+        fetchData_drivers();
+      });
+    }
+  }
+
   @override
   void initState() {
     setState(() {
       TabController_.index = 6;
     });
-    //loadData();
     fetchData_drivers();
     selectedCity = '';
 
@@ -508,6 +504,9 @@ class _edit_driverState extends State<edit_driver> {
                                                   TextButton(
                                                       onPressed: () {
                                                         //when pressed change working day to driver store in  new_working_day variable
+                                                        post_edit_working_days(
+                                                            driver_selcted
+                                                                .username);
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
@@ -696,6 +695,7 @@ class _edit_driverState extends State<edit_driver> {
                                                   TextButton(
                                                       onPressed: () {
                                                         //when pressed add vacation to driver store in  vacation variable
+
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
