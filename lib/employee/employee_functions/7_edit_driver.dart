@@ -16,6 +16,8 @@ class edit_driver extends StatefulWidget {
 
 class _edit_driverState extends State<edit_driver> {
   TextEditingController controller = new TextEditingController();
+  TextEditingController controller2 = new TextEditingController();
+
   List<dynamic> drivers_ = [];
   ////////////////
   int _selectedTabIndex =
@@ -25,6 +27,7 @@ class _edit_driverState extends State<edit_driver> {
   bool isHovered = false;
   bool isHovered2 = false;
   bool isHovered3 = false;
+  bool isHovered4 = false;
 
   /////////////////////
   List citylist = [
@@ -38,13 +41,19 @@ class _edit_driverState extends State<edit_driver> {
     'None'
   ];
   String? selectedCity;
+  String? new_vehicle_id;
 
   //////
   List<driver> drivers = [];
-  late driver driver_selcted =
-      driver(username: '', name: '', img: '', working_days: [], city: '');
+  driver driver_selcted = driver(
+      username: '',
+      name: '',
+      img: '',
+      working_days: [],
+      city: '',
+      vehicle_id: '');
   //////
-  List<String> new_working_day = [];
+  List<String> new_working_days = [];
   //////////
   bool is_selected = false; // to change button from disable to enable
   ///////////////////////////////////
@@ -106,9 +115,10 @@ class _edit_driverState extends State<edit_driver> {
           .split(', ')
           .map((day) => day.trim())
           .toList();
-      // print(daysList);
+
       new_drivers.add(
         driver(
+          vehicle_id: drivers_[i]['vehicleNumber'],
           city: drivers_[i]['city'],
           username: drivers_[i]['username'],
           name: drivers_[i]['name'],
@@ -124,30 +134,119 @@ class _edit_driverState extends State<edit_driver> {
   String username = GetStorage().read("userName");
   String password = GetStorage().read("password");
 
-  Future post_edit_working_days(String username_driver) async {
+  Future post_edit_days(String username_driver) async {
     var url = urlStarter + "/employee/editDriverWorkingDays";
     var responce = await http.post(Uri.parse(url),
         body: jsonEncode({
           "employeeUserName": username,
           "employeePassword": password,
           "driverUsername": username_driver,
-          "workingDays": new_working_day.toString()
+          "workingDays": new_working_days.toString()
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
         });
     if (responce.statusCode == 200) {
       setState(() {
-        print(new_working_day);
-        new_working_day.clear();
-        print(new_working_day);
+        new_working_days.clear();
         _days.forEach((day) {
           day.isSelected = false;
         });
         controller.text = '';
-        driver_selcted =
-            driver(username: '', name: '', img: '', working_days: [], city: '');
+        driver_selcted = driver(
+            username: '',
+            name: '',
+            img: '',
+            working_days: [],
+            city: '',
+            vehicle_id: '');
         fetchData_drivers();
+      });
+    }
+  }
+
+  Future post_edit_vacation(String username_driver) async {
+    var url = urlStarter + "/employee/addVacationDriver";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "driverUsername": username_driver,
+          "notAvailableDate": vacation,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      setState(() {
+        fetchData_drivers();
+        vacation_date_true = false;
+        vacation = '';
+        controller.text = '';
+        driver_selcted = driver(
+            username: '',
+            name: '',
+            img: '',
+            working_days: [],
+            city: '',
+            vehicle_id: '');
+      });
+    }
+  }
+
+  Future post_edit_city(String username_driver) async {
+    var url = urlStarter + "/employee/editDriverWorkingCity";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "driverUsername": username_driver,
+          "newCity": selectedCity,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      setState(() {
+        fetchData_drivers();
+        selectedCity = '';
+        controller.text = '';
+        driver_selcted = driver(
+            username: '',
+            name: '',
+            img: '',
+            working_days: [],
+            city: '',
+            vehicle_id: '');
+      });
+    }
+  }
+
+  Future post_edit_vehicle_id(String username_driver) async {
+    var url = urlStarter + "/employee/editDriverVehicleNumber";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "driverUsername": username_driver,
+          "vehicleNumber": new_vehicle_id,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      setState(() {
+        fetchData_drivers();
+        controller2.text = '';
+        new_vehicle_id = '';
+        controller.text = '';
+        driver_selcted = driver(
+            username: '',
+            name: '',
+            img: '',
+            working_days: [],
+            city: '',
+            vehicle_id: '');
       });
     }
   }
@@ -159,7 +258,7 @@ class _edit_driverState extends State<edit_driver> {
     });
     fetchData_drivers();
     selectedCity = '';
-
+    new_vehicle_id = '';
     super.initState();
   }
 
@@ -200,7 +299,8 @@ class _edit_driverState extends State<edit_driver> {
                             name: '',
                             img: '',
                             working_days: [],
-                            city: '');
+                            city: '',
+                            vehicle_id: '');
                       });
                     },
                     onHover: (value) {
@@ -242,7 +342,8 @@ class _edit_driverState extends State<edit_driver> {
                             name: '',
                             img: '',
                             working_days: [],
-                            city: '');
+                            city: '',
+                            vehicle_id: '');
                       });
                     },
                     onHover: (value) {
@@ -284,12 +385,53 @@ class _edit_driverState extends State<edit_driver> {
                             name: '',
                             img: '',
                             working_days: [],
-                            city: '');
+                            city: '',
+                            vehicle_id: '');
                       });
                     },
                     onHover: (value) {
                       setState(() {
                         isHovered3 = !isHovered3;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: 200,
+                  height: 40,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: (isHovered4 || _selectedTabIndex == 4)
+                          ? primarycolor
+                          : Colors.white,
+                      foregroundColor: Colors.black,
+                    ),
+                    child: Text('Edit vehicle number'),
+                    onPressed: () {
+                      setState(() {
+                        controller.text = '';
+                        _selectedTabIndex = 4;
+                        driver_selcted = driver(
+                            username: '',
+                            name: '',
+                            img: '',
+                            working_days: [],
+                            city: '',
+                            vehicle_id: '');
+                      });
+                    },
+                    onHover: (value) {
+                      setState(() {
+                        isHovered4 = !isHovered4;
                       });
                     },
                   ),
@@ -320,12 +462,16 @@ class _edit_driverState extends State<edit_driver> {
                         textFieldConfiguration: TextFieldConfiguration(
                           onChanged: (text) {
                             setState(() {
+                              _days.forEach((day) {
+                                day.isSelected = false;
+                              });
                               driver_selcted = driver(
                                   username: '',
                                   name: '',
                                   img: '',
                                   working_days: [],
-                                  city: '');
+                                  city: '',
+                                  vehicle_id: '');
                             });
                           },
                           controller: controller,
@@ -377,6 +523,17 @@ class _edit_driverState extends State<edit_driver> {
                         },
                         onSuggestionSelected: (driver suggestion) {
                           setState(() {
+                            if (_selectedTabIndex == 1) {
+                              _days.forEach((day) {
+                                if (suggestion.working_days
+                                    .contains(day.dayKey)) {
+                                  day.isSelected = true;
+                                  new_working_days.add(day.dayKey);
+                                } else {
+                                  day.isSelected = false;
+                                }
+                              });
+                            }
                             driver_selcted = suggestion;
                             controller.text = suggestion.name;
                           });
@@ -454,7 +611,14 @@ class _edit_driverState extends State<edit_driver> {
                               ),
                               onSelect: (values) {
                                 setState(() {
-                                  new_working_day = values;
+                                  new_working_days.clear();
+
+                                  _days.forEach((day) {
+                                    if (day.isSelected) {
+                                      new_working_days.add(day.dayKey);
+                                    }
+                                  });
+                                  // new_working_days = values;
                                 });
                               },
                             ),
@@ -468,7 +632,7 @@ class _edit_driverState extends State<edit_driver> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: (new_working_day.isNotEmpty &&
+                              color: (new_working_days.isNotEmpty &&
                                       driver_selcted.name.isNotEmpty)
                                   ? primarycolor
                                   : Colors.grey,
@@ -488,7 +652,7 @@ class _edit_driverState extends State<edit_driver> {
                                         color: Colors.white),
                                   ),
                                 ),
-                                onPressed: (new_working_day.isNotEmpty &&
+                                onPressed: (new_working_days.isNotEmpty &&
                                         driver_selcted.name.isNotEmpty)
                                     ? () {
                                         showDialog(
@@ -504,9 +668,11 @@ class _edit_driverState extends State<edit_driver> {
                                                   TextButton(
                                                       onPressed: () {
                                                         //when pressed change working day to driver store in  new_working_day variable
-                                                        post_edit_working_days(
+                                                        post_edit_days(
                                                             driver_selcted
                                                                 .username);
+                                                        new_working_days
+                                                            .clear();
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
@@ -532,7 +698,7 @@ class _edit_driverState extends State<edit_driver> {
                                                 content: Container(
                                                   width: 400,
                                                   child: Text(
-                                                    "Are you sure you want to change working days for ${driver_selcted.name} to ${new_working_day}",
+                                                    "Are you sure you want to change working days for ${driver_selcted.name} to ${new_working_days}",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 18),
@@ -695,7 +861,9 @@ class _edit_driverState extends State<edit_driver> {
                                                   TextButton(
                                                       onPressed: () {
                                                         //when pressed add vacation to driver store in  vacation variable
-
+                                                        post_edit_vacation(
+                                                            driver_selcted
+                                                                .username);
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
@@ -862,6 +1030,9 @@ class _edit_driverState extends State<edit_driver> {
                                                   TextButton(
                                                       onPressed: () {
                                                         //when pressed add vacation to driver store in  vacation variable
+                                                        post_edit_city(
+                                                            driver_selcted
+                                                                .username);
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
@@ -889,6 +1060,163 @@ class _edit_driverState extends State<edit_driver> {
                                                   width: 400,
                                                   child: Text(
                                                     "Are you sure you want to Edit the transmission line for ${driver_selcted.name} from ${driver_selcted.city} to ${selectedCity}",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18),
+                                                  ),
+                                                ),
+                                                titleTextStyle: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 25),
+                                                contentTextStyle: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16),
+                                                backgroundColor: primarycolor,
+                                              );
+                                            });
+                                      }
+                                    : null),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+
+                //////////////////////// widgets when edit  number
+
+                Visibility(
+                  visible: _selectedTabIndex == 4,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text.rich(TextSpan(
+                              text: 'Vehicle Number: ',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text: '${driver_selcted.vehicle_id}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ])),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Container(
+                              width: 300,
+                              child: TextField(
+                                controller: controller2,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: theme_helper().text_form_style(
+                                    "Vehicle Number",
+                                    "Enter Vehicle Number",
+                                    null),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    new_vehicle_id = newValue;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 400,
+                            height: 1,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: (new_vehicle_id!.isNotEmpty &&
+                                      driver_selcted.name.isNotEmpty)
+                                  ? primarycolor
+                                  : Colors.grey,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                color: primarycolor,
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
+                                  child: Text(
+                                    "Save Changes",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                onPressed: (new_vehicle_id!.isNotEmpty &&
+                                        driver_selcted.name.isNotEmpty)
+                                    ? () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        //when pressed add vacation to driver store in  vacation variable
+                                                        post_edit_vehicle_id(
+                                                            driver_selcted
+                                                                .username);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(
+                                                        "Yes",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18),
+                                                      )),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(
+                                                        "Cancel",
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 18),
+                                                      )),
+                                                ],
+                                                title:
+                                                    Text("Edit Vehicle number"),
+                                                content: Container(
+                                                  width: 400,
+                                                  child: Text(
+                                                    "Are you sure you want to Edit Vehicle number for ${driver_selcted.name} from ${driver_selcted.vehicle_id} to ${new_vehicle_id}",
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 18),
@@ -961,9 +1289,11 @@ class driver {
   final String username;
   final String img;
   final String city;
+  final String vehicle_id;
   final List<String> working_days;
 
   driver({
+    required this.vehicle_id,
     required this.city,
     required this.working_days,
     required this.username,
