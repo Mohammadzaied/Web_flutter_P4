@@ -211,8 +211,8 @@ class _receiving_moneyState extends State<receiving_money> {
                 children: [
                   Center(
                     child: Container(
-                      height: 140,
-                      width: 140,
+                      height: 180,
+                      width: 180,
                       decoration: BoxDecoration(
                           shape: BoxShape.rectangle,
                           //borderRadius: BorderRadius.circular(20),
@@ -227,7 +227,7 @@ class _receiving_moneyState extends State<receiving_money> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Text.rich(TextSpan(
                       text: 'Driver name: ',
@@ -243,7 +243,7 @@ class _receiving_moneyState extends State<receiving_money> {
                         )
                       ])),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Text.rich(TextSpan(
                       text: 'Username: ',
@@ -259,7 +259,7 @@ class _receiving_moneyState extends State<receiving_money> {
                         )
                       ])),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Text.rich(TextSpan(
                       text: 'Number package delivery: ',
@@ -275,7 +275,7 @@ class _receiving_moneyState extends State<receiving_money> {
                         )
                       ])),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Text.rich(TextSpan(
                       text: 'Number package receive: ',
@@ -291,7 +291,7 @@ class _receiving_moneyState extends State<receiving_money> {
                         )
                       ])),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Text.rich(TextSpan(
                       text: 'Money of delivery: ',
@@ -307,7 +307,7 @@ class _receiving_moneyState extends State<receiving_money> {
                         )
                       ])),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Text.rich(TextSpan(
                       text: 'Money of purchase: ',
@@ -323,7 +323,7 @@ class _receiving_moneyState extends State<receiving_money> {
                         )
                       ])),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Text.rich(TextSpan(
                       text: 'Total amount: ',
@@ -340,7 +340,7 @@ class _receiving_moneyState extends State<receiving_money> {
                         )
                       ])),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
