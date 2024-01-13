@@ -75,8 +75,8 @@ class create_order extends StatefulWidget {
 }
 
 class _create_orderState extends State<create_order> {
-  late double latfrom = 0;
-  late double longfrom;
+  double latfrom = 32.228263850000005;
+  double longfrom = 35.22223124412008;
   late double latto = 0;
   late double longto = 0;
   double distance = 0;
@@ -87,11 +87,16 @@ class _create_orderState extends State<create_order> {
   double pricePerKm = 1.5;
   double bigPackagePrice = 4;
   String? rec_name;
+  String? send_name;
   String? rec_userName = "";
+  String? send_userName = "";
   String? payment_method;
   String? rec_phone;
   String? rec_email;
-  String? locationFromInfo;
+  String? send_phone;
+  String? send_email;
+  String? locationFromInfo =
+      'amenity: جامعة النجاح الوطنية - الحرم الجديد, road: شارع رفيديا, suburb: رفيديا البلد, city: نابلس';
   String? locationToInfo;
   String? package_price;
   String textFromChild = '';
@@ -102,9 +107,12 @@ class _create_orderState extends State<create_order> {
   TextEditingController _textController2 = TextEditingController();
   TextEditingController _textControllerName = TextEditingController();
   TextEditingController _textControllerphone = TextEditingController();
-  //TextEditingController _textControllerRec_userName = TextEditingController();
   TextEditingController _textControllerEmail = TextEditingController();
-  String selectedName = "";
+  TextEditingController _textControllerSenderName = TextEditingController();
+  TextEditingController _textControllerSenderphone = TextEditingController();
+  TextEditingController _textControllerSenderEmail = TextEditingController();
+  String selectedRecName = "";
+  String selectedSenderName = "";
   int discount = 0;
   String shippingType = "Document";
   String paySelectedValue = "The recipient";
@@ -118,10 +126,21 @@ class _create_orderState extends State<create_order> {
     'Paypal',
     'Cash delivery',
   ];
+  List citylist = [
+    'Nablus',
+    'Tulkarm',
+    'Ramallah',
+    'Jenin',
+    'Qalqilya',
+    'Salfit',
+    'Hebron'
+  ];
+  String? toCity;
   late int selectedValue;
 
   @override
   void initState() {
+    fetchData();
     setState(() {
       TabController_.index = 1;
     });
@@ -141,7 +160,7 @@ class _create_orderState extends State<create_order> {
       _textControllerEmail.text = widget.email;
       package_price = widget.price.toString();
       _textControllerName.text = widget.name == "null" ? '' : widget.name;
-      selectedName = widget.name == "null" ? '' : widget.name;
+      selectedRecName = widget.name == "null" ? '' : widget.name;
       rec_userName = widget.rec_userName == "null" ? '' : widget.rec_userName;
     }
     // = widget.accountSelectedValue == "Have" ? "Document" : widget.shipping;
@@ -233,7 +252,8 @@ class _create_orderState extends State<create_order> {
   Future<void> fetchData() async {
     var url =
         urlStarter + "/users/showCustomers?userName=" + userName.toString();
-    final response = await http.get(Uri.parse(url));
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
     List<dynamic> sug = [];
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -254,23 +274,23 @@ class _create_orderState extends State<create_order> {
     }
   }
 
-  // String customerUserName = GetStorage().read('userName');
-  // String customerPassword = GetStorage().read('password');
-
-  //// testing to remove error
-  String customerUserName = '111';
-  String customerPassword = '1111';
+  String employeeUserName = GetStorage().read('userName');
+  String employeePassword = GetStorage().read('password');
 
   Future postSendPackageUser(String endPoint, String doneMsg) async {
     var url = urlStarter + endPoint;
     var responce = await http.post(Uri.parse(url),
         body: jsonEncode({
-          "customerUserName": customerUserName,
-          "customerPassword": customerPassword,
+          "employeeUserName": employeeUserName,
+          "employeePassword": employeePassword,
           "rec_userName": rec_userName,
-          "recName": selectedName,
+          "send_userName": send_userName,
+          "recName": selectedRecName,
           "recEmail": rec_email,
           "phoneNumber": rec_phone,
+          "senderName": selectedSenderName,
+          "senderEmail": send_email,
+          "senderPhoneNumber": send_phone,
           "packagePrice": package_price,
           "shippingType": shippingType + selectedIdx.toString(),
           "whoWillPay": paySelectedValue,
@@ -280,7 +300,9 @@ class _create_orderState extends State<create_order> {
           "latFrom": latfrom,
           "longFrom": longfrom,
           "locationFromInfo": locationFromInfo,
-          "locationToInfo": locationToInfo
+          "locationToInfo": locationToInfo,
+          "toCity": toCity,
+          "fromCity": "Nablus"
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -300,7 +322,7 @@ class _create_orderState extends State<create_order> {
           context: context,
           builder: (context) {
             return show_dialog().alartDialogPushNamed(
-                "Done!", doneMsg, context, GetStorage().read("userType"));
+                "Done!", doneMsg, context, "/create_order");
           });
     }
 
@@ -313,30 +335,6 @@ class _create_orderState extends State<create_order> {
         1000;
   }
 
-  Future<void> fetchLocations() async {
-    var url =
-        urlStarter + "/customer/getMyLocations?userName=" + customerUserName;
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      setState(() {
-        Locations = data['result'];
-      });
-    } else if (response.statusCode == 404) {
-      setState(() {});
-    } else {
-      throw Exception('Failed to load data');
-    }
-    Locations.add({
-      "longTo": 35.297659,
-      "latTo": 32.193192,
-      "location":
-          "residential: روجيب, suburb: إسكان الموظفين, village: روجيب, county: منطقة ب",
-      "name": "Manually set Location",
-      "id": 99999999
-    });
-  }
-
   List<DataItem> items = [
     DataItem(name: 'Small Package', img: "assets/small.jpeg"),
     DataItem(name: 'Meduim Package', img: "assets/meduim.jpeg"),
@@ -344,9 +342,8 @@ class _create_orderState extends State<create_order> {
   ];
   @override
   Widget build(BuildContext context) {
+    final focus0 = FocusNode();
     final focus = FocusNode();
-
-    // return Scaffold(body: Text('data'));
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -363,6 +360,164 @@ class _create_orderState extends State<create_order> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Sender Name',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Visibility(
+                        visible: true,
+                        child: SearchField(
+                          controller: _textControllerSenderName,
+                          onSearchTextChanged: (query) {
+                            send_userName = '';
+                            if (!query.isEmpty) {
+                              final filter = suggestions
+                                  .where((element) => element['Fname']
+                                      .toLowerCase()
+                                      .startsWith(query.toLowerCase()))
+                                  .toList();
+                              return filter
+                                  .map((e) => SearchFieldListItem<String>(
+                                      e['userName'].toString(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: ListTile(
+                                          title: Text(e['Fname'] +
+                                              " " +
+                                              e['Lname'].toString()),
+                                          trailing:
+                                              Text(e['userName'].toString()),
+                                        ),
+                                      )))
+                                  .toList();
+                            }
+                            return null;
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty)
+                              return "please enter the sender's name";
+                            if (send_userName == rec_userName)
+                              return "The sender cannot be the recipient";
+                            return null;
+                          },
+                          onSaved: (newValue) {
+                            selectedSenderName = newValue.toString();
+                            print(newValue);
+                          },
+                          scrollbarDecoration: ScrollbarDecoration(),
+                          searchInputDecoration: theme_helper().text_form_style(
+                              "The sender's name",
+                              "Enter The sender's name",
+                              Icons.person_outline_sharp),
+                          itemHeight: 50,
+                          suggestions: []
+                              .map((e) => SearchFieldListItem<String>(e,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0),
+                                    child:
+                                        Text(e, style: TextStyle(fontSize: 16)),
+                                  )))
+                              .toList(),
+                          suggestionState: Suggestion.hidden,
+                          focusNode: focus0,
+                          onSuggestionTap: (SearchFieldListItem<String> x) {
+                            setState(() {
+                              focus0.unfocus();
+                              selectedSenderName = x.searchKey;
+                              print(selectedSenderName);
+                              final filter = suggestions.where((element) {
+                                return element['userName']
+                                    .toLowerCase()
+                                    .startsWith(
+                                        selectedSenderName.toLowerCase());
+                              }).toList();
+                              send_name =
+                                  filter[0]['Fname'] + " " + filter[0]['Lname'];
+                              send_phone =
+                                  "0" + filter[0]['phoneNumber'].toString();
+                              send_email = filter[0]['email'];
+                              selectedSenderName = send_name.toString();
+                              _textControllerSenderphone.text =
+                                  send_phone.toString();
+                              _textControllerSenderName.text =
+                                  send_name.toString();
+                              _textControllerSenderEmail.text =
+                                  send_email.toString();
+                              send_userName = filter[0]['userName'];
+                              print(send_userName);
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'sender Phone',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      TextFormField(
+                        controller: _textControllerSenderphone,
+                        keyboardType: TextInputType.phone,
+                        decoration: theme_helper().text_form_style(
+                            "The sender's Phone",
+                            "Enter The sender's phone",
+                            Icons.phone),
+                        validator: (value) {
+                          String res = isValidPhone(value.toString());
+                          if (!res.isEmpty) {
+                            return res;
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) {
+                          send_phone = newValue;
+                        },
+                      ),
+                      Visibility(
+                        visible: true,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Sender Email',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            TextFormField(
+                              controller: _textControllerSenderEmail,
+                              //initialValue: rec_email,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: theme_helper().text_form_style(
+                                  "The sender's email",
+                                  "Enter The sender's email",
+                                  Icons.email),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Please enter sender's email";
+                                }
+                                if (!isValidEmail(value)) {
+                                  return 'Please enter a valid email address';
+                                }
+                                return null;
+                              },
+                              onSaved: (newValue) {
+                                send_email = newValue;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -402,10 +557,12 @@ class _create_orderState extends State<create_order> {
                           validator: (value) {
                             if (value!.isEmpty)
                               return "please enter the recipient's name";
+                            if (send_userName == rec_userName)
+                              return "The recipient cannot be the sender";
                             return null;
                           },
                           onSaved: (newValue) {
-                            selectedName = newValue.toString();
+                            selectedRecName = newValue.toString();
                             print(newValue);
                           },
                           scrollbarDecoration: ScrollbarDecoration(),
@@ -428,19 +585,19 @@ class _create_orderState extends State<create_order> {
                           onSuggestionTap: (SearchFieldListItem<String> x) {
                             setState(() {
                               focus.unfocus();
-                              selectedName = x.searchKey;
-                              print(selectedName);
+                              selectedRecName = x.searchKey;
+                              print(selectedRecName);
                               final filter = suggestions.where((element) {
                                 return element['userName']
                                     .toLowerCase()
-                                    .startsWith(selectedName.toLowerCase());
+                                    .startsWith(selectedRecName.toLowerCase());
                               }).toList();
                               rec_name =
                                   filter[0]['Fname'] + " " + filter[0]['Lname'];
                               rec_phone =
                                   "0" + filter[0]['phoneNumber'].toString();
                               rec_email = filter[0]['email'];
-                              selectedName = rec_name.toString();
+                              selectedRecName = rec_name.toString();
                               _textControllerphone.text = rec_phone.toString();
                               _textControllerName.text = rec_name.toString();
                               _textControllerEmail.text = rec_email.toString();
@@ -450,21 +607,6 @@ class _create_orderState extends State<create_order> {
                           },
                         ),
                       ),
-                      // SizedBox(height: 10),
-                      // TextFormField(
-                      //   controller: _textControllerName,
-                      //   decoration: theme_helper().text_form_style(
-                      //       "The recipient's Username",
-                      //       "Enter The recipient's Username",
-                      //       Icons.abc),
-                      //   validator: (value) {
-                      //     if (value!.isEmpty) return "The recipient's Username";
-                      //     return null;
-                      //   },
-                      //   onSaved: (newValue) {
-                      //     rec_name = newValue;
-                      //   },
-                      // ),
                       SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -475,7 +617,6 @@ class _create_orderState extends State<create_order> {
                       ),
                       TextFormField(
                         controller: _textControllerphone,
-                        //initialValue: widget.phone != '' ? widget.phone : null,
                         keyboardType: TextInputType.phone,
                         decoration: theme_helper().text_form_style(
                             "The recipient's Phone",
@@ -493,7 +634,7 @@ class _create_orderState extends State<create_order> {
                         },
                       ),
                       Visibility(
-                        visible: true, //accountSelectedValue == "Doesn't have",
+                        visible: true,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -557,7 +698,6 @@ class _create_orderState extends State<create_order> {
                         },
                       ),
                       SizedBox(height: 20),
-
                       Row(
                         children: [
                           SizedBox(
@@ -595,7 +735,7 @@ class _create_orderState extends State<create_order> {
                               });
                             },
                           ),
-                          Text("I'll pay"),
+                          Text("The sender"),
                         ],
                       ),
                       SizedBox(height: 20),
@@ -691,114 +831,35 @@ class _create_orderState extends State<create_order> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Shipping From',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
                       DropdownButtonFormField(
+                        value: toCity,
                         isExpanded: true,
-                        hint: Text('Choose shipping from location',
-                            style: TextStyle(color: Colors.grey)),
-                        items: Locations.map((value) {
-                          return DropdownMenuItem(
-                            value: value['id'],
-                            child: Text(
-                              value['name'].toString(),
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          );
-                        }).toList(),
-                        value: payment_method,
-                        decoration: theme_helper().text_form_style(
-                          '',
-                          '',
-                          Icons.not_listed_location_outlined,
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            if (99999999 == value) {
-                              isSetLocationAllow = true;
-                            } else {
-                              isSetLocationAllow = false;
-                              Locations.map((value1) {
-                                if (value == value1['id']) {
-                                  latfrom = value1['latTo'];
-                                  longfrom = value1['longTo'];
-                                  locationFromInfo = value1['location'];
-                                  _textController.text =
-                                      locationFromInfo.toString();
-                                  reCalculateDistance(
-                                      latfrom, longfrom, latto, longto);
-                                }
-                              }).toString();
-                            }
-
-                            print(isSetLocationAllow);
-                          });
-                        },
+                        hint: Text('Shipping To City'),
                         validator: (value) {
                           if (value == null) {
-                            return "Please choose location";
+                            return "Please select city";
                           }
                           return null;
                         },
-                      ),
-                      //SizedBox(height: 10),
-                      TextFormField(
-                        controller: _textController,
-                        style: TextStyle(fontSize: 12.0),
-                        validator: (val) {
-                          if (val!.isEmpty)
-                            return 'Please set location shipping from';
-                          return null;
-                        },
-                        readOnly: true,
-                        onSaved: (val) {
-                          locationFromInfo = val;
-                        },
-                        enabled: isSetLocationAllow,
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => set_location(
-                                      onDataReceived: getlocationfrom))));
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon:
-                              Icon(Icons.location_on, color: Colors.red),
-                          hintText: 'Set Location Shipping From',
-                          hintStyle: TextStyle(fontSize: 16.0),
-                          filled: true,
-                          fillColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(color: Colors.grey)),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade400)),
-                          errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide:
-                                  BorderSide(color: Colors.red, width: 2)),
-                          focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide:
-                                  BorderSide(color: Colors.red, width: 2)),
+                        decoration: theme_helper().text_form_style(
+                          '',
+                          '',
+                          Icons.location_city,
                         ),
+                        items: citylist.map((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            toCity = (value as String?)!;
+                            print(toCity);
+                          });
+                        },
                       ),
                       SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Shipping From',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
                       TextFormField(
                         controller: _textController2,
                         style: TextStyle(fontSize: 12.0),
@@ -845,7 +906,6 @@ class _create_orderState extends State<create_order> {
                       SizedBox(
                         height: 30,
                       ),
-
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -1015,7 +1075,6 @@ class _create_orderState extends State<create_order> {
                           ],
                         ),
                       ),
-
                       SizedBox(
                         height: 30,
                       ),
@@ -1040,16 +1099,13 @@ class _create_orderState extends State<create_order> {
                                 formState5.currentState!.save();
                                 if (widget.title == "Edit Package") {
                                   print("Edit Package");
-                                  print("have");
                                   postSendPackageUser(
                                       "/customer/editPackageUser?packageId=" +
                                           widget.packageId.toString(),
                                       "The package is edited successfully");
                                 } else {
-                                  print("have");
-                                  postSendPackageUser(
-                                      "/customer/sendPackageUser",
-                                      "The package is created successfully, now it is in review status you can edit it");
+                                  postSendPackageUser("/employee/createOrder",
+                                      "The package is created successfully");
                                 }
                               }
                             },

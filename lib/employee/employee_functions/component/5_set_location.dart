@@ -98,7 +98,7 @@ class _set_locationState extends State<set_location> {
                                 pickedData.latLong.latitude,
                                 pickedData.latLong.longitude);
                             Navigator.of(context).pop();
-                            Navigator.of(context).pop();
+                            //Navigator.of(context).pop();
                             //add_parcel().
                           },
                           child: Text(
