@@ -24,7 +24,7 @@ class _assign_orderState extends State<assign_order> {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       drivers_ = data;
-      print(data);
+      // print(data);
       setState(() {
         drivers = buildMy_drivers();
       });
@@ -62,13 +62,13 @@ class _assign_orderState extends State<assign_order> {
 
   Future<void> fetchData_assign_orders() async {
     var url = urlStarter + "/employee/getAssignPackageToDriver";
-    print(url);
+    // print(url);
     final response = await http
         .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       assign_orders = data;
-      print(assign_orders);
+      // print(assign_orders);
       setState(() {
         pk_assign = buildMy_assign_orders();
       });

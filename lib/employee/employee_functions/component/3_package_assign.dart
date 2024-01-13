@@ -81,6 +81,10 @@ class _package_assignState extends State<package_assign> {
     List<driver_assign_to_order> filteredDrivers =
         filterDrivers(widget.drivers, dayselcted_num, widget.city);
 
+    print('1111');
+    print(filteredDrivers.length);
+    print('1111');
+
     ////////////////////////////////////////////////////////////
 
     return Container(
@@ -385,12 +389,11 @@ class driver_assign_to_order {
 List<driver_assign_to_order> filterDrivers(
     List<driver_assign_to_order> drivers, String currentDay, String city) {
   print('######');
-  drivers.map((e) => print(e.name));
   print(currentDay);
   print(city);
   print('######');
+
   return drivers
-      .where((driver) =>
-          driver.isAvailableOnCurrentDay(currentDay) && driver.city == city)
+      .where((driver) => driver.isAvailableOnCurrentDay(currentDay))
       .toList();
 }
