@@ -52,7 +52,7 @@ class _package_assignState extends State<package_assign> {
   }
 
   String dayselcted_day = DateFormat('EEEE').format(DateTime.now());
-  String dayselcted_num = DateFormat('dd-MM-yyyy').format(DateTime.now());
+  String dayselcted_num = DateFormat('yyyy-mm-dd').format(DateTime.now());
 
   List daylist = [
     'Sunday',
@@ -351,7 +351,7 @@ class _package_assignState extends State<package_assign> {
     if (selectedDate != null) {
       setState(() {
         dayselcted_day = DateFormat('EEEE').format(selectedDate);
-        dayselcted_num = DateFormat('yyyy-MM-dd').format(selectedDate);
+        dayselcted_num = DateFormat('yyyy-mm-dd').format(selectedDate);
       });
     }
   }
@@ -393,4 +393,4 @@ List<driver_assign_to_order> filterDrivers(
       .where((driver) =>
           driver.isAvailableOnCurrentDay(currentDay) && driver.city == city)
       .toList();
-  }
+}
