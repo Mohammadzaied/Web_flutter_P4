@@ -375,7 +375,7 @@ class driver_assign_to_order {
   });
 
   bool isAvailableOnCurrentDay(String currentDay) {
-    DateTime dateTime = DateFormat('dd-MM-yyyy').parse(currentDay);
+    DateTime dateTime = DateFormat('yyyy-mm-dd').parse(currentDay);
     String dayOfWeek = DateFormat('EEEE').format(dateTime);
     return working_days.contains(dayOfWeek) && vacation != currentDay;
   }
@@ -393,4 +393,4 @@ List<driver_assign_to_order> filterDrivers(
       .where((driver) =>
           driver.isAvailableOnCurrentDay(currentDay) && driver.city == city)
       .toList();
-}
+  }
