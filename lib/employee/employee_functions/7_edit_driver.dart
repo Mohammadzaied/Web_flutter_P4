@@ -51,6 +51,7 @@ class _edit_driverState extends State<edit_driver> {
       img: '',
       working_days: [],
       city: '',
+      vacation: '',
       vehicle_id: '');
   //////
   List<String> new_working_days = [];
@@ -118,6 +119,7 @@ class _edit_driverState extends State<edit_driver> {
 
       new_drivers.add(
         driver(
+          vacation: drivers_[i]['notAvailableDate'].toString(),
           vehicle_id: drivers_[i]['vehicleNumber'],
           city: drivers_[i]['city'],
           username: drivers_[i]['username'],
@@ -154,6 +156,7 @@ class _edit_driverState extends State<edit_driver> {
         });
         controller.text = '';
         driver_selcted = driver(
+            vacation: '',
             username: '',
             name: '',
             img: '',
@@ -184,6 +187,7 @@ class _edit_driverState extends State<edit_driver> {
         vacation = '';
         controller.text = '';
         driver_selcted = driver(
+            vacation: '',
             username: '',
             name: '',
             img: '',
@@ -212,6 +216,7 @@ class _edit_driverState extends State<edit_driver> {
         selectedCity = '';
         controller.text = '';
         driver_selcted = driver(
+            vacation: '',
             username: '',
             name: '',
             img: '',
@@ -241,6 +246,7 @@ class _edit_driverState extends State<edit_driver> {
         new_vehicle_id = '';
         controller.text = '';
         driver_selcted = driver(
+            vacation: '',
             username: '',
             name: '',
             img: '',
@@ -295,6 +301,7 @@ class _edit_driverState extends State<edit_driver> {
                         controller.text = '';
                         _selectedTabIndex = 1;
                         driver_selcted = driver(
+                            vacation: '',
                             username: '',
                             name: '',
                             img: '',
@@ -338,6 +345,7 @@ class _edit_driverState extends State<edit_driver> {
                         controller.text = '';
                         _selectedTabIndex = 2;
                         driver_selcted = driver(
+                            vacation: '',
                             username: '',
                             name: '',
                             img: '',
@@ -381,6 +389,7 @@ class _edit_driverState extends State<edit_driver> {
                         controller.text = '';
                         _selectedTabIndex = 3;
                         driver_selcted = driver(
+                            vacation: '',
                             username: '',
                             name: '',
                             img: '',
@@ -421,6 +430,7 @@ class _edit_driverState extends State<edit_driver> {
                         controller.text = '';
                         _selectedTabIndex = 4;
                         driver_selcted = driver(
+                            vacation: '',
                             username: '',
                             name: '',
                             img: '',
@@ -466,6 +476,7 @@ class _edit_driverState extends State<edit_driver> {
                                 day.isSelected = false;
                               });
                               driver_selcted = driver(
+                                  vacation: '',
                                   username: '',
                                   name: '',
                                   img: '',
@@ -737,6 +748,29 @@ class _edit_driverState extends State<edit_driver> {
                               children: <InlineSpan>[
                                 TextSpan(
                                   text: '${driver_selcted.working_days}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ])),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text.rich(TextSpan(
+                              text: 'Specific Vacation :',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text:
+                                      ' ${driver_selcted.vacation != 'null' ? driver_selcted.vacation : 'No specific vacation'}',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.red,
@@ -1290,6 +1324,7 @@ class driver {
   final String img;
   final String city;
   final String vehicle_id;
+  final String vacation;
   final List<String> working_days;
 
   driver({
@@ -1299,5 +1334,6 @@ class driver {
     required this.username,
     required this.name,
     required this.img,
+    required this.vacation,
   });
 }

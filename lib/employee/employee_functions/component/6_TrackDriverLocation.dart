@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class TrackDriverLocation extends StatefulWidget {
   final double Late;
@@ -31,20 +31,20 @@ class _TrackDriverLocationState extends State<TrackDriverLocation> {
   late Timer timer;
   List<Marker> markers = [];
 
-  // Future<void> fetchLocation() async {
-  //   var url = urlStarter + "/driver/driverLocation?driverUserName=" + username;
-  //   final response = await http
-  //       .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
-  //   if (response.statusCode == 200) {
-  //     var data = jsonDecode(response.body);
-  //     setState(() {
-  //       late = data['late'];
-  //       long = data['long'];
-  //     });
-  //   } else {
-  //     throw Exception('Failed to load data');
-  //   }
-  // }
+  Future<void> fetchLocation() async {
+    var url = urlStarter + "/driver/driverLocation?driverUserName=" + username;
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      setState(() {
+        late = data['late'];
+        long = data['long'];
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 
   void initState() {
     long = widget.long;
@@ -52,17 +52,16 @@ class _TrackDriverLocationState extends State<TrackDriverLocation> {
     name = widget.name;
     username = widget.userName;
     _addMarker(LatLng(late, long), name);
-
     initial();
     super.initState();
-    // timer = Timer.periodic(Duration(seconds: 30), (Timer t) async {
-    //   await fetchLocation();
-    //   setState(() {
-    //     _addMarker(LatLng(late, long), name);
-    //     mapController!
-    //         .animateCamera(CameraUpdate.newLatLng(LatLng(late, long)));
-    //   });
-    // });
+    timer = Timer.periodic(Duration(seconds: 30), (Timer t) async {
+      await fetchLocation();
+      setState(() {
+        _addMarker(LatLng(late, long), name);
+        mapController!
+            .animateCamera(CameraUpdate.newLatLng(LatLng(late, long)));
+      });
+    });
   }
 
   void dispose() {
@@ -107,7 +106,7 @@ class _TrackDriverLocationState extends State<TrackDriverLocation> {
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
           target: LatLng(late, long),
-          zoom: 14.0,
+          zoom: 10.0,
         ),
         onMapCreated: (controller) {
           mapController = controller;

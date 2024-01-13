@@ -35,13 +35,15 @@ class _package_assignState extends State<package_assign> {
   String username = GetStorage().read("userName");
   String password = GetStorage().read("password");
 
-  Future post_assign_order(int id) async {
-    var url = urlStarter + "/employee/acceptPackage";
+  Future post_assign_order(int id, String drivr_username, String date) async {
+    var url = urlStarter + "/employee/AssignPackageToDriver";
     var responce = await http.post(Uri.parse(url),
         body: jsonEncode({
           "employeeUserName": username,
           "employeePassword": password,
-          "packageId": id
+          "packageId": id,
+          "driverUsername": drivr_username,
+          "assignToDate": date,
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -52,7 +54,7 @@ class _package_assignState extends State<package_assign> {
   }
 
   String dayselcted_day = DateFormat('EEEE').format(DateTime.now());
-  String dayselcted_num = DateFormat('yyyy-mm-dd').format(DateTime.now());
+  String dayselcted_num = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   List daylist = [
     'Sunday',
@@ -67,10 +69,6 @@ class _package_assignState extends State<package_assign> {
 
   @override
   void initState() {
-    // loadData();
-
-    //fetchData_drivers();
-
     super.initState();
   }
 
@@ -80,10 +78,6 @@ class _package_assignState extends State<package_assign> {
 
     List<driver_assign_to_order> filteredDrivers =
         filterDrivers(widget.drivers, dayselcted_num, widget.city);
-
-    print('1111');
-    print(filteredDrivers.length);
-    print('1111');
 
     ////////////////////////////////////////////////////////////
 
@@ -263,11 +257,12 @@ class _package_assignState extends State<package_assign> {
                             onChanged: (newValue) {
                               setState(() {
                                 selecteddriver = newValue as String;
+                                print(selecteddriver);
                               });
                             },
                             items: filteredDrivers.map((value) {
                               return DropdownMenuItem(
-                                value: value.name,
+                                value: value.username,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -290,7 +285,6 @@ class _package_assignState extends State<package_assign> {
                                       width: 3,
                                     ),
                                     Text(value.name),
-                                    // Text(value.username),
                                   ],
                                 ),
                               );
@@ -324,10 +318,11 @@ class _package_assignState extends State<package_assign> {
                             ),
                             onPressed: filteredDrivers.length > 0
                                 ? () {
-                                    ////this name customer
-                                    print(widget.name);
-                                    /////this selected driver
-                                    print(selecteddriver);
+                                    post_assign_order(widget.id, selecteddriver,
+                                        dayselcted_num + ' 11:11:11');
+                                    setState(() {
+                                      selecteddriver = '';
+                                    });
                                   }
                                 : null,
                           ),
@@ -355,7 +350,8 @@ class _package_assignState extends State<package_assign> {
     if (selectedDate != null) {
       setState(() {
         dayselcted_day = DateFormat('EEEE').format(selectedDate);
-        dayselcted_num = DateFormat('yyyy-mm-dd').format(selectedDate);
+        dayselcted_num = DateFormat('yyyy-MM-dd').format(selectedDate);
+        print(dayselcted_num);
       });
     }
   }
@@ -379,7 +375,7 @@ class driver_assign_to_order {
   });
 
   bool isAvailableOnCurrentDay(String currentDay) {
-    DateTime dateTime = DateFormat('yyyy-mm-dd').parse(currentDay);
+    DateTime dateTime = DateFormat('yyyy-MM-dd').parse(currentDay);
     String dayOfWeek = DateFormat('EEEE').format(dateTime);
     return working_days.contains(dayOfWeek) && vacation != currentDay;
   }
@@ -388,11 +384,6 @@ class driver_assign_to_order {
 /////////////////   filter to put Suitable drivers
 List<driver_assign_to_order> filterDrivers(
     List<driver_assign_to_order> drivers, String currentDay, String city) {
-  print('######');
-  print(currentDay);
-  print(city);
-  print('######');
-
   return drivers
       .where((driver) => driver.isAvailableOnCurrentDay(currentDay))
       .toList();
