@@ -65,51 +65,6 @@ class _package_assignState extends State<package_assign> {
   ];
   String selecteddriver = '';
 
-  // void loadData() async {
-  //   drivers = [
-  //     driver_assign_to_order(
-  //       username: '111111',
-  //       name: 'mohammad zaied',
-  //       working_days: ['Sunday', 'Monday', 'Saturday'],
-  //       img: "assets/f3.png",
-  //       vacation: '19-12-2023',
-  //       city: 'Ramallah',
-  //     ),
-  //     driver_assign_to_order(
-  //       username: '222222222222',
-  //       name: 'rami',
-  //       working_days: ['Thursday', 'Monday'],
-  //       img: "assets/add-friend.png",
-  //       vacation: '12-12-2023',
-  //       city: 'Ramallah',
-  //     ),
-  //     driver_assign_to_order(
-  //       username: '555555',
-  //       name: 'zain',
-  //       working_days: ['Sunday', 'Friday', 'Thursday'],
-  //       img: "assets/driver.png",
-  //       vacation: '15-12-2023',
-  //       city: 'Ramallah',
-  //     ),
-  //     driver_assign_to_order(
-  //       username: '4532233',
-  //       name: 'ahmad',
-  //       working_days: ['Thursday', 'Monday', 'Saturday'],
-  //       img: "",
-  //       vacation: '19-12-2023',
-  //       city: 'Ramallah',
-  //     ),
-  //     driver_assign_to_order(
-  //       username: '4532233',
-  //       name: 'ahmad saleh',
-  //       working_days: ['Thursday', 'Monday', 'Tuesday'],
-  //       img: "",
-  //       vacation: '20-12-2023',
-  //       city: 'Jenin',
-  //     ),
-  //   ];
-  // }
-
   @override
   void initState() {
     // loadData();
@@ -122,22 +77,9 @@ class _package_assignState extends State<package_assign> {
   @override
   Widget build(BuildContext) {
     //////////////////////////////////// filter driver
-    // List<driver_assign_to_order> filteredDrivers = [
-    //   driver_assign_to_order(
-    //     username: '4532233',
-    //     name: 'ahmad saleh',
-    //     working_days: ['Thursday', 'Monday', 'Tuesday'],
-    //     img: "",
-    //     vacation: '20-12-2023',
-    //     city: 'Jenin',
-    //   ),
-    // ];
-    //setState(() {
-    print('1111111111');
-    print(widget.drivers);
+
     List<driver_assign_to_order> filteredDrivers =
         filterDrivers(widget.drivers, dayselcted_num, widget.city);
-    //});
 
     ////////////////////////////////////////////////////////////
 
@@ -172,8 +114,13 @@ class _package_assignState extends State<package_assign> {
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(20),
                               image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(widget.photo_cus))),
+                                fit: BoxFit.cover,
+                                image: NetworkImage(widget.photo_cus,
+                                    scale: 1,
+                                    headers: {
+                                      'ngrok-skip-browser-warning': 'true'
+                                    }),
+                              )),
                         ),
                         Spacer(),
                         Text.rich(TextSpan(
@@ -293,7 +240,7 @@ class _package_assignState extends State<package_assign> {
                           ),
                         ),
                         Container(
-                          width: 260,
+                          width: 300,
                           child: DropdownButtonFormField(
                             hint: Text(
                                 filteredDrivers.length > 0
@@ -339,6 +286,7 @@ class _package_assignState extends State<package_assign> {
                                       width: 3,
                                     ),
                                     Text(value.name),
+                                    // Text(value.username),
                                   ],
                                 ),
                               );
@@ -397,7 +345,7 @@ class _package_assignState extends State<package_assign> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 2)),
+      lastDate: DateTime.now().add(Duration(days: 1)),
     );
 
     if (selectedDate != null) {
@@ -436,6 +384,11 @@ class driver_assign_to_order {
 /////////////////   filter to put Suitable drivers
 List<driver_assign_to_order> filterDrivers(
     List<driver_assign_to_order> drivers, String currentDay, String city) {
+  print('######');
+  drivers.map((e) => print(e.name));
+  print(currentDay);
+  print(city);
+  print('######');
   return drivers
       .where((driver) =>
           driver.isAvailableOnCurrentDay(currentDay) && driver.city == city)

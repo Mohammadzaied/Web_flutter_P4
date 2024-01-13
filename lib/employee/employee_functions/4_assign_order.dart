@@ -89,17 +89,17 @@ class _assign_orderState extends State<assign_order> {
           },
           drivers: drivers,
           id: assign_orders[i]['packageId'],
-          package_type: 0,
-          package_size: assign_orders[i]['shippingType'] == 'Document0'
+          package_type: assign_orders[i]['packageType'],
+          package_size: assign_orders[i]['packageSize'] == 'Document0'
               ? 0
-              : assign_orders[i]['shippingType'] == 'Package0'
+              : assign_orders[i]['packageSize'] == 'Package0'
                   ? 1
-                  : assign_orders[i]['shippingType'] == 'Package1'
+                  : assign_orders[i]['packageSize'] == 'Package1'
                       ? 2
                       : 3,
-          photo_cus: assign_orders[i]['img'],
+          photo_cus: urlStarter + assign_orders[i]['img'],
           name: assign_orders[i]['name'],
-          city: assign_orders[i]['name'],
+          city: assign_orders[i]['city'],
         ),
       );
     }
