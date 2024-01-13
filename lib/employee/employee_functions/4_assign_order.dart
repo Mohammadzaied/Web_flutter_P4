@@ -13,15 +13,61 @@ class assign_order extends StatefulWidget {
 class _assign_orderState extends State<assign_order> {
   List<dynamic> assign_orders = [];
   List<package_assign> pk_assign = [];
+  List<dynamic> drivers_ = [];
+  List<driver_assign_to_order> drivers = [];
 
-  Future<void> fetchData_assign_orders() async {
-    var url = urlStarter + "/employee/getNewOrders";
+  Future<void> fetchData_drivers() async {
+    var url = urlStarter + "/employee/GetDriverListEmployee";
     print(url);
     final response = await http
         .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      assign_orders = data['result'];
+      drivers_ = data;
+      print(data);
+      setState(() {
+        drivers = buildMy_drivers();
+      });
+    } else {
+      print('new_orders error');
+      throw Exception('Failed to load data');
+    }
+  }
+
+  List<driver_assign_to_order> buildMy_drivers() {
+    List<driver_assign_to_order> new_drivers = [];
+    for (int i = 0; i < drivers_.length; i++) {
+      List<String> daysList = drivers_[i]['working_days']
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', '')
+          .split(', ')
+          .map((day) => day.trim())
+          .toList();
+
+      new_drivers.add(
+        driver_assign_to_order(
+          vacation: drivers_[i]['notAvailableDate'].toString(),
+          city: drivers_[i]['city'],
+          username: drivers_[i]['username'],
+          name: drivers_[i]['name'],
+          working_days: daysList,
+          img: urlStarter + drivers_[i]['img'],
+        ),
+      );
+    }
+
+    return new_drivers;
+  }
+
+  Future<void> fetchData_assign_orders() async {
+    var url = urlStarter + "/employee/getAssignPackageToDriver";
+    print(url);
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      assign_orders = data;
       print(assign_orders);
       setState(() {
         pk_assign = buildMy_assign_orders();
@@ -35,79 +81,28 @@ class _assign_orderState extends State<assign_order> {
   List<package_assign> buildMy_assign_orders() {
     List<package_assign> orders = [];
 
-    orders.add(
-      package_assign(
-        refreshdata: () {
-          fetchData_assign_orders();
-        },
-        id: 00000000000,
-        package_type: 1,
-        photo_cus: "assets/f3.png",
-        name: 'majed',
-        from: 'Ramallah',
-        to: 'Nablus',
-        package_size: 2,
-      ),
-    );
-    orders.add(
-      package_assign(
-        refreshdata: () {
-          fetchData_assign_orders();
-        },
-        id: 1234586886,
-        package_type: 1,
-        photo_cus: "assets/f3.png",
-        name: 'Mohammad aaaaaaaaa',
-        from: 'Ramallah',
-        to: 'Hebron',
-        package_size: 3,
-      ),
-    );
-    orders.add(
-      package_assign(
-        refreshdata: () {
-          fetchData_assign_orders();
-        },
-        id: 88484888488848,
-        package_type: 0,
-        photo_cus: "assets/f3.png",
-        name: 'ahmad',
-        from: 'Hebron',
-        to: 'Tulkarm',
-        package_size: 3,
-      ),
-    );
-
-    // for (int i = 0; i < assign_orders.length; i++) {
-    //   orders.add(
-    //     package_assign(
-    //       package_type: 1,
-    //       refreshdata: () {
-    //         //setState(() {
-    //         fetchData_assign_orders();
-    //         // });
-    //       },
-    //       id: assign_orders[i]['packageId'],
-    //       photo_cus: urlStarter +
-    //           '/image/' +
-    //           assign_orders[i]['send_user']['userName'] +
-    //           assign_orders[i]['send_user']['url'],
-    //       name: assign_orders[i]['send_user']['Fname'] +
-    //           ' ' +
-    //           assign_orders[i]['send_user']['Lname'],
-    //       from: assign_orders[i]['fromCity'],
-    //       to: assign_orders[i]['toCity'],
-    //       // price: assign_orders[i]['packagePrice'],
-    //       package_size: assign_orders[i]['shippingType'] == 'Document0'
-    //           ? 0
-    //           : assign_orders[i]['shippingType'] == 'Package0'
-    //               ? 1
-    //               : assign_orders[i]['shippingType'] == 'Package1'
-    //                   ? 2
-    //                   : 3,
-    //     ),
-    //   );
-    // }
+    for (int i = 0; i < assign_orders.length; i++) {
+      orders.add(
+        package_assign(
+          refreshdata: () {
+            fetchData_assign_orders();
+          },
+          drivers: drivers,
+          id: assign_orders[i]['packageId'],
+          package_type: 0,
+          package_size: assign_orders[i]['shippingType'] == 'Document0'
+              ? 0
+              : assign_orders[i]['shippingType'] == 'Package0'
+                  ? 1
+                  : assign_orders[i]['shippingType'] == 'Package1'
+                      ? 2
+                      : 3,
+          photo_cus: assign_orders[i]['img'],
+          name: assign_orders[i]['name'],
+          city: assign_orders[i]['name'],
+        ),
+      );
+    }
 
     return orders;
   }
@@ -133,7 +128,8 @@ class _assign_orderState extends State<assign_order> {
   @override
   void initState() {
     //fetchData_assign_orders();
-    pk_assign = buildMy_assign_orders();
+    fetchData_drivers().then((value) => fetchData_assign_orders());
+
     setState(() {
       TabController_.index = 2;
     });
@@ -153,25 +149,25 @@ class _assign_orderState extends State<assign_order> {
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 0 &&
-          (order.to != selectedCity)) {
+          (order.city != selectedCity)) {
         return false;
       }
 
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 1 &&
-          (order.from != selectedCity)) {
+          (order.city != selectedCity)) {
         return false;
       }
 
       if (selectedtype == 'Delivery' &&
           selectedCity!.isNotEmpty &&
-          order.to != selectedCity) {
+          order.city != selectedCity) {
         return false;
       }
       if (selectedtype == 'Receiving' &&
           selectedCity!.isNotEmpty &&
-          order.from != selectedCity) {
+          order.city != selectedCity) {
         return false;
       }
 

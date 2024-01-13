@@ -62,10 +62,6 @@ class _set_locationState extends State<set_location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Detect Location '),
-        backgroundColor: primarycolor,
-      ),
       body: OpenStreetMapSearchAndPick(
           center: current,
           locationPinIconColor: primarycolor,

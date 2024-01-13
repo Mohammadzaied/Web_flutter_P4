@@ -6,25 +6,25 @@ import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
 
 class package_assign extends StatefulWidget {
+  final List<driver_assign_to_order> drivers;
   final String photo_cus;
   final int package_type; // 0 Delivery of a package , 1 Receiving a package
-  final String from;
-  final String to;
+  final String city;
   final String name;
   final int id;
-  final int package_size; //0 doc  , 1 small ,2 meduim , 3 large
+  final int package_size; // 0 doc  , 1 small ,2 meduim , 3 large
   final Function() refreshdata;
 
   package_assign({
     super.key,
     required this.photo_cus,
     required this.package_size,
-    required this.from,
-    required this.to,
+    required this.city,
     required this.name,
     required this.package_type,
     required this.id,
     required this.refreshdata,
+    required this.drivers,
   });
 
   @override
@@ -32,70 +32,24 @@ class package_assign extends StatefulWidget {
 }
 
 class _package_assignState extends State<package_assign> {
-  List<dynamic> drivers_ = [];
-  List<driver_assign_to_order> drivers = [];
+  String username = GetStorage().read("userName");
+  String password = GetStorage().read("password");
 
-  // Future<void> fetchData_drivers() async {
-  //   var url = urlStarter + "/employee/GetDriverListEmployee";
-  //   print(url);
-  //   final response = await http
-  //       .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
-  //   if (response.statusCode == 200) {
-  //     var data = jsonDecode(response.body);
-  //     drivers_ = data;
-  //     // print(data);
-  //     setState(() {
-  //       drivers = buildMy_drivers();
-  //     });
-  //   } else {
-  //     print('new_orders error');
-  //     throw Exception('Failed to load data');
-  //   }
-  // }
-
-  // List<driver_assign_to_order> buildMy_drivers() {
-  //   List<driver_assign_to_order> new_drivers = [];
-  //   for (int i = 0; i < drivers_.length; i++) {
-  //     List<String> daysList = drivers_[i]['working_days']
-  //         .toString()
-  //         .replaceAll('[', '')
-  //         .replaceAll(']', '')
-  //         .split(', ')
-  //         .map((day) => day.trim())
-  //         .toList();
-
-  //     new_drivers.add(
-  //       driver_assign_to_order(
-  //         vacation: '20/1/2024',
-  //         city: drivers_[i]['city'],
-  //         username: drivers_[i]['username'],
-  //         name: drivers_[i]['name'],
-  //         working_days: daysList,
-  //         img: urlStarter + drivers_[i]['img'],
-  //       ),
-  //     );
-  //   }
-
-  //   return new_drivers;
-  // }
-
-  // String username = GetStorage().read("userName");
-  // String password = GetStorage().read("password");
-  // Future post_assign_order(int id) async {
-  //   var url = urlStarter + "/employee/acceptPackage";
-  //   var responce = await http.post(Uri.parse(url),
-  //       body: jsonEncode({
-  //         "employeeUserName": username,
-  //         "employeePassword": password,
-  //         "packageId": id
-  //       }),
-  //       headers: {
-  //         'Content-type': 'application/json; charset=UTF-8',
-  //       });
-  //   if (responce.statusCode == 200) {
-  //     widget.refreshdata();
-  //   }
-  // }
+  Future post_assign_order(int id) async {
+    var url = urlStarter + "/employee/acceptPackage";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "packageId": id
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      widget.refreshdata();
+    }
+  }
 
   String dayselcted_day = DateFormat('EEEE').format(DateTime.now());
   String dayselcted_num = DateFormat('dd-MM-yyyy').format(DateTime.now());
@@ -111,63 +65,80 @@ class _package_assignState extends State<package_assign> {
   ];
   String selecteddriver = '';
 
-  void loadData() async {
-    drivers = [
-      driver_assign_to_order(
-        username: '111111',
-        name: 'mohammad zaied',
-        working_days: ['Sunday', 'Monday', 'Saturday'],
-        img: "assets/f3.png",
-        vacation: '19-12-2023',
-        city: 'Ramallah',
-      ),
-      driver_assign_to_order(
-        username: '222222222222',
-        name: 'rami',
-        working_days: ['Thursday', 'Monday'],
-        img: "assets/add-friend.png",
-        vacation: '12-12-2023',
-        city: 'Ramallah',
-      ),
-      driver_assign_to_order(
-        username: '555555',
-        name: 'zain',
-        working_days: ['Sunday', 'Friday', 'Thursday'],
-        img: "assets/driver.png",
-        vacation: '15-12-2023',
-        city: 'Ramallah',
-      ),
-      driver_assign_to_order(
-        username: '4532233',
-        name: 'ahmad',
-        working_days: ['Thursday', 'Monday', 'Saturday'],
-        img: "",
-        vacation: '19-12-2023',
-        city: 'Ramallah',
-      ),
-      driver_assign_to_order(
-        username: '4532233',
-        name: 'ahmad saleh',
-        working_days: ['Thursday', 'Monday', 'Tuesday'],
-        img: "",
-        vacation: '20-12-2023',
-        city: 'Jenin',
-      ),
-    ];
-  }
+  // void loadData() async {
+  //   drivers = [
+  //     driver_assign_to_order(
+  //       username: '111111',
+  //       name: 'mohammad zaied',
+  //       working_days: ['Sunday', 'Monday', 'Saturday'],
+  //       img: "assets/f3.png",
+  //       vacation: '19-12-2023',
+  //       city: 'Ramallah',
+  //     ),
+  //     driver_assign_to_order(
+  //       username: '222222222222',
+  //       name: 'rami',
+  //       working_days: ['Thursday', 'Monday'],
+  //       img: "assets/add-friend.png",
+  //       vacation: '12-12-2023',
+  //       city: 'Ramallah',
+  //     ),
+  //     driver_assign_to_order(
+  //       username: '555555',
+  //       name: 'zain',
+  //       working_days: ['Sunday', 'Friday', 'Thursday'],
+  //       img: "assets/driver.png",
+  //       vacation: '15-12-2023',
+  //       city: 'Ramallah',
+  //     ),
+  //     driver_assign_to_order(
+  //       username: '4532233',
+  //       name: 'ahmad',
+  //       working_days: ['Thursday', 'Monday', 'Saturday'],
+  //       img: "",
+  //       vacation: '19-12-2023',
+  //       city: 'Ramallah',
+  //     ),
+  //     driver_assign_to_order(
+  //       username: '4532233',
+  //       name: 'ahmad saleh',
+  //       working_days: ['Thursday', 'Monday', 'Tuesday'],
+  //       img: "",
+  //       vacation: '20-12-2023',
+  //       city: 'Jenin',
+  //     ),
+  //   ];
+  // }
 
   @override
   void initState() {
-    loadData();
+    // loadData();
+
     //fetchData_drivers();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext) {
     //////////////////////////////////// filter driver
-    List<driver_assign_to_order> filteredDrivers = filterDrivers(drivers,
-        dayselcted_num, widget.package_type == 0 ? widget.to : widget.from);
+    // List<driver_assign_to_order> filteredDrivers = [
+    //   driver_assign_to_order(
+    //     username: '4532233',
+    //     name: 'ahmad saleh',
+    //     working_days: ['Thursday', 'Monday', 'Tuesday'],
+    //     img: "",
+    //     vacation: '20-12-2023',
+    //     city: 'Jenin',
+    //   ),
+    // ];
+    //setState(() {
+    print('1111111111');
+    print(widget.drivers);
+    List<driver_assign_to_order> filteredDrivers =
+        filterDrivers(widget.drivers, dayselcted_num, widget.city);
+    //});
+
     ////////////////////////////////////////////////////////////
 
     return Container(
@@ -254,9 +225,7 @@ class _package_assignState extends State<package_assign> {
                             style: TextStyle(fontSize: 12, color: Colors.grey),
                             children: <InlineSpan>[
                               TextSpan(
-                                text: widget.package_type == 0
-                                    ? '${widget.to}'
-                                    : '${widget.from}',
+                                text: widget.city,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
@@ -357,8 +326,14 @@ class _package_assignState extends State<package_assign> {
                                       decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(value.img))),
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(value.img,
+                                                scale: 1,
+                                                headers: {
+                                                  'ngrok-skip-browser-warning':
+                                                      'true'
+                                                }),
+                                          )),
                                     ),
                                     SizedBox(
                                       width: 3,

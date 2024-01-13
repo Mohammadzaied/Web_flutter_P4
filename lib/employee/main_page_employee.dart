@@ -11,6 +11,7 @@ import 'package:flutter_application_1/employee/employee_functions/7_edit_driver.
 import 'package:flutter_application_1/employee/employee_functions/8_edit_page.dart';
 import 'package:flutter_application_1/employee/employee_functions/1_new_orders.dart';
 import 'package:flutter_application_1/employee/employee_functions/5_receiving_money.dart';
+import 'package:flutter_application_1/employee/employee_functions/9_track-package.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
 import 'package:flutter_application_1/sign_in_pages/2_forget_pass.dart';
 import 'package:flutter_application_1/sign_in_pages/4_new_password.dart';
@@ -26,6 +27,7 @@ late Widget widget4;
 late Widget widget5;
 late Widget widget6;
 late Widget widget7;
+late Widget widget8;
 
 late TabController TabController_;
 
@@ -52,7 +54,8 @@ class _main_pageState extends State<main_page>
     widget5 = receiving_money();
     widget6 = edit_driver();
     widget7 = distribution_orders();
-    TabController_ = TabController(length: 7, vsync: this);
+    widget8 = track_p(isSearchBox: true, packageId: 00000000);
+    TabController_ = TabController(length: 8, vsync: this);
     super.initState();
   }
 
@@ -88,6 +91,7 @@ class _main_pageState extends State<main_page>
             Tab(text: 'All Orders '),
             Tab(text: 'Receiving Money'),
             Tab(text: 'Distribution orders'),
+            Tab(text: 'Tracking Packages'),
             Tab(text: 'Edit driver information'),
           ],
           labelStyle: TextStyle(
@@ -138,6 +142,10 @@ void _onItemTapped(int index, BuildContext context) {
       GoRouter.of(context).go('/distribution_orders');
       break;
     case 6:
+      GoRouter.of(context).go('/track_package');
+
+      break;
+    case 7:
       GoRouter.of(context).go('/edit_driver');
 
       break;
@@ -239,6 +247,12 @@ final GoRouter Router_pages = GoRouter(
           path: '/edit_driver',
           builder: (BuildContext context, GoRouterState state) {
             return widget6;
+          },
+        ),
+        GoRoute(
+          path: '/track_package',
+          builder: (BuildContext context, GoRouterState state) {
+            return widget8;
           },
         ),
         GoRoute(
