@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
 import 'package:flutter_application_1/employee/main_page_employee.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class all_orders extends StatefulWidget {
   final List<package_edit> pk_all;
@@ -15,6 +17,26 @@ class all_orders extends StatefulWidget {
 }
 
 class _all_ordersState extends State<all_orders> {
+  List<dynamic> all_orders = [];
+
+  Future<void> fetchData_new_orders() async {
+    var url = urlStarter + "/employee/getNewOrders";
+    print(url);
+    final response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      all_orders = data['result'];
+      //print(new_orders);
+      setState(() {
+        //  pk_new = buildMy_new_orders();
+      });
+    } else {
+      print('new_orders error');
+      throw Exception('Failed to load data');
+    }
+  }
+
   List citylist = [
     'Nablus',
     'Tulkarm',

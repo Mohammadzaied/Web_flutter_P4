@@ -16,3 +16,17 @@ Future<void> main() async {
     routerConfig: Router_pages,
   ));
 }
+
+// Future<void> main() async {
+//   //WidgetsFlutterBinding.ensureInitialized();
+//   // await GetStorage.init();
+//   // var userType = GetStorage().read("userType");
+//   // print(userType);
+//   runApp(MaterialApp(
+//     theme: ThemeData(
+//       primaryColor: primarycolor,
+//     ),
+//     debugShowCheckedModeBanner: false,
+//     home: assign_order(),
+//   ));
+// }

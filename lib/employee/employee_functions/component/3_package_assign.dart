@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:get_storage/get_storage.dart';
 
 class package_assign extends StatefulWidget {
   final String photo_cus;
@@ -10,6 +13,7 @@ class package_assign extends StatefulWidget {
   final String name;
   final int id;
   final int package_size; //0 doc  , 1 small ,2 meduim , 3 large
+  final Function() refreshdata;
 
   package_assign({
     super.key,
@@ -20,6 +24,7 @@ class package_assign extends StatefulWidget {
     required this.name,
     required this.package_type,
     required this.id,
+    required this.refreshdata,
   });
 
   @override
@@ -27,14 +32,91 @@ class package_assign extends StatefulWidget {
 }
 
 class _package_assignState extends State<package_assign> {
+  List<dynamic> drivers_ = [];
   List<driver_assign_to_order> drivers = [];
+
+  // Future<void> fetchData_drivers() async {
+  //   var url = urlStarter + "/employee/GetDriverListEmployee";
+  //   print(url);
+  //   final response = await http
+  //       .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+  //   if (response.statusCode == 200) {
+  //     var data = jsonDecode(response.body);
+  //     drivers_ = data;
+  //     // print(data);
+  //     setState(() {
+  //       drivers = buildMy_drivers();
+  //     });
+  //   } else {
+  //     print('new_orders error');
+  //     throw Exception('Failed to load data');
+  //   }
+  // }
+
+  // List<driver_assign_to_order> buildMy_drivers() {
+  //   List<driver_assign_to_order> new_drivers = [];
+  //   for (int i = 0; i < drivers_.length; i++) {
+  //     List<String> daysList = drivers_[i]['working_days']
+  //         .toString()
+  //         .replaceAll('[', '')
+  //         .replaceAll(']', '')
+  //         .split(', ')
+  //         .map((day) => day.trim())
+  //         .toList();
+
+  //     new_drivers.add(
+  //       driver_assign_to_order(
+  //         vacation: '20/1/2024',
+  //         city: drivers_[i]['city'],
+  //         username: drivers_[i]['username'],
+  //         name: drivers_[i]['name'],
+  //         working_days: daysList,
+  //         img: urlStarter + drivers_[i]['img'],
+  //       ),
+  //     );
+  //   }
+
+  //   return new_drivers;
+  // }
+
+  // String username = GetStorage().read("userName");
+  // String password = GetStorage().read("password");
+  // Future post_assign_order(int id) async {
+  //   var url = urlStarter + "/employee/acceptPackage";
+  //   var responce = await http.post(Uri.parse(url),
+  //       body: jsonEncode({
+  //         "employeeUserName": username,
+  //         "employeePassword": password,
+  //         "packageId": id
+  //       }),
+  //       headers: {
+  //         'Content-type': 'application/json; charset=UTF-8',
+  //       });
+  //   if (responce.statusCode == 200) {
+  //     widget.refreshdata();
+  //   }
+  // }
+
+  String dayselcted_day = DateFormat('EEEE').format(DateTime.now());
+  String dayselcted_num = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
+  List daylist = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
   String selecteddriver = '';
+
   void loadData() async {
     drivers = [
       driver_assign_to_order(
         username: '111111',
         name: 'mohammad zaied',
-        working_days: ['Sunday', 'Monday'],
+        working_days: ['Sunday', 'Monday', 'Saturday'],
         img: "assets/f3.png",
         vacation: '19-12-2023',
         city: 'Ramallah',
@@ -61,7 +143,7 @@ class _package_assignState extends State<package_assign> {
         working_days: ['Thursday', 'Monday', 'Saturday'],
         img: "",
         vacation: '19-12-2023',
-        city: 'Hebron',
+        city: 'Ramallah',
       ),
       driver_assign_to_order(
         username: '4532233',
@@ -77,15 +159,15 @@ class _package_assignState extends State<package_assign> {
   @override
   void initState() {
     loadData();
+    //fetchData_drivers();
     super.initState();
   }
 
   @override
   Widget build(BuildContext) {
     //////////////////////////////////// filter driver
-    String currentDay_format = DateFormat('dd-MM-yyyy').format(DateTime.now());
     List<driver_assign_to_order> filteredDrivers = filterDrivers(drivers,
-        currentDay_format, widget.package_type == 0 ? widget.to : widget.from);
+        dayselcted_num, widget.package_type == 0 ? widget.to : widget.from);
     ////////////////////////////////////////////////////////////
 
     return Container(
@@ -106,109 +188,152 @@ class _package_assignState extends State<package_assign> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Flexible(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                child: Column(
+                  //mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(20),
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(widget.photo_cus))),
-                    ),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Package Type : ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: widget.package_type == 0
-                                ? 'Package Delivery '
-                                : 'Package Received ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Package ID : ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: ' ${widget.id}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Customer name: ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: ' ${widget.name}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: widget.package_type == 0 ? 'to: ' : 'from: ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: widget.package_type == 0
-                                ? '${widget.to}'
-                                : '${widget.from}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Package size : ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: widget.package_size == 0
-                                ? 'Document'
-                                : widget.package_size == 1
-                                    ? 'Small'
-                                    : widget.package_size == 2
-                                        ? 'Meduim'
-                                        : 'Large',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(20),
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(widget.photo_cus))),
+                        ),
+                        Spacer(),
+                        Text.rich(TextSpan(
+                            text: 'Package Type : ',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: widget.package_type == 0
+                                    ? 'Package Delivery '
+                                    : 'Package Received ',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ])),
+                        Spacer(),
+                        Text.rich(TextSpan(
+                            text: 'Package ID : ',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: ' ${widget.id}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ])),
+                        Spacer(),
+                        Text.rich(TextSpan(
+                            text: 'Customer name: ',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: ' ${widget.name}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ])),
+                        Spacer(),
+                        Text.rich(TextSpan(
+                            text: widget.package_type == 0 ? 'to: ' : 'from: ',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: widget.package_type == 0
+                                    ? '${widget.to}'
+                                    : '${widget.from}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ])),
+                        Spacer(),
+                        Text.rich(TextSpan(
+                            text: 'Package size : ',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: widget.package_size == 0
+                                    ? 'Document'
+                                    : widget.package_size == 1
+                                        ? 'Small'
+                                        : widget.package_size == 2
+                                            ? 'Meduim'
+                                            : 'Large',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ])),
+                        Spacer(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: MaterialButton(
+                            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            color: Colors.blue,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.calendar_month,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 3,
+                                  ),
+                                  Text(
+                                    '${dayselcted_day}',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onPressed: () {
+                              _selectDate(context);
+                            },
+                          ),
+                        ),
+                        Container(
                           width: 260,
-                          //height: 70,
                           child: DropdownButtonFormField(
-                            hint: Text('Drivers',
-                                style: TextStyle(color: Colors.grey)),
+                            hint: Text(
+                                filteredDrivers.length > 0
+                                    ? 'Available drivers by date'
+                                    : 'NO Available drivers',
+                                style: TextStyle(
+                                    color: filteredDrivers.length > 0
+                                        ? Colors.black
+                                        : Colors.red)),
                             decoration: theme_helper().text_form_style(
                               '',
                               '',
@@ -249,27 +374,35 @@ class _package_assignState extends State<package_assign> {
                           width: 10,
                         ),
                         Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: filteredDrivers.length > 0
+                                ? primarycolor
+                                : Colors.grey,
+                          ),
                           child: MaterialButton(
-                            padding: EdgeInsets.all(8),
+                            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
                             color: primarycolor,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "Assign",
+                                "Assign to Driver",
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 23,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
                             ),
-                            onPressed: () {
-                              ////this name customer
-                              print(widget.name);
-                              /////this selected driver
-                              print(selecteddriver);
-                            },
+                            onPressed: filteredDrivers.length > 0
+                                ? () {
+                                    ////this name customer
+                                    print(widget.name);
+                                    /////this selected driver
+                                    print(selecteddriver);
+                                  }
+                                : null,
                           ),
                         ),
                       ],
@@ -282,6 +415,22 @@ class _package_assignState extends State<package_assign> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 2)),
+    );
+
+    if (selectedDate != null) {
+      setState(() {
+        dayselcted_day = DateFormat('EEEE').format(selectedDate);
+        dayselcted_num = DateFormat('yyyy-MM-dd').format(selectedDate);
+      });
+    }
   }
 }
 

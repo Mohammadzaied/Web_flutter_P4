@@ -42,18 +42,13 @@ class main_page extends StatefulWidget {
 
 class _main_pageState extends State<main_page>
     with SingleTickerProviderStateMixin {
-  int counter_new = 0;
-  int counter_assign = 0;
-
   void initState() {
     widget1 = all_orders(pk_all: buildMy_package_edit());
     widget2 = new_order();
-    //counter_new = 2; //buildMy_new_orders().length;
     widget3 = create_order(
       title: 'Create order',
     );
-    widget4 = assign_order(pk_assign: buildMy_assign_orders());
-    counter_assign = buildMy_assign_orders().length;
+    widget4 = assign_order();
     widget5 = receiving_money();
     widget6 = edit_driver();
     widget7 = distribution_orders();
