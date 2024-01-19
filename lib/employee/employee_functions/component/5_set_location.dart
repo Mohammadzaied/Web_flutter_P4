@@ -62,6 +62,9 @@ class _set_locationState extends State<set_location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primarycolor,
+      ),
       body: OpenStreetMapSearchAndPick(
           center: current,
           locationPinIconColor: primarycolor,
@@ -93,7 +96,9 @@ class _set_locationState extends State<set_location> {
                                 "${addressParts[0]}','${addressParts[1]}','${addressParts[2]}','${addressParts[3]}",
                                 pickedData.latLong.latitude,
                                 pickedData.latLong.longitude);
-                            Navigator.of(context).pop();
+                            //Navigator.of(context).pop();
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                             //Navigator.of(context).pop();
                             //add_parcel().
                           },

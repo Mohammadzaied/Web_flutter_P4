@@ -35,7 +35,8 @@ class _package_assignState extends State<package_assign> {
   String username = GetStorage().read("userName");
   String password = GetStorage().read("password");
 
-  Future post_assign_order(int id, String drivr_username, String date) async {
+  Future post_assign_order(
+      int id, String drivr_username, String date, int type) async {
     var url = urlStarter + "/employee/AssignPackageToDriver";
     var responce = await http.post(Uri.parse(url),
         body: jsonEncode({
@@ -43,6 +44,7 @@ class _package_assignState extends State<package_assign> {
           "employeePassword": password,
           "packageId": id,
           "driverUsername": drivr_username,
+          "packageType": type,
           "assignToDate": date,
         }),
         headers: {
@@ -318,8 +320,11 @@ class _package_assignState extends State<package_assign> {
                             ),
                             onPressed: filteredDrivers.length > 0
                                 ? () {
-                                    post_assign_order(widget.id, selecteddriver,
-                                        dayselcted_num + ' 11:11:11');
+                                    post_assign_order(
+                                        widget.id,
+                                        selecteddriver,
+                                        dayselcted_num + ' 11:11:11',
+                                        widget.package_type);
                                     setState(() {
                                       selecteddriver = '';
                                     });
@@ -374,10 +379,12 @@ class driver_assign_to_order {
     required this.img,
   });
 
-  bool isAvailableOnCurrentDay(String currentDay) {
+  bool isAvailableOnCurrentDay(String currentDay, String c) {
     DateTime dateTime = DateFormat('yyyy-MM-dd').parse(currentDay);
     String dayOfWeek = DateFormat('EEEE').format(dateTime);
-    return working_days.contains(dayOfWeek) && vacation != currentDay;
+    return working_days.contains(dayOfWeek) &&
+        vacation != currentDay &&
+        city == c;
   }
 }
 
@@ -385,6 +392,6 @@ class driver_assign_to_order {
 List<driver_assign_to_order> filterDrivers(
     List<driver_assign_to_order> drivers, String currentDay, String city) {
   return drivers
-      .where((driver) => driver.isAvailableOnCurrentDay(currentDay))
+      .where((driver) => driver.isAvailableOnCurrentDay(currentDay, city))
       .toList();
 }

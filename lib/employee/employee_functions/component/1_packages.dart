@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 late package_edit pk_select;
 
 class package_edit extends StatefulWidget {
   final String photo_cus;
   final int package_type; // 0 Delivery of a package , 1 Receiving a package
-  final String from;
-  final String to;
+  final String city;
   final String name;
-  final String
-      status; // status for accepted orders  if the order status is accept,reject or above to edit status , but new orders should not be here
+  final String status;
   final String driver;
   final int id;
+  final Function() refreshdata;
 
   package_edit({
     super.key,
     required this.photo_cus,
-    required this.from,
-    required this.to,
+    required this.city,
     required this.name,
     required this.package_type,
     required this.id,
     required this.status,
     required this.driver,
+    required this.refreshdata,
   });
 
   @override
@@ -32,6 +33,27 @@ class package_edit extends StatefulWidget {
 }
 
 class _package_editState extends State<package_edit> {
+  String username = GetStorage().read("userName");
+  String password = GetStorage().read("password");
+
+  Future post_delete_package(int id) async {
+    var url = urlStarter + "/employee/DeletePackage";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "packageId": id,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      setState(() {
+        widget.refreshdata();
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -67,9 +89,28 @@ class _package_editState extends State<package_edit> {
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.circular(20),
                           image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(widget.photo_cus))),
+                            fit: BoxFit.cover,
+                            image: NetworkImage(widget.photo_cus,
+                                scale: 1,
+                                headers: {
+                                  'ngrok-skip-browser-warning': 'true'
+                                }),
+                          )),
                     ),
+                    Spacer(),
+                    Text.rich(TextSpan(
+                        text: 'Customer name: ',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        children: <InlineSpan>[
+                          TextSpan(
+                            text: ' ${widget.name}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ])),
                     Spacer(),
                     Text.rich(TextSpan(
                         text: 'Package Type : ',
@@ -115,44 +156,29 @@ class _package_editState extends State<package_edit> {
                           )
                         ])),
                     Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Driver: ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: widget.driver.isNotEmpty
-                                ? ' ${widget.driver}'
-                                : '....',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Customer name: ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: ' ${widget.name}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
+                    Visibility(
+                      visible: widget.driver != 'null',
+                      child: Text.rich(TextSpan(
+                          text: 'Driver: ',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          children: <InlineSpan>[
+                            TextSpan(
+                              text: ' ${widget.driver}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ])),
+                    ),
                     Spacer(),
                     Text.rich(TextSpan(
                         text: widget.package_type == 0 ? 'to: ' : 'from: ',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                         children: <InlineSpan>[
                           TextSpan(
-                            text: widget.package_type == 0
-                                ? '${widget.to}'
-                                : '${widget.from}',
+                            text: '${widget.city}',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -160,26 +186,6 @@ class _package_editState extends State<package_edit> {
                             ),
                           )
                         ])),
-                    // Spacer(),
-                    // Text.rich(TextSpan(
-                    //     text: 'Package size : ',
-                    //     style: TextStyle(fontSize: 12, color: Colors.grey),
-                    //     children: <InlineSpan>[
-                    //       TextSpan(
-                    //         text: widget.package_size == 0
-                    //             ? 'Document'
-                    //             : widget.package_size == 1
-                    //                 ? 'Small'
-                    //                 : widget.package_size == 2
-                    //                     ? 'Meduim'
-                    //                     : 'Large',
-                    //         style: TextStyle(
-                    //           fontSize: 14,
-                    //           color: Colors.black,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       )
-                    //     ])),
                     Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -204,30 +210,84 @@ class _package_editState extends State<package_edit> {
                               setState(() {
                                 pk_select = widget;
                               });
-                              GoRouter.of(context).go('/edit_package');
+                              //GoRouter.of(context).go('/edit_package');
                             },
                           ),
                         ),
                         SizedBox(
                           width: 5,
                         ),
-                        Container(
-                          child: MaterialButton(
-                            padding: EdgeInsets.all(8),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            color: Colors.red,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "Delete",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                        Visibility(
+                          visible: widget.status == "Rejected by employee" ||
+                              widget.status == "Rejected by driver" ||
+                              widget.status == "Delivered",
+                          child: Container(
+                            child: MaterialButton(
+                              padding: EdgeInsets.all(8),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              color: Colors.red,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                post_delete_package(widget.id);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                "Yes",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              )),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                "Cancel",
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 18),
+                                              )),
+                                        ],
+                                        title: Text("Delete package"),
+                                        content: Container(
+                                          width: 400,
+                                          child: Text(
+                                            "Are you sure you want to delete  the package id's ${widget.id} for customer ${widget.name} , you can't undo this action!",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18),
+                                          ),
+                                        ),
+                                        titleTextStyle: TextStyle(
+                                            color: Colors.white, fontSize: 25),
+                                        contentTextStyle: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                        backgroundColor: primarycolor,
+                                      );
+                                    });
+                              },
                             ),
-                            onPressed: () {},
                           ),
                         ),
                       ],

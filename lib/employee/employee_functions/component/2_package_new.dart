@@ -227,6 +227,26 @@ class _package_newState extends State<package_new> {
                                 borderRadius: BorderRadius.circular(10.0)),
                             color: primarycolor,
                             child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.location_on_outlined,
+                                  color: Colors.white,
+                                )),
+                            onPressed: () {
+                              // post_accepet_order(widget.id);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          child: MaterialButton(
+                            padding: EdgeInsets.all(8),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            color: primarycolor,
+                            child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 "Accept",
@@ -347,7 +367,6 @@ class _package_newState extends State<package_new> {
                                       backgroundColor: primarycolor,
                                     );
                                   });
-                              print(widget.name);
                             },
                           ),
                         ),

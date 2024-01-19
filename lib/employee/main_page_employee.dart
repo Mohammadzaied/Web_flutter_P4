@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/employee/common/drawer.dart';
-import 'package:flutter_application_1/employee/drawer_function/change_password.dart';
-import 'package:flutter_application_1/employee/drawer_function/edit_profile.dart';
+import 'package:flutter_application_1/admin/main_page_admin.dart';
+import 'package:flutter_application_1/admin/managers.dart';
+import 'package:flutter_application_1/drawer/drawer.dart';
+import 'package:flutter_application_1/drawer/drawer_function/change_password.dart';
+import 'package:flutter_application_1/drawer/drawer_function/edit_profile.dart';
 import 'package:flutter_application_1/employee/employee_functions/3_all_orders.dart';
 import 'package:flutter_application_1/employee/employee_functions/4_assign_order.dart';
-import 'package:flutter_application_1/employee/employee_functions/9_data.dart';
 import 'package:flutter_application_1/employee/employee_functions/6_distribution_orders.dart';
 import 'package:flutter_application_1/employee/employee_functions/2_create_order.dart';
 import 'package:flutter_application_1/employee/employee_functions/7_edit_driver.dart';
@@ -45,7 +46,7 @@ class main_page extends StatefulWidget {
 class _main_pageState extends State<main_page>
     with SingleTickerProviderStateMixin {
   void initState() {
-    widget1 = all_orders(pk_all: buildMy_package_edit());
+    widget1 = all_orders();
     widget2 = new_order();
     widget3 = create_order(
       title: 'Create order',
@@ -157,6 +158,8 @@ final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
+final GlobalKey<NavigatorState> _shellNavigatorKey2 =
+    GlobalKey<NavigatorState>(debugLabel: 'shell2');
 final GoRouter Router_pages = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/',
@@ -259,6 +262,32 @@ final GoRouter Router_pages = GoRouter(
           path: '/distribution_orders',
           builder: (BuildContext context, GoRouterState state) {
             return widget7;
+          },
+        ),
+      ],
+    ),
+    ShellRoute(
+      navigatorKey: _shellNavigatorKey2,
+      builder: (BuildContext context, GoRouterState state, Widget child) {
+        return main_page_admin(child: child);
+      },
+      routes: <RouteBase>[
+        GoRoute(
+          path: '/all_manager',
+          builder: (BuildContext context, GoRouterState state) {
+            return managers();
+          },
+        ),
+        GoRoute(
+          path: '/delete_Manager',
+          builder: (BuildContext context, GoRouterState state) {
+            return managers();
+          },
+        ),
+        GoRoute(
+          path: '/Add_manager',
+          builder: (BuildContext context, GoRouterState state) {
+            return managers();
           },
         ),
       ],

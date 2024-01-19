@@ -1,8 +1,10 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class edit_package extends StatefulWidget {
   final package_edit pk_edit;
@@ -14,83 +16,57 @@ class edit_package extends StatefulWidget {
 }
 
 class _edit_packageState extends State<edit_package> {
-  List<driver_assign_to_order> drivers = [];
+  String username = GetStorage().read("userName");
+  String password = GetStorage().read("password");
   String selected_driver = '';
   String selected_status = '';
 
-  List<String> status = [
-    'pendding',
-    'accept',
-    'reject',
-    'assign to driver',
-    'on way'
-  ]; ////you should add all status here
-  void loadData() async {
-    drivers = [
-      driver_assign_to_order(
-        username: '111111',
-        name: 'mohammad zaied',
-        working_days: ['Sunday', 'Monday', 'Thursday'],
-        img: "assets/f3.png",
-        vacation: '19-12-2023',
-        city: 'Ramallah',
-      ),
-      driver_assign_to_order(
-        username: '222222222222',
-        name: 'rami',
-        working_days: ['Thursday', 'Monday'],
-        img: "assets/add-friend.png",
-        vacation: '12-12-2023',
-        city: 'Ramallah',
-      ),
-      driver_assign_to_order(
-        username: '555555',
-        name: 'zain',
-        working_days: ['Sunday', 'Friday', 'Thursday'],
-        img: "assets/driver.png",
-        vacation: '15-12-2023',
-        city: 'Ramallah',
-      ),
-      driver_assign_to_order(
-        username: '4532233',
-        name: 'ahmad',
-        working_days: ['Thursday', 'Monday', 'Saturday'],
-        img: "",
-        vacation: '19-12-2023',
-        city: 'Hebron',
-      ),
-      driver_assign_to_order(
-        username: '4532233',
-        name: 'ahmad saleh',
-        working_days: ['Thursday', 'Monday', 'Tuesday'],
-        img: "",
-        vacation: '20-12-2023',
-        city: 'Jenin',
-      ),
-    ];
+  Future post_edit_order(int id) async {
+    var url = urlStarter + "/employee/acceptPackage";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "packageId": id
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      //widget.refreshdata();
+    }
   }
+
+  List<String> status = [
+    "Under review",
+    "Rejected by employee",
+    "Accepted",
+    //'assign to driver'
+    "Wait Driver",
+    "Rejected by driver",
+    "Complete Receive",
+    "In Warehouse",
+    //"In Warehouse with driver",
+    "With Driver",
+    "Delivered",
+  ];
+  ////you should add all status here
 
   @override
   void initState() {
-    selected_driver =
-        widget.pk_edit.driver.isEmpty ? '' : widget.pk_edit.driver;
     selected_status =
         widget.pk_edit.status.isEmpty ? '' : widget.pk_edit.status;
-    loadData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    //////////////////////////////////// filter driver
-    String currentDay_format = DateFormat('dd-MM-yyyy').format(DateTime.now());
-    List<driver_assign_to_order> filteredDrivers = filterDrivers(
-        drivers,
-        currentDay_format,
-        widget.pk_edit.package_type == 0
-            ? widget.pk_edit.to
-            : widget.pk_edit.from);
     ////////////////////////////////////////////////////////////
+    List<String> filteredList = selected_status.isNotEmpty
+        ? status.sublist(0, status.indexOf(selected_status) + 1)
+        : status;
+    //////////////////////////////////////////
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -138,68 +114,68 @@ class _edit_packageState extends State<edit_package> {
               SizedBox(
                 height: 30,
               ),
-              Visibility(
-                visible: selected_driver.isNotEmpty,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Driver: ',
-                          style: TextStyle(fontSize: 20, color: Colors.grey),
-                        ),
-                        Container(
-                          width: 260,
-                          child: DropdownButtonFormField(
-                            value: selected_driver.isNotEmpty
-                                ? selected_driver
-                                : null,
-                            hint: Text('Drivers',
-                                style: TextStyle(color: Colors.grey)),
-                            decoration: theme_helper().text_form_style(
-                              '',
-                              '',
-                              null,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                            onChanged: (newValue) {
-                              setState(() {
-                                selected_driver = newValue as String;
-                              });
-                            },
-                            items: filteredDrivers.map((value) {
-                              return DropdownMenuItem(
-                                value: value.name,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: AssetImage(value.img))),
-                                    ),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text(value.name),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    )
-                  ],
-                ),
-              ),
+              // Visibility(
+              //   visible: selected_driver.isNotEmpty,
+              //   child: Column(
+              //     children: [
+              //       Row(
+              //         children: [
+              //           Text(
+              //             'Driver: ',
+              //             style: TextStyle(fontSize: 20, color: Colors.grey),
+              //           ),
+              //           Container(
+              //             width: 260,
+              //             child: DropdownButtonFormField(
+              //               value: selected_driver.isNotEmpty
+              //                   ? selected_driver
+              //                   : null,
+              //               hint: Text('Drivers',
+              //                   style: TextStyle(color: Colors.grey)),
+              //               decoration: theme_helper().text_form_style(
+              //                 '',
+              //                 '',
+              //                 null,
+              //               ),
+              //               borderRadius: BorderRadius.circular(10),
+              //               onChanged: (newValue) {
+              //                 setState(() {
+              //                   selected_driver = newValue as String;
+              //                 });
+              //               },
+              //               items: filteredDrivers.map((value) {
+              //                 return DropdownMenuItem(
+              //                   value: value.name,
+              //                   child: Row(
+              //                     mainAxisAlignment: MainAxisAlignment.start,
+              //                     children: [
+              //                       Container(
+              //                         height: 40,
+              //                         width: 40,
+              //                         decoration: BoxDecoration(
+              //                             shape: BoxShape.circle,
+              //                             image: DecorationImage(
+              //                                 fit: BoxFit.cover,
+              //                                 image: AssetImage(value.img))),
+              //                       ),
+              //                       SizedBox(
+              //                         width: 3,
+              //                       ),
+              //                       Text(value.name),
+              //                     ],
+              //                   ),
+              //                 );
+              //               }).toList(),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //       SizedBox(
+              //         height: 30,
+              //       )
+              //     ],
+              //   ),
+              // ),
               Visibility(
                 visible: selected_status.isNotEmpty,
                 child: Column(
@@ -227,7 +203,7 @@ class _edit_packageState extends State<edit_package> {
                                 selected_status = newValue as String;
                               });
                             },
-                            items: status.map((value) {
+                            items: filteredList.map((value) {
                               return DropdownMenuItem(
                                   value: value, child: Text(value));
                             }).toList(),
@@ -297,37 +273,4 @@ class _edit_packageState extends State<edit_package> {
       ),
     );
   }
-}
-
-class driver_assign_to_order {
-  final String name;
-  final String username;
-  final String img;
-  final List<String> working_days;
-  final String city;
-  final String vacation;
-
-  driver_assign_to_order({
-    required this.city,
-    required this.vacation,
-    required this.working_days,
-    required this.username,
-    required this.name,
-    required this.img,
-  });
-
-  bool isAvailableOnCurrentDay(String currentDay) {
-    DateTime dateTime = DateFormat('dd-MM-yyyy').parse(currentDay);
-    String dayOfWeek = DateFormat('EEEE').format(dateTime);
-    return working_days.contains(dayOfWeek) && vacation != currentDay;
-  }
-}
-
-/////////////////   filter to put Suitable drivers
-List<driver_assign_to_order> filterDrivers(
-    List<driver_assign_to_order> drivers, String currentDay, String city) {
-  return drivers
-      .where((driver) =>
-          driver.isAvailableOnCurrentDay(currentDay) && driver.city == city)
-      .toList();
 }

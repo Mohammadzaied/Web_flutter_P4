@@ -94,23 +94,23 @@ class CustomDrawer extends StatelessWidget {
                 },
               ),
               Padding(padding: EdgeInsets.only(top: 20)),
-              ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                leading: Icon(
-                  Icons.help,
-                  color: primarycolor,
-                  size: 30,
-                ),
-                title: Text(
-                  "Help",
-                  style: TextStyle(fontSize: 25),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+              // ListTile(
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(30),
+              //   ),
+              //   leading: Icon(
+              //     Icons.help,
+              //     color: primarycolor,
+              //     size: 30,
+              //   ),
+              //   title: Text(
+              //     "Help",
+              //     style: TextStyle(fontSize: 25),
+              //   ),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //   },
+              // ),
               Divider(
                 color: Colors.grey,
                 height: 5,

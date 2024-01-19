@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_application_1/admin/main_page_admin.dart';
 import 'package:flutter_application_1/employee/main_page_employee.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:get_storage/get_storage.dart';
@@ -6,8 +7,6 @@ import 'package:get_storage/get_storage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  var userType = GetStorage().read("userType");
-  print(userType);
   runApp(MaterialApp.router(
     theme: ThemeData(
       primaryColor: primarycolor,
@@ -16,17 +15,3 @@ Future<void> main() async {
     routerConfig: Router_pages,
   ));
 }
-
-// Future<void> main() async {
-//   //WidgetsFlutterBinding.ensureInitialized();
-//   // await GetStorage.init();
-//   // var userType = GetStorage().read("userType");
-//   // print(userType);
-//   runApp(MaterialApp(
-//     theme: ThemeData(
-//       primaryColor: primarycolor,
-//     ),
-//     debugShowCheckedModeBanner: false,
-//     home: assign_order(),
-//   ));
-// }

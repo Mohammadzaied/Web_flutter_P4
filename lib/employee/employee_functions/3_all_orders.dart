@@ -1,40 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
+import 'package:flutter_application_1/employee/employee_functions/component/3_package_assign.dart';
 import 'package:flutter_application_1/employee/main_page_employee.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class all_orders extends StatefulWidget {
-  final List<package_edit> pk_all;
-
-  const all_orders({
-    super.key,
-    required this.pk_all,
-  });
   @override
   State<all_orders> createState() => _all_ordersState();
 }
 
 class _all_ordersState extends State<all_orders> {
   List<dynamic> all_orders = [];
+  List<package_edit> pk_all = [];
 
-  Future<void> fetchData_new_orders() async {
-    var url = urlStarter + "/employee/getNewOrders";
+  Future<void> fetchData_all_orders() async {
+    var url = urlStarter + "/employee/getAllPackages";
     print(url);
     final response = await http
         .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      all_orders = data['result'];
+      all_orders = data;
       //print(new_orders);
       setState(() {
-        //  pk_new = buildMy_new_orders();
+        pk_all = buildMy_all_orders();
       });
     } else {
       print('new_orders error');
       throw Exception('Failed to load data');
     }
+  }
+
+  List<package_edit> buildMy_all_orders() {
+    List<package_edit> orders = [];
+
+    for (int i = 0; i < all_orders.length; i++) {
+      orders.add(
+        package_edit(
+          refreshdata: () {
+            fetchData_all_orders();
+          },
+          driver: all_orders[i]['driverName'],
+          // drivers: drivers,
+          id: all_orders[i]['packageId'],
+          package_type: all_orders[i]['packageType'],
+          // package_size: all_orders[i]['packageSize'] == 'Document0'
+          //     ? 0
+          //     : all_orders[i]['packageSize'] == 'Package0'
+          //         ? 1
+          //         : all_orders[i]['packageSize'] == 'Package1'
+          //             ? 2
+          //             : 3,
+          photo_cus: urlStarter + all_orders[i]['img'],
+          name: all_orders[i]['name'],
+          city: all_orders[i]['city'],
+          status: all_orders[i]['status'],
+        ),
+      );
+    }
+
+    return orders;
   }
 
   List citylist = [
@@ -47,13 +74,27 @@ class _all_ordersState extends State<all_orders> {
     'Hebron',
     'None'
   ];
+  // List<String> status = [
+  //   'pendding',
+  //   'accept',
+  //   'reject',
+  //   'assign to driver',
+  //   'on way',
+  //   'None'
+  // ];
   List<String> status = [
-    'pendding',
-    'accept',
-    'reject',
-    'assign to driver',
-    'on way',
-    'None'
+    "Under review",
+    "Rejected by employee",
+    "Accepted",
+    //'assign to driver'
+    "Wait Driver",
+    "Rejected by driver",
+    "Complete Receive",
+    "In Warehouse",
+    //"In Warehouse with driver",
+    "With Driver",
+    "Delivered",
+    "None",
   ];
   List packagetypes = ['Delivery', 'Receiving', 'None'];
   List searchtypes = ['Search by Name', 'Search by ID'];
@@ -66,6 +107,7 @@ class _all_ordersState extends State<all_orders> {
 
   @override
   void initState() {
+    fetchData_all_orders();
     setState(() {
       TabController_.index = 3;
     });
@@ -79,35 +121,35 @@ class _all_ordersState extends State<all_orders> {
 
   List<package_edit> _filterOrders() {
     if (selectedCity!.isEmpty && selectedtype!.isEmpty && searchtype!.isEmpty) {
-      return widget.pk_all;
+      return pk_all;
     }
 
-    return widget.pk_all.where((order) {
+    return pk_all.where((order) {
       if (selectedstatus!.isNotEmpty && (order.status != selectedstatus)) {
         return false;
       }
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 0 &&
-          (order.to != selectedCity)) {
+          (order.city != selectedCity)) {
         return false;
       }
 
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 1 &&
-          (order.from != selectedCity)) {
+          (order.city != selectedCity)) {
         return false;
       }
 
       if (selectedtype == 'Delivery' &&
           selectedCity!.isNotEmpty &&
-          order.to != selectedCity) {
+          order.city != selectedCity) {
         return false;
       }
       if (selectedtype == 'Receiving' &&
           selectedCity!.isNotEmpty &&
-          order.from != selectedCity) {
+          order.city != selectedCity) {
         return false;
       }
 
@@ -198,7 +240,7 @@ class _all_ordersState extends State<all_orders> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 5, 20),
                 child: Container(
-                  width: 200,
+                  width: 250,
                   child: DropdownButtonFormField(
                     hint: Text('Filterd by Status',
                         style: TextStyle(color: Colors.grey)),

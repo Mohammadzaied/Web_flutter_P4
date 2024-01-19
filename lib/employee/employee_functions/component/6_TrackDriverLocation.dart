@@ -100,6 +100,9 @@ class _TrackDriverLocationState extends State<TrackDriverLocation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primarycolor,
+      ),
       body: Container(
           child: GoogleMap(
         markers: markers.toSet(),

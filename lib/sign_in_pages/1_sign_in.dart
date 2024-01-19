@@ -47,7 +47,9 @@ class _sign_inState extends State<sign_in> {
       GetStorage().write("url", responceBody['user']['url']);
       if (responceBody['user']['userType'] == "employee")
         GoRouter.of(context).go('/new_orders');
-      else {
+      else if (responceBody['user']['userType'] == "admin") {
+        GoRouter.of(context).go('/all_manager');
+      } else {
         print("not allowed");
         showDialog(
           context: context,
@@ -254,6 +256,8 @@ class _sign_inState extends State<sign_in> {
                                       if (formState.currentState!.validate()) {
                                         formState.currentState!.save();
                                         postSignin();
+
+                                        //GoRouter.of(context).go('/all_manager');
                                         //GoRouter.of(context).go('/new_orders');
                                       }
                                     },
