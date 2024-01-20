@@ -53,6 +53,10 @@ class _new_orderState extends State<new_order> {
     for (int i = 0; i < new_orders.length; i++) {
       orders.add(
         package_new(
+          longfrom: new_orders[i]['longFrom'],
+          Latefrom: new_orders[i]['latFrom'],
+          longto: new_orders[i]['longTo'],
+          Lateto: new_orders[i]['latTo'],
           refreshdata: () {
             fetchData_new_orders();
           },

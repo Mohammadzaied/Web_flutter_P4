@@ -14,6 +14,7 @@ import 'package:flutter_application_1/employee/employee_functions/1_new_orders.d
 import 'package:flutter_application_1/employee/employee_functions/5_receiving_money.dart';
 import 'package:flutter_application_1/employee/employee_functions/9_track-package.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
+import 'package:flutter_application_1/employee/employee_functions/component/5_set_location.dart';
 import 'package:flutter_application_1/sign_in_pages/2_forget_pass.dart';
 import 'package:flutter_application_1/sign_in_pages/4_new_password.dart';
 import 'package:flutter_application_1/sign_in_pages/1_sign_in.dart';
@@ -274,12 +275,6 @@ final GoRouter Router_pages = GoRouter(
       routes: <RouteBase>[
         GoRoute(
           path: '/all_manager',
-          builder: (BuildContext context, GoRouterState state) {
-            return managers();
-          },
-        ),
-        GoRoute(
-          path: '/delete_Manager',
           builder: (BuildContext context, GoRouterState state) {
             return managers();
           },

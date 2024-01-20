@@ -255,10 +255,8 @@ class _sign_inState extends State<sign_in> {
                                       isLoginFaild = false;
                                       if (formState.currentState!.validate()) {
                                         formState.currentState!.save();
-                                        postSignin();
 
-                                        //GoRouter.of(context).go('/all_manager');
-                                        //GoRouter.of(context).go('/new_orders');
+                                        postSignin();
                                       }
                                     },
                                   ),

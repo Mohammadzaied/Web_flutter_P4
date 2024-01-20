@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
 class set_location extends StatefulWidget {
@@ -96,11 +97,7 @@ class _set_locationState extends State<set_location> {
                                 "${addressParts[0]}','${addressParts[1]}','${addressParts[2]}','${addressParts[3]}",
                                 pickedData.latLong.latitude,
                                 pickedData.latLong.longitude);
-                            //Navigator.of(context).pop();
                             Navigator.pop(context);
-                            Navigator.pop(context);
-                            //Navigator.of(context).pop();
-                            //add_parcel().
                           },
                           child: Text(
                             "Ok",

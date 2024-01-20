@@ -1,3 +1,4 @@
+import 'package:flutter_application_1/employee/employee_functions/component/7_location_new_order.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
@@ -12,6 +13,10 @@ class package_new extends StatefulWidget {
   final int price;
   final String name;
   final int package_size; //0 doc  , 1 small ,2 meduim , 3 large
+  final double Latefrom;
+  final double longfrom;
+  final double Lateto;
+  final double longto;
   final Function() refreshdata;
 
   package_new({
@@ -24,6 +29,10 @@ class package_new extends StatefulWidget {
     required this.id,
     required this.price,
     required this.refreshdata,
+    required this.Latefrom,
+    required this.longfrom,
+    required this.Lateto,
+    required this.longto,
   });
 
   @override
@@ -233,7 +242,14 @@ class _package_newState extends State<package_new> {
                                   color: Colors.white,
                                 )),
                             onPressed: () {
-                              // post_accepet_order(widget.id);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Location_p(
+                                          Latefrom: widget.Latefrom,
+                                          longfrom: widget.longfrom,
+                                          Lateto: widget.Lateto,
+                                          longto: widget.longto)));
                             },
                           ),
                         ),
