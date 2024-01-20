@@ -300,7 +300,8 @@ class _receiving_moneyState extends State<receiving_money> {
                       style: TextStyle(fontSize: 20, color: Colors.grey),
                       children: <InlineSpan>[
                         TextSpan(
-                          text: ' ${selected_driver.total_delivery}₪',
+                          text:
+                              ' ${selected_driver.total_delivery.toStringAsFixed(2)}\$',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
@@ -316,7 +317,7 @@ class _receiving_moneyState extends State<receiving_money> {
                       style: TextStyle(fontSize: 20, color: Colors.grey),
                       children: <InlineSpan>[
                         TextSpan(
-                          text: ' ${selected_driver.total_purchase}₪',
+                          text: ' ${selected_driver.total_purchase}\$',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
@@ -333,7 +334,7 @@ class _receiving_moneyState extends State<receiving_money> {
                       children: <InlineSpan>[
                         TextSpan(
                           text:
-                              ' ${selected_driver.total_delivery + selected_driver.total_purchase}₪',
+                              ' ${(selected_driver.total_delivery + selected_driver.total_purchase).toStringAsFixed(2)}\$',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
@@ -430,7 +431,7 @@ class driver {
   final String img;
   final int num_pkg_receive;
   final int num_pkg_deliver;
-  final int total_delivery;
+  final double total_delivery;
   final int total_purchase;
 
   driver({
