@@ -355,16 +355,16 @@ class _create_orderState extends State<create_order> {
           Center(
             child: Container(
               width: 800,
-              child: Column(
-                children: [
-                  Form(
-                      key: formState5,
-                      child: Row(
+              child: Form(
+                  key: formState5,
+                  child: Column(
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         //crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 300,
+                            width: 350,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -543,7 +543,7 @@ class _create_orderState extends State<create_order> {
                           ),
                           Spacer(),
                           Container(
-                            width: 300,
+                            width: 350,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -716,472 +716,481 @@ class _create_orderState extends State<create_order> {
                                     ],
                                   ),
                                 ),
-                                // SizedBox(height: 10),
+                                SizedBox(height: 10),
                               ],
                             ),
                           ),
-
-                          // Container(
-                          //   width: 400,
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     mainAxisAlignment: MainAxisAlignment.start,
-                          //     children: [
-                          //       Padding(
-                          //         padding: const EdgeInsets.all(8.0),
-                          //         child: Text(
-                          //           'Package Price',
-                          //           style: TextStyle(fontSize: 16),
-                          //         ),
-                          //       ),
-                          //       TextFormField(
-                          //         initialValue: package_price,
-                          //         keyboardType: TextInputType.numberWithOptions(
-                          //             decimal: true),
-                          //         inputFormatters: <TextInputFormatter>[
-                          //           FilteringTextInputFormatter.allow(
-                          //               RegExp(r'[0-9.]')),
-                          //         ],
-                          //         decoration: theme_helper().text_form_style(
-                          //             "package price(or enter 0 if payment done)",
-                          //             "Enter The package price",
-                          //             Icons.price_change),
-                          //         validator: (value) {
-                          //           if (value!.isEmpty) return "The package price";
-                          //           return null;
-                          //         },
-                          //         onSaved: (newValue) {
-                          //           package_price = newValue;
-                          //         },
-                          //       ),
-                          //     ],
-                          //   ),
-                          // )
-                          // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                          // SizedBox(height: 10),
-
-                          // SizedBox(height: 20),
-                          // Row(
-                          //   children: [
-                          //     SizedBox(
-                          //       width: 10,
-                          //     ),
-                          //     Text(
-                          //       'Who will pay the delivery costs?',
-                          //       style: TextStyle(fontWeight: FontWeight.bold),
-                          //     ),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   children: [
-                          //     Radio(
-                          //       activeColor: primarycolor,
-                          //       value: "The recipient",
-                          //       groupValue: paySelectedValue,
-                          //       onChanged: (value) {
-                          //         setState(() {
-                          //           paySelectedValue = value.toString();
-                          //         });
-                          //       },
-                          //     ),
-                          //     Text("The recipient"),
-                          //     SizedBox(
-                          //       width: 10,
-                          //     ),
-                          //     Radio(
-                          //       activeColor: primarycolor,
-                          //       value: "The sender",
-                          //       groupValue: paySelectedValue,
-                          //       onChanged: (value) {
-                          //         setState(() {
-                          //           paySelectedValue = value.toString();
-                          //         });
-                          //       },
-                          //     ),
-                          //     Text("The sender"),
-                          //   ],
-                          // ),
-                          // SizedBox(height: 20),
-                          // Row(
-                          //   children: [
-                          //     SizedBox(
-                          //       width: 10,
-                          //     ),
-                          //     Text(
-                          //       'What are you shipping ?',
-                          //       style: TextStyle(fontWeight: FontWeight.bold),
-                          //     ),
-                          //   ],
-                          // ),
-                          // SizedBox(height: 10),
-                          // Row(
-                          //   children: [
-                          //     Radio(
-                          //       activeColor: primarycolor,
-                          //       value: "Document",
-                          //       groupValue: shippingType,
-                          //       onChanged: (value) {
-                          //         setState(() {
-                          //           shippingType = value.toString();
-                          //           calaulateTotalPrice();
-                          //         });
-                          //       },
-                          //     ),
-                          //     Text('Document'),
-                          //     SizedBox(
-                          //       width: 10,
-                          //     ),
-                          //     Radio(
-                          //       activeColor: primarycolor,
-                          //       value: "Package",
-                          //       groupValue: shippingType,
-                          //       onChanged: (value) {
-                          //         setState(() {
-                          //           shippingType = value.toString();
-                          //         });
-                          //       },
-                          //     ),
-                          //     Text('Package'),
-                          //   ],
-                          // ),
-                          // Visibility(
-                          //   visible: shippingType == "Package",
-                          //   child: Container(
-                          //     height: 200.0,
-                          //     child: ListView.builder(
-                          //       scrollDirection: Axis.horizontal,
-                          //       itemCount: items.length,
-                          //       itemBuilder: (BuildContext context, int index) {
-                          //         return GestureDetector(
-                          //           onTap: () {
-                          //             setState(() {
-                          //               selectedIdx = index;
-                          //               calaulateTotalPrice();
-                          //             });
-                          //             print('${items[index].name}');
-                          //           },
-                          //           child: Card(
-                          //             margin: EdgeInsets.all(8.0),
-                          //             shape: RoundedRectangleBorder(
-                          //               side: BorderSide(
-                          //                 color: selectedIdx == index
-                          //                     ? primarycolor
-                          //                     : Colors.transparent,
-                          //                 width: 5.0,
-                          //               ),
-                          //               borderRadius: BorderRadius.circular(30.0),
-                          //             ),
-                          //             child: Center(
-                          //               child: Container(
-                          //                 width: 150,
-                          //                 padding: EdgeInsets.all(8.0),
-                          //                 child: Column(
-                          //                   children: [
-                          //                     Image(
-                          //                       height: 140,
-                          //                       image: AssetImage(
-                          //                           items[index].img), // ),
-                          //                     ),
-                          //                     Text('${items[index].name}')
-                          //                   ],
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         );
-                          //       },
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(height: 20),
-                          // DropdownButtonFormField(
-                          //   value: toCity,
-                          //   isExpanded: true,
-                          //   hint: Text('Shipping To City'),
-                          //   validator: (value) {
-                          //     if (value == null) {
-                          //       return "Please select city";
-                          //     }
-                          //     return null;
-                          //   },
-                          //   decoration: theme_helper().text_form_style(
-                          //     '',
-                          //     '',
-                          //     Icons.location_city,
-                          //   ),
-                          //   items: citylist.map((value) {
-                          //     return DropdownMenuItem(
-                          //       value: value,
-                          //       child: Text(value),
-                          //     );
-                          //   }).toList(),
-                          //   onChanged: (value) {
-                          //     setState(() {
-                          //       toCity = (value as String?)!;
-                          //       print(toCity);
-                          //     });
-                          //   },
-                          // ),
-                          // SizedBox(height: 20),
-                          // TextFormField(
-                          //   controller: _textController2,
-                          //   style: TextStyle(fontSize: 12.0),
-                          //   validator: (val) {
-                          //     if (val!.isEmpty)
-                          //       return 'Please set location shipping to';
-                          //     return null;
-                          //   },
-                          //   readOnly: true,
-                          //   onSaved: (val) {
-                          //     locationToInfo = val;
-                          //   },
-                          //   onTap: () {
-                          //     Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: ((context) => set_location(
-                          //                 onDataReceived: getlocationto))));
-                          //   },
-                          //   decoration: InputDecoration(
-                          //     prefixIcon:
-                          //         Icon(Icons.location_on, color: Colors.red),
-                          //     hintText: 'Set Location Shipping To',
-                          //     hintStyle: TextStyle(fontSize: 16.0),
-                          //     filled: true,
-                          //     fillColor: Colors.white,
-                          //     focusedBorder: OutlineInputBorder(
-                          //         borderRadius: BorderRadius.circular(5),
-                          //         borderSide: BorderSide(color: Colors.grey)),
-                          //     enabledBorder: OutlineInputBorder(
-                          //         borderRadius: BorderRadius.circular(5),
-                          //         borderSide:
-                          //             BorderSide(color: Colors.grey.shade400)),
-                          //     errorBorder: OutlineInputBorder(
-                          //         borderRadius: BorderRadius.circular(5),
-                          //         borderSide:
-                          //             BorderSide(color: Colors.red, width: 2)),
-                          //     focusedErrorBorder: OutlineInputBorder(
-                          //         borderRadius: BorderRadius.circular(5),
-                          //         borderSide:
-                          //             BorderSide(color: Colors.red, width: 2)),
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: 30,
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.all(8.0),
-                          //   child: Text(
-                          //     'Delivery Price',
-                          //     style: TextStyle(fontSize: 16),
-                          //   ),
-                          // ),
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black),
-                          //   ),
-                          //   child: Column(
-                          //     children: [
-                          //       Container(
-                          //         padding: EdgeInsets.all(10),
-                          //         color: Colors.white,
-                          //         child: Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             Text(
-                          //               '+ Opening price:',
-                          //               style: TextStyle(
-                          //                   color: Colors.grey, fontSize: 20),
-                          //             ),
-                          //             Text(
-                          //               openingPrice.toString() + '\$',
-                          //               style: TextStyle(
-                          //                   color: Colors.grey, fontSize: 20),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       ),
-                          //       Container(
-                          //         padding: EdgeInsets.all(10),
-                          //         color: Colors.white,
-                          //         child: Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             Text(
-                          //               '+ Package size price:',
-                          //               style: TextStyle(
-                          //                   color: Colors.grey, fontSize: 20),
-                          //             ),
-                          //             Text(
-                          //               boxSizePrice.toString() + '\$',
-                          //               style: TextStyle(
-                          //                   color: Colors.grey, fontSize: 20),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       ),
-                          //       Container(
-                          //         padding: EdgeInsets.all(10),
-                          //         color: Colors.white,
-                          //         child: Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             Text(
-                          //               '   Delivery Price/Km:',
-                          //               style: TextStyle(
-                          //                   color: Colors.grey, fontSize: 20),
-                          //             ),
-                          //             Text(
-                          //               pricePerKm.toStringAsFixed(2),
-                          //               style: TextStyle(
-                          //                   color: Colors.grey, fontSize: 20),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       ),
-                          //       Container(
-                          //         padding: EdgeInsets.all(10),
-                          //         color: Colors.white,
-                          //         child: Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             Text(
-                          //               '   Distance:',
-                          //               style: TextStyle(
-                          //                   color: Colors.grey, fontSize: 20),
-                          //             ),
-                          //             distance > 0
-                          //                 ? Text(
-                          //                     '${distance.toStringAsFixed(2)} km',
-                          //                     style: TextStyle(
-                          //                         color: Colors.grey, fontSize: 20),
-                          //                   )
-                          //                 : Text('---'),
-                          //           ],
-                          //         ),
-                          //       ),
-                          //       Container(
-                          //         padding: EdgeInsets.all(10),
-                          //         color: Colors.white,
-                          //         child: Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             Text(
-                          //               '+ Distance delivery price:',
-                          //               style: TextStyle(
-                          //                   color: Colors.grey, fontSize: 20),
-                          //             ),
-                          //             distance > 0
-                          //                 ? Text(
-                          //                     '${distancePrice.toStringAsFixed(2)}\$',
-                          //                     style: TextStyle(
-                          //                         color: Colors.grey, fontSize: 20),
-                          //                   )
-                          //                 : Text(
-                          //                     '---',
-                          //                     style: TextStyle(
-                          //                         color: Colors.grey, fontSize: 20),
-                          //                   ),
-                          //           ],
-                          //         ),
-                          //       ),
-                          //       Visibility(
-                          //         visible: discount > 0,
-                          //         child: Container(
-                          //           padding: EdgeInsets.all(10),
-                          //           color: Colors.white,
-                          //           child: Row(
-                          //             mainAxisAlignment:
-                          //                 MainAxisAlignment.spaceBetween,
-                          //             children: [
-                          //               Text(
-                          //                 '% Discount:',
-                          //                 style: TextStyle(
-                          //                     color: Colors.grey, fontSize: 20),
-                          //               ),
-                          //               Text('${discount}%',
-                          //                   style: TextStyle(
-                          //                       color: Colors.grey, fontSize: 20)),
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       ),
-                          //       Container(
-                          //         padding: EdgeInsets.all(10),
-                          //         color: Colors.white,
-                          //         child: Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             Text(
-                          //               'Total Price:',
-                          //               style: TextStyle(
-                          //                   fontWeight: FontWeight.bold,
-                          //                   color: Colors.black,
-                          //                   fontSize: 20),
-                          //             ),
-                          //             Text(
-                          //               totalPrice.toStringAsFixed(2) + "\$",
-                          //               style: TextStyle(
-                          //                   fontWeight: FontWeight.bold,
-                          //                   color: Colors.black,
-                          //                   fontSize: 20),
-                          //             )
-                          //           ],
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: 30,
-                          // ),
-                          // Center(
-                          //   child: Container(
-                          //     child: MaterialButton(
-                          //       shape: RoundedRectangleBorder(
-                          //           borderRadius: BorderRadius.circular(10.0)),
-                          //       color: primarycolor,
-                          //       child: Padding(
-                          //         padding: EdgeInsets.fromLTRB(40, 10, 40, 10),
-                          //         child: Text(
-                          //           "Save Package",
-                          //           style: TextStyle(
-                          //               fontSize: 20,
-                          //               fontWeight: FontWeight.bold,
-                          //               color: Colors.white),
-                          //         ),
-                          //       ),
-                          //       onPressed: () {
-                          //         if (formState5.currentState!.validate()) {
-                          //           formState5.currentState!.save();
-                          //           if (widget.title == "Edit Package") {
-                          //             print("Edit Package");
-                          //             postSendPackageUser(
-                          //                 "/customer/editPackageUser?packageId=" +
-                          //                     widget.packageId.toString(),
-                          //                 "The package is edited successfully");
-                          //           } else {
-                          //             postSendPackageUser("/employee/createOrder",
-                          //                 "The package is created successfully");
-                          //           }
-                          //         }
-                          //       },
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: 20,
-                          // ),
                         ],
-                      )),
-                ],
-              ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        width: 800,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Package Price',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            TextFormField(
+                              initialValue: package_price,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9.]')),
+                              ],
+                              decoration: theme_helper().text_form_style(
+                                  "package price(or enter 0 if payment done)",
+                                  "Enter The package price",
+                                  Icons.price_change),
+                              validator: (value) {
+                                if (value!.isEmpty) return "The package price";
+                                return null;
+                              },
+                              onSaved: (newValue) {
+                                package_price = newValue;
+                              },
+                            ),
+                            // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Who will pay the delivery costs?',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Radio(
+                                  activeColor: primarycolor,
+                                  value: "The recipient",
+                                  groupValue: paySelectedValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      paySelectedValue = value.toString();
+                                    });
+                                  },
+                                ),
+                                Text("The recipient"),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Radio(
+                                  activeColor: primarycolor,
+                                  value: "The sender",
+                                  groupValue: paySelectedValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      paySelectedValue = value.toString();
+                                    });
+                                  },
+                                ),
+                                Text("The sender"),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'What are you shipping ?',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Radio(
+                                  activeColor: primarycolor,
+                                  value: "Document",
+                                  groupValue: shippingType,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      shippingType = value.toString();
+                                      calaulateTotalPrice();
+                                    });
+                                  },
+                                ),
+                                Text('Document'),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Radio(
+                                  activeColor: primarycolor,
+                                  value: "Package",
+                                  groupValue: shippingType,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      shippingType = value.toString();
+                                    });
+                                  },
+                                ),
+                                Text('Package'),
+                              ],
+                            ),
+                            Visibility(
+                              visible: shippingType == "Package",
+                              child: Container(
+                                height: 200.0,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: items.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedIdx = index;
+                                          calaulateTotalPrice();
+                                        });
+                                        print('${items[index].name}');
+                                      },
+                                      child: Card(
+                                        margin: EdgeInsets.all(8.0),
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            color: selectedIdx == index
+                                                ? primarycolor
+                                                : Colors.transparent,
+                                            width: 5.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                        ),
+                                        child: Center(
+                                          child: Container(
+                                            width: 150,
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: [
+                                                Image(
+                                                  height: 140,
+                                                  image: AssetImage(
+                                                      items[index].img), // ),
+                                                ),
+                                                Text('${items[index].name}')
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            DropdownButtonFormField(
+                              value: toCity,
+                              isExpanded: true,
+                              hint: Text('Shipping To City'),
+                              validator: (value) {
+                                if (value == null) {
+                                  return "Please select city";
+                                }
+                                return null;
+                              },
+                              decoration: theme_helper().text_form_style(
+                                '',
+                                '',
+                                Icons.location_city,
+                              ),
+                              items: citylist.map((value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  toCity = (value as String?)!;
+                                  print(toCity);
+                                });
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            TextFormField(
+                              controller: _textController2,
+                              style: TextStyle(fontSize: 12.0),
+                              validator: (val) {
+                                if (val!.isEmpty)
+                                  return 'Please set location shipping to';
+                                return null;
+                              },
+                              readOnly: true,
+                              onSaved: (val) {
+                                locationToInfo = val;
+                              },
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => set_location(
+                                            onDataReceived: getlocationto))));
+                              },
+                              decoration: InputDecoration(
+                                prefixIcon:
+                                    Icon(Icons.location_on, color: Colors.red),
+                                hintText: 'Set Location Shipping To',
+                                hintStyle: TextStyle(fontSize: 16.0),
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: BorderSide(color: Colors.grey)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: BorderSide(
+                                        color: Colors.grey.shade400)),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: BorderSide(
+                                        color: Colors.red, width: 2)),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: BorderSide(
+                                        color: Colors.red, width: 2)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Delivery Price',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '+ Opening price:',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                        Text(
+                                          openingPrice.toString() + '\$',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '+ Package size price:',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                        Text(
+                                          boxSizePrice.toString() + '\$',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '   Delivery Price/Km:',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                        Text(
+                                          pricePerKm.toStringAsFixed(2),
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '   Distance:',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                        distance > 0
+                                            ? Text(
+                                                '${distance.toStringAsFixed(2)} km',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 20),
+                                              )
+                                            : Text('---'),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '+ Distance delivery price:',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 20),
+                                        ),
+                                        distance > 0
+                                            ? Text(
+                                                '${distancePrice.toStringAsFixed(2)}\$',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 20),
+                                              )
+                                            : Text(
+                                                '---',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 20),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: discount > 0,
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      color: Colors.white,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '% Discount:',
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 20),
+                                          ),
+                                          Text('${discount}%',
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 20)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Total Price:',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 20),
+                                        ),
+                                        Text(
+                                          totalPrice.toStringAsFixed(2) + "\$",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 20),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Center(
+                              child: Container(
+                                child: MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  color: primarycolor,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.fromLTRB(40, 10, 40, 10),
+                                    child: Text(
+                                      "Save Package",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (formState5.currentState!.validate()) {
+                                      formState5.currentState!.save();
+                                      if (widget.title == "Edit Package") {
+                                        print("Edit Package");
+                                        postSendPackageUser(
+                                            "/customer/editPackageUser?packageId=" +
+                                                widget.packageId.toString(),
+                                            "The package is edited successfully");
+                                      } else {
+                                        postSendPackageUser(
+                                            "/employee/createOrder",
+                                            "The package is created successfully");
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
             ),
           )
         ]),

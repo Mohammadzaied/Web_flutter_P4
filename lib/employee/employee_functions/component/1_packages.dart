@@ -13,6 +13,7 @@ class package_edit extends StatefulWidget {
   final String name;
   final String status;
   final String driver;
+  final String? driverUsername;
   final int id;
   final Function() refreshdata;
 
@@ -26,6 +27,7 @@ class package_edit extends StatefulWidget {
     required this.status,
     required this.driver,
     required this.refreshdata,
+    required this.driverUsername,
   });
 
   @override
@@ -33,6 +35,19 @@ class package_edit extends StatefulWidget {
 }
 
 class _package_editState extends State<package_edit> {
+  List<String> status = [
+    "Under review",
+    "Rejected by employee",
+    "Accepted",
+    //'assign to driver'
+    "Wait Driver",
+    "Rejected by driver",
+    "Complete Receive",
+    "In Warehouse",
+    //"In Warehouse with driver",
+    "With Driver",
+    "Delivered",
+  ];
   String username = GetStorage().read("userName");
   String password = GetStorage().read("password");
 
@@ -43,6 +58,27 @@ class _package_editState extends State<package_edit> {
           "employeeUserName": username,
           "employeePassword": password,
           "packageId": id,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    if (responce.statusCode == 200) {
+      setState(() {
+        widget.refreshdata();
+      });
+    }
+  }
+
+  Future post_edit_package(
+      int id, String status, String driver_username) async {
+    var url = urlStarter + "/employee/editPackage";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "employeeUserName": username,
+          "employeePassword": password,
+          "packageId": id,
+          "packageStatus": status,
+          "driverUsername": driver_username,
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -190,28 +226,83 @@ class _package_editState extends State<package_edit> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          child: MaterialButton(
-                            padding: EdgeInsets.all(8),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            color: primarycolor,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "Undo Progress",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                        Visibility(
+                          visible: widget.status != 'Under review',
+                          child: Container(
+                            child: MaterialButton(
+                              padding: EdgeInsets.all(8),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              color: primarycolor,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Undo Progress",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
+                              onPressed: () {
+                                String before_status = '';
+                                int targetIndex = status.indexOf(widget.status);
+                                if (targetIndex != -1 && targetIndex > 0) {
+                                  before_status = status[targetIndex - 1];
+                                }
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                post_edit_package(
+                                                    widget.id,
+                                                    widget.status,
+                                                    widget.driver);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                "Yes",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              )),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                "Cancel",
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 18),
+                                              )),
+                                        ],
+                                        title: Text("Edit package Status"),
+                                        content: Container(
+                                          width: 400,
+                                          child: Text(
+                                            "Are you sure you want to edit  the package id's ${widget.id} status from state  '${widget.status}' to '${before_status}'",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18),
+                                          ),
+                                        ),
+                                        titleTextStyle: TextStyle(
+                                            color: Colors.white, fontSize: 25),
+                                        contentTextStyle: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                        backgroundColor: primarycolor,
+                                      );
+                                    });
+                              },
                             ),
-                            onPressed: () {
-                              setState(() {
-                                pk_select = widget;
-                              });
-                              //GoRouter.of(context).go('/edit_package');
-                            },
                           ),
                         ),
                         SizedBox(

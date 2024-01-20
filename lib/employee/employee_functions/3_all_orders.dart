@@ -42,17 +42,10 @@ class _all_ordersState extends State<all_orders> {
           refreshdata: () {
             fetchData_all_orders();
           },
+          driverUsername: all_orders[i]['driverUsername'],
           driver: all_orders[i]['driverName'],
-          // drivers: drivers,
           id: all_orders[i]['packageId'],
           package_type: all_orders[i]['packageType'],
-          // package_size: all_orders[i]['packageSize'] == 'Document0'
-          //     ? 0
-          //     : all_orders[i]['packageSize'] == 'Package0'
-          //         ? 1
-          //         : all_orders[i]['packageSize'] == 'Package1'
-          //             ? 2
-          //             : 3,
           photo_cus: urlStarter + all_orders[i]['img'],
           name: all_orders[i]['name'],
           city: all_orders[i]['city'],
@@ -74,14 +67,7 @@ class _all_ordersState extends State<all_orders> {
     'Hebron',
     'None'
   ];
-  // List<String> status = [
-  //   'pendding',
-  //   'accept',
-  //   'reject',
-  //   'assign to driver',
-  //   'on way',
-  //   'None'
-  // ];
+
   List<String> status = [
     "Under review",
     "Rejected by employee",
@@ -128,6 +114,7 @@ class _all_ordersState extends State<all_orders> {
       if (selectedstatus!.isNotEmpty && (order.status != selectedstatus)) {
         return false;
       }
+
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 0 &&
@@ -347,7 +334,6 @@ class _all_ordersState extends State<all_orders> {
                   ),
                 )
               ])),
-          //  Text('${filteredOrders.length}'),
         ],
       ),
       ...filteredOrders.map((order) {

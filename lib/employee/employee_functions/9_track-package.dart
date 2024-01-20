@@ -71,9 +71,11 @@ class _track_pState extends State<track_p> {
               DateFormat('yyyy-MM-ddTHH:mm:ss').parse(recieveDateString);
           deliverDate =
               DateFormat('yyyy-MM-ddTHH:mm:ss').parse(deliverDateString);
+          print(driver);
           if (driver == null) {
             driverName = " ";
             vehicleNumber = " ";
+            _driver = new Driver(late: 0, long: 0, username: '', name: '');
           } else {
             driverName = driver['Fname'] + " " + driver['Lname'];
             vehicleNumber = data['driver']['vehicleNumber'];
@@ -188,6 +190,19 @@ class _track_pState extends State<track_p> {
                   SizedBox(
                     height: 15,
                   ),
+                  Text.rich(TextSpan(
+                      text: 'ID: ',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text: '${tracking_number}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ])),
                   Container(
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
