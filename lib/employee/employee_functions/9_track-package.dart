@@ -193,19 +193,6 @@ class _track_pState extends State<track_p> {
                   SizedBox(
                     height: 15,
                   ),
-                  Text.rich(TextSpan(
-                      text: 'ID: ',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: '${tracking_number}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ])),
                   Container(
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(

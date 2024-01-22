@@ -46,6 +46,7 @@ class _all_ordersState extends State<all_orders> {
           refreshdata: () {
             fetchData_all_orders();
           },
+          reason: all_orders[i]['reason'],
           driverUsername: all_orders[i]['driverUsername'],
           driver: all_orders[i]['driverName'],
           id: all_orders[i]['packageId'],

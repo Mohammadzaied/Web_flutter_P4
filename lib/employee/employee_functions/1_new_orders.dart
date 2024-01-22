@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/2_package_new.dart';
 import 'package:flutter_application_1/employee/main_page_employee.dart';
@@ -28,6 +30,7 @@ class _new_orderState extends State<new_order> {
   String? selectedCity_to;
   String? searchtype;
   String? serach_content;
+  late Timer timer;
 
   Future<void> fetchData_new_orders() async {
     var url = urlStarter + "/employee/getNewOrders";
@@ -97,6 +100,10 @@ class _new_orderState extends State<new_order> {
   void initState() {
     super.initState();
     fetchData_new_orders();
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
+      await fetchData_new_orders();
+    });
+    fetchData_new_orders();
     setState(() {
       TabController_.index = 0;
     });
@@ -104,6 +111,11 @@ class _new_orderState extends State<new_order> {
     selectedCity_to = '';
     searchtype = 'Search by Name';
     serach_content = '';
+  }
+
+  void dispose() {
+    super.dispose();
+    timer.cancel();
   }
 
   List<package_new> _filterOrders() {

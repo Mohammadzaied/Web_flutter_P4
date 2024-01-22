@@ -14,6 +14,7 @@ class package_edit extends StatefulWidget {
   final String status;
   final String driver;
   final String? driverUsername;
+  final String? reason;
   final int id;
   final String whoWillPay;
   final Function() refreshdata;
@@ -29,7 +30,8 @@ class package_edit extends StatefulWidget {
       required this.driver,
       required this.refreshdata,
       required this.driverUsername,
-      required this.whoWillPay});
+      required this.whoWillPay,
+      required this.reason});
 
   @override
   State<package_edit> createState() => _package_editState();
@@ -40,15 +42,16 @@ class _package_editState extends State<package_edit> {
     "Under review",
     "Rejected by employee",
     "Accepted",
-    //'assign to driver'
-    "Wait Driver",
+    'Assigned to receive', // employee assign package to driver
+    "Wait Driver", // driver accept
     "Rejected by driver",
     "Complete Receive",
     "In Warehouse",
-    //"In Warehouse with driver",
+    "Assigned to deliver",
     "With Driver",
     "Delivered",
   ];
+
   String username = GetStorage().read("userName");
   String password = GetStorage().read("password");
 
@@ -227,6 +230,74 @@ class _package_editState extends State<package_edit> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        Visibility(
+                          visible: widget.status == "Rejected by employee" ||
+                              widget.status == "Rejected by driver" ||
+                              (widget.status == "In Warehouse" &&
+                                  widget.reason != null) ||
+                              (widget.status == "Accepted" &&
+                                  widget.reason != null),
+                          child: Container(
+                            child: MaterialButton(
+                              padding: EdgeInsets.all(8),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              color: Colors.grey,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.comment,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                "Ok",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              )),
+                                        ],
+                                        title: Text(widget.status ==
+                                                "Rejected by employee"
+                                            ? "Comment from employee"
+                                            : "Comment from driver"),
+                                        content: Container(
+                                          width: 400,
+                                          child: Text(
+                                            "${widget.reason}",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18),
+                                          ),
+                                        ),
+                                        titleTextStyle: TextStyle(
+                                            color: Colors.white, fontSize: 25),
+                                        contentTextStyle: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                        backgroundColor: primarycolor,
+                                      );
+                                    });
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
                         Visibility(
                           visible: widget.status != 'Under review' &&
                               widget.status != 'Completed' &&
