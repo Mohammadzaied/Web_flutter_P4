@@ -15,20 +15,21 @@ class package_edit extends StatefulWidget {
   final String driver;
   final String? driverUsername;
   final int id;
+  final String whoWillPay;
   final Function() refreshdata;
 
-  package_edit({
-    super.key,
-    required this.photo_cus,
-    required this.city,
-    required this.name,
-    required this.package_type,
-    required this.id,
-    required this.status,
-    required this.driver,
-    required this.refreshdata,
-    required this.driverUsername,
-  });
+  package_edit(
+      {super.key,
+      required this.photo_cus,
+      required this.city,
+      required this.name,
+      required this.package_type,
+      required this.id,
+      required this.status,
+      required this.driver,
+      required this.refreshdata,
+      required this.driverUsername,
+      required this.whoWillPay});
 
   @override
   State<package_edit> createState() => _package_editState();
@@ -70,7 +71,7 @@ class _package_editState extends State<package_edit> {
   }
 
   Future post_edit_package(
-      int id, String status, String driver_username) async {
+      int id, String status, String? driver_username, String whoWillPay) async {
     var url = urlStarter + "/employee/editPackage";
     var responce = await http.post(Uri.parse(url),
         body: jsonEncode({
@@ -227,7 +228,9 @@ class _package_editState extends State<package_edit> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Visibility(
-                          visible: widget.status != 'Under review',
+                          visible: widget.status != 'Under review' &&
+                              widget.status != 'Completed' &&
+                              widget.status != 'In Warehouse',
                           child: Container(
                             child: MaterialButton(
                               padding: EdgeInsets.all(8),
@@ -264,7 +267,8 @@ class _package_editState extends State<package_edit> {
                                                 post_edit_package(
                                                     widget.id,
                                                     widget.status,
-                                                    widget.driver);
+                                                    widget.driverUsername,
+                                                    widget.whoWillPay);
                                                 Navigator.of(context).pop();
                                               },
                                               child: Text(
@@ -311,7 +315,7 @@ class _package_editState extends State<package_edit> {
                         Visibility(
                           visible: widget.status == "Rejected by employee" ||
                               widget.status == "Rejected by driver" ||
-                              widget.status == "Delivered",
+                              widget.status == "Completed",
                           child: Container(
                             child: MaterialButton(
                               padding: EdgeInsets.all(8),

@@ -27,6 +27,10 @@ class _all_ordersState extends State<all_orders> {
       setState(() {
         pk_all = buildMy_all_orders();
       });
+    } else if (response.statusCode == 404) {
+      setState(() {
+        pk_all = buildMy_all_orders();
+      });
     } else {
       print('new_orders error');
       throw Exception('Failed to load data');
@@ -50,6 +54,7 @@ class _all_ordersState extends State<all_orders> {
           name: all_orders[i]['name'],
           city: all_orders[i]['city'],
           status: all_orders[i]['status'],
+          whoWillPay: all_orders[i]['whoWillPay'],
         ),
       );
     }

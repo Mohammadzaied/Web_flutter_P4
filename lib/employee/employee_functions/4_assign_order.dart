@@ -16,7 +16,7 @@ class _assign_orderState extends State<assign_order> {
   List<dynamic> drivers_ = [];
   List<driver_assign_to_order> drivers = [];
 
-  Future<void> fetchData_drivers() async {
+  Future fetchData_drivers() async {
     var url = urlStarter + "/employee/GetDriverListEmployee";
     print(url);
     final response = await http
@@ -29,7 +29,7 @@ class _assign_orderState extends State<assign_order> {
         drivers = buildMy_drivers();
       });
     } else {
-      print('new_orders error');
+      print('driver error');
       throw Exception('Failed to load data');
     }
   }
@@ -65,10 +65,15 @@ class _assign_orderState extends State<assign_order> {
     // print(url);
     final response = await http
         .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+    print("response.statusCode " + response.statusCode.toString());
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       assign_orders = data;
       // print(assign_orders);
+      setState(() {
+        pk_assign = buildMy_assign_orders();
+      });
+    } else if (response.statusCode == 404) {
       setState(() {
         pk_assign = buildMy_assign_orders();
       });
