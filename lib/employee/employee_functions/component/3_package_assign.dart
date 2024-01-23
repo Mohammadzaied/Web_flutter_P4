@@ -206,11 +206,10 @@ class _package_assignState extends State<package_assign> {
                             ])),
                         Spacer(),
                         Visibility(
-                          visible: true,
-                          // (widget.status == "In Warehouse" &&
-                          //     widget.reason != null) ||
-                          // (widget.status == "Accepted" &&
-                          //     widget.reason != null),
+                          visible: (widget.status == "In Warehouse" &&
+                                  widget.reason != null) ||
+                              (widget.status == "Accepted" &&
+                                  widget.reason != null),
                           child: Container(
                             child: MaterialButton(
                               shape: RoundedRectangleBorder(
