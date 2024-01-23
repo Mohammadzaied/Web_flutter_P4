@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/admin/add_manager.dart';
+import 'package:flutter_application_1/admin/all_mangers.dart';
 import 'package:flutter_application_1/admin/main_page_admin.dart';
 import 'package:flutter_application_1/admin/managers.dart';
 import 'package:flutter_application_1/drawer/drawer.dart';
@@ -276,13 +278,13 @@ final GoRouter Router_pages = GoRouter(
         GoRoute(
           path: '/all_manager',
           builder: (BuildContext context, GoRouterState state) {
-            return managers();
+            return all_managers();
           },
         ),
         GoRoute(
           path: '/Add_manager',
           builder: (BuildContext context, GoRouterState state) {
-            return managers();
+            return add_manager();
           },
         ),
       ],

@@ -3,7 +3,7 @@ import 'package:flutter_application_1/drawer/drawer.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:go_router/go_router.dart';
 
-late TabController TabController_;
+late TabController TabController_2;
 
 class main_page_admin extends StatefulWidget {
   const main_page_admin({
@@ -19,7 +19,7 @@ class main_page_admin extends StatefulWidget {
 class _main_page_adminState extends State<main_page_admin>
     with SingleTickerProviderStateMixin {
   void initState() {
-    TabController_ = TabController(length: 2, vsync: this);
+    TabController_2 = TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -47,7 +47,7 @@ class _main_page_adminState extends State<main_page_admin>
         backgroundColor: primarycolor,
         bottom: TabBar(
           onTap: (int idx) => _onItemTapped(idx, context),
-          controller: TabController_,
+          controller: TabController_2,
           tabs: [
             Tab(text: 'All Managers'),
             Tab(text: 'Add Manager'),
@@ -74,7 +74,7 @@ class _main_page_adminState extends State<main_page_admin>
   }
 
   void dispose() {
-    TabController_.dispose();
+    TabController_2.dispose();
     super.dispose();
   }
 }
@@ -90,79 +90,3 @@ void _onItemTapped(int index, BuildContext context) {
       break;
   }
 }
-
-// /////////////////////////////////
-// final GlobalKey<NavigatorState> _rootNavigatorKey =
-//     GlobalKey<NavigatorState>(debugLabel: 'root');
-// final GlobalKey<NavigatorState> _shellNavigatorKey =
-//     GlobalKey<NavigatorState>(debugLabel: 'shell');
-// final GoRouter Router_pages2 = GoRouter(
-//   navigatorKey: _rootNavigatorKey,
-//   initialLocation: '/',
-//   debugLogDiagnostics: true,
-//   routes: <RouteBase>[
-//     //////////////////// route main pages
-
-//     GoRoute(
-//         path: '/',
-//         builder: (BuildContext context, GoRouterState state) {
-//           return sign_in();
-//         }),
-//     GoRoute(
-//         path: '/Verification',
-//         builder: (BuildContext context, GoRouterState state) {
-//           return Verification();
-//         }),
-//     GoRoute(
-//         path: '/Forget_Password',
-//         builder: (BuildContext context, GoRouterState state) {
-//           return ForgetPassword();
-//         }),
-//     GoRoute(
-//         path: '/New_Password',
-//         builder: (BuildContext context, GoRouterState state) {
-//           return NewPass();
-//         }),
-
-//     ///////////////////////////////////// route functions drawer
-//     GoRoute(
-//         path: '/change_pass',
-//         builder: (BuildContext context, GoRouterState state) {
-//           return chang_pass();
-//         }),
-
-//     GoRoute(
-//         path: '/edit_profile',
-//         builder: (BuildContext context, GoRouterState state) {
-//           return edit_profile();
-//         }),
-
-//     //////////////////// route main page employee
-//     ShellRoute(
-//       navigatorKey: _shellNavigatorKey,
-//       builder: (BuildContext context, GoRouterState state, Widget child) {
-//         return main_page_admin(child: child);
-//       },
-//       routes: <RouteBase>[
-//         GoRoute(
-//           path: '/all_manager',
-//           builder: (BuildContext context, GoRouterState state) {
-//             return widget1;
-//           },
-//         ),
-//         GoRoute(
-//           path: '/delete_Manager',
-//           builder: (BuildContext context, GoRouterState state) {
-//             return widget2;
-//           },
-//         ),
-//         GoRoute(
-//           path: '/Add_manager',
-//           builder: (BuildContext context, GoRouterState state) {
-//             return widget3;
-//           },
-//         ),
-//       ],
-//     ),
-//   ],
-// );

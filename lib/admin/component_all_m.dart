@@ -6,27 +6,22 @@ import 'dart:convert';
 
 class Manager extends StatefulWidget {
   final String photo_cus;
-  final String city;
   final String name;
+  final String username;
   final String phone;
   final String email;
-  final String number_employee;
-  final String number_drivers;
   final String date;
-
   final Function() refreshdata;
 
   Manager({
     super.key,
     required this.photo_cus,
-    required this.city,
     required this.name,
     required this.phone,
     required this.email,
-    required this.number_employee,
-    required this.number_drivers,
     required this.refreshdata,
     required this.date,
+    required this.username,
   });
 
   @override
@@ -34,30 +29,16 @@ class Manager extends StatefulWidget {
 }
 
 class _ManagerState extends State<Manager> {
-  // String username = GetStorage().read("userName");
-  // String password = GetStorage().read("password");
-
-  // Future post_delete_package(int id) async {
-  //   var url = urlStarter + "/employee/DeletePackage";
-  //   var responce = await http.post(Uri.parse(url),
-  //       body: jsonEncode({
-  //         "employeeUserName": username,
-  //         "employeePassword": password,
-  //         "packageId": id,
-  //       }),
-  //       headers: {
-  //         'Content-type': 'application/json; charset=UTF-8',
-  //       });
-  //   if (responce.statusCode == 200) {
-  //     setState(() {
-  //       widget.refreshdata();
-  //     });
-  //   }
-  // }
-
-  @override
-  void initState() {
-    super.initState();
+  Future post_delete_Manager(String user) async {
+    var url = urlStarter + "/admin/deleteManager/${user}";
+    var responce = await http.delete(Uri.parse(url), headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    });
+    if (responce.statusCode == 200) {
+      setState(() {
+        widget.refreshdata();
+      });
+    }
   }
 
   @override
@@ -142,63 +123,7 @@ class _ManagerState extends State<Manager> {
                         ])),
                     Spacer(),
                     Text.rich(TextSpan(
-                        text: 'City: ',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: ' ${widget.city}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Number of emplyees',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: widget.number_employee,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Number of drivers',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: widget.number_drivers,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Date created',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: widget.date,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ])),
-                    Spacer(),
-                    Text.rich(TextSpan(
-                        text: 'Date created',
+                        text: 'Date created: ',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                         children: <InlineSpan>[
                           TextSpan(
@@ -238,6 +163,7 @@ class _ManagerState extends State<Manager> {
                                   actions: [
                                     TextButton(
                                         onPressed: () {
+                                          post_delete_Manager(widget.username);
                                           Navigator.of(context).pop();
                                         },
                                         child: Text(

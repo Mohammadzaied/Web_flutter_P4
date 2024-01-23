@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/admin/component_all_m.dart';
-import 'package:flutter_application_1/employee/main_page_employee.dart';
+import 'package:flutter_application_1/admin/main_page_admin.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,14 +17,14 @@ class _all_managersState extends State<all_managers> {
   List<dynamic> M_news = [];
 
   Future<void> fetchData_managers() async {
-    var url = urlStarter + "/employee/getNewOrders";
+    var url = urlStarter + "/admin/managersList";
     print(url);
     final response = await http
         .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      M_news = data['result'];
-      print(M_news);
+      M_news = data;
+      print(data);
       setState(() {
         M_new = buildMy_Managers();
       });
@@ -36,18 +36,15 @@ class _all_managersState extends State<all_managers> {
 
   List<Manager> buildMy_Managers() {
     List<Manager> M = [];
-    //M_news
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < M_news.length; i++) {
       M.add(
         Manager(
-          name: 'Mahmoud',
-          email: 'eaasss@gmail.com',
-          phone: '1111111111111',
-          photo_cus: "",
-          city: 'Tulkarm',
-          number_drivers: '10',
-          number_employee: '5',
-          date: '2024-01-12',
+          username: M_news[i]['username'],
+          name: M_news[i]['name'],
+          email: M_news[i]['email'],
+          phone: M_news[i]['phoneNumber'].toString(),
+          photo_cus: urlStarter + M_news[i]['img'],
+          date: M_news[i]['createdAt'],
           refreshdata: () {
             fetchData_managers();
           },
@@ -59,10 +56,11 @@ class _all_managersState extends State<all_managers> {
 
   @override
   void initState() {
-    super.initState();
     setState(() {
-      TabController_.index = 0;
+      TabController_2.index = 0;
     });
+    super.initState();
+    fetchData_managers();
   }
 
   void dispose() {
@@ -72,23 +70,26 @@ class _all_managersState extends State<all_managers> {
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text.rich(TextSpan(
-              text: 'Result: ',
-              style: TextStyle(fontSize: 20, color: Colors.grey),
-              children: <InlineSpan>[
-                TextSpan(
-                  text: ' ( ${M_new.length} )',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ])),
-        ],
+      Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text.rich(TextSpan(
+                text: 'Result: ',
+                style: TextStyle(fontSize: 20, color: Colors.grey),
+                children: <InlineSpan>[
+                  TextSpan(
+                    text: ' ( ${M_new.length} )',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ])),
+          ],
+        ),
       ),
       ...M_new.map((order) {
         return order;
