@@ -227,6 +227,7 @@ class _package_editState extends State<package_edit> {
                           )
                         ])),
                     Spacer(),
+                    //IconButton(onPressed: onPressed, icon: icon)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -239,16 +240,12 @@ class _package_editState extends State<package_edit> {
                                   widget.reason != null),
                           child: Container(
                             child: MaterialButton(
-                              padding: EdgeInsets.all(8),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.0)),
                               color: Colors.grey,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.comment,
-                                  color: Colors.white,
-                                ),
+                              child: Icon(
+                                Icons.comment,
+                                color: Colors.white,
                               ),
                               onPressed: () {
                                 showDialog(
@@ -322,7 +319,11 @@ class _package_editState extends State<package_edit> {
                                 String before_status = '';
                                 int targetIndex = status.indexOf(widget.status);
                                 if (targetIndex != -1 && targetIndex > 0) {
-                                  before_status = status[targetIndex - 1];
+                                  if (widget.status == 'Complete Receive' ||
+                                      widget.status == 'Accepted')
+                                    before_status = status[targetIndex - 2];
+                                  else
+                                    before_status = status[targetIndex - 1];
                                 }
                                 showDialog(
                                     context: context,

@@ -11,6 +11,8 @@ class package_assign extends StatefulWidget {
   final int package_type; // 0 Delivery of a package , 1 Receiving a package
   final String city;
   final String name;
+  final String status;
+  final String? reason;
   final int id;
   final int package_size; // 0 doc  , 1 small ,2 meduim , 3 large
   final Function() refreshdata;
@@ -25,6 +27,8 @@ class package_assign extends StatefulWidget {
     required this.id,
     required this.refreshdata,
     required this.drivers,
+    required this.status,
+    required this.reason,
   });
 
   @override
@@ -201,6 +205,64 @@ class _package_assignState extends State<package_assign> {
                               )
                             ])),
                         Spacer(),
+                        Visibility(
+                          visible: true,
+                          // (widget.status == "In Warehouse" &&
+                          //     widget.reason != null) ||
+                          // (widget.status == "Accepted" &&
+                          //     widget.reason != null),
+                          child: Container(
+                            child: MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              color: Colors.grey,
+                              child: Icon(
+                                Icons.comment,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                "Ok",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              )),
+                                        ],
+                                        title: Text("Comment from driver"),
+                                        content: Container(
+                                          width: 400,
+                                          child: Text(
+                                            "${widget.reason}",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18),
+                                          ),
+                                        ),
+                                        titleTextStyle: TextStyle(
+                                            color: Colors.white, fontSize: 25),
+                                        contentTextStyle: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                        backgroundColor: primarycolor,
+                                      );
+                                    });
+                              },
+                            ),
+                          ),
+                        ),
+                        Spacer()
                       ],
                     ),
                     Row(

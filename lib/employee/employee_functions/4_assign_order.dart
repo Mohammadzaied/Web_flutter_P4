@@ -89,6 +89,8 @@ class _assign_orderState extends State<assign_order> {
     for (int i = 0; i < assign_orders.length; i++) {
       orders.add(
         package_assign(
+          reason: assign_orders[i]['reason'],
+          status: '',
           refreshdata: () {
             fetchData_assign_orders();
           },
