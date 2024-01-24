@@ -84,15 +84,6 @@ class _new_orderState extends State<new_order> {
         ),
       );
     }
-    // orders.add(package_new(
-    //   id: 12345,
-    //   photo_cus: '',
-    //   name: 'ahh',
-    //   from: 'Ramallah',
-    //   to: 'Tulkarm',
-    //   price: 234,
-    //   package_size: 0,
-    // ));
     return orders;
   }
 
@@ -151,6 +142,7 @@ class _new_orderState extends State<new_order> {
   @override
   Widget build(BuildContext context) {
     List<package_new> filteredOrders = _filterOrders();
+    filteredOrders.sort((a, b) => a.id.compareTo(b.id));
 
     return ListView(children: [
       Row(

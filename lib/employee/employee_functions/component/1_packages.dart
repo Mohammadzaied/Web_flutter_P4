@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -405,54 +406,55 @@ class _package_editState extends State<package_edit> {
                                 ),
                               ),
                               onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                post_delete_package(widget.id);
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                "Yes",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18),
-                                              )),
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                "Cancel",
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 18),
-                                              )),
-                                        ],
-                                        title: Text("Delete package"),
-                                        content: Container(
-                                          width: 400,
-                                          child: Text(
-                                            "Are you sure you want to delete  the package id's ${widget.id} for customer ${widget.name} , you can't undo this action!",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18),
-                                          ),
-                                        ),
-                                        titleTextStyle: TextStyle(
-                                            color: Colors.white, fontSize: 25),
-                                        contentTextStyle: TextStyle(
-                                            color: Colors.white, fontSize: 16),
-                                        backgroundColor: primarycolor,
-                                      );
-                                    });
+                                // GoRouter.of(context).go('/data',name: {'name': 'YourParameterHere'});
+                                // showDialog(
+                                //     context: context,
+                                //     builder: (context) {
+                                //       return AlertDialog(
+                                //         shape: RoundedRectangleBorder(
+                                //           borderRadius:
+                                //               BorderRadius.circular(20.0),
+                                //         ),
+                                //         actions: [
+                                //           TextButton(
+                                //               onPressed: () {
+                                //                 post_delete_package(widget.id);
+                                //                 Navigator.of(context).pop();
+                                //               },
+                                //               child: Text(
+                                //                 "Yes",
+                                //                 style: TextStyle(
+                                //                     color: Colors.white,
+                                //                     fontSize: 18),
+                                //               )),
+                                //           TextButton(
+                                //               onPressed: () {
+                                //                 Navigator.of(context).pop();
+                                //               },
+                                //               child: Text(
+                                //                 "Cancel",
+                                //                 style: TextStyle(
+                                //                     color: Colors.red,
+                                //                     fontSize: 18),
+                                //               )),
+                                //         ],
+                                //         title: Text("Delete package"),
+                                //         content: Container(
+                                //           width: 400,
+                                //           child: Text(
+                                //             "Are you sure you want to delete  the package id's ${widget.id} for customer ${widget.name} , you can't undo this action!",
+                                //             style: TextStyle(
+                                //                 color: Colors.white,
+                                //                 fontSize: 18),
+                                //           ),
+                                //         ),
+                                //         titleTextStyle: TextStyle(
+                                //             color: Colors.white, fontSize: 25),
+                                //         contentTextStyle: TextStyle(
+                                //             color: Colors.white, fontSize: 16),
+                                //         backgroundColor: primarycolor,
+                                //       );
+                                //     });
                               },
                             ),
                           ),

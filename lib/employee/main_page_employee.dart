@@ -17,6 +17,7 @@ import 'package:flutter_application_1/employee/employee_functions/5_receiving_mo
 import 'package:flutter_application_1/employee/employee_functions/9_track-package.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/5_set_location.dart';
+import 'package:flutter_application_1/employee/employee_functions/data.dart';
 import 'package:flutter_application_1/sign_in_pages/2_forget_pass.dart';
 import 'package:flutter_application_1/sign_in_pages/4_new_password.dart';
 import 'package:flutter_application_1/sign_in_pages/1_sign_in.dart';
@@ -96,15 +97,16 @@ class _main_pageState extends State<main_page>
             Tab(text: 'Receiving Money'),
             Tab(text: 'Distribution orders'),
             Tab(text: 'Tracking Packages'),
+            //Tab(text: 'Daily report'),
             Tab(text: 'Edit driver information'),
           ],
           labelStyle: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: 14,
           ),
           unselectedLabelStyle: TextStyle(
             fontWeight: FontWeight.normal,
-            fontSize: 14,
+            fontSize: 12,
           ),
           labelColor: Colors.black,
           unselectedLabelColor: Colors.white,
@@ -247,6 +249,12 @@ final GoRouter Router_pages = GoRouter(
           path: '/receiving_money',
           builder: (BuildContext context, GoRouterState state) {
             return widget5;
+          },
+        ),
+        GoRoute(
+          path: '/data',
+          builder: (BuildContext context, GoRouterState state) {
+            return data_show();
           },
         ),
         GoRoute(

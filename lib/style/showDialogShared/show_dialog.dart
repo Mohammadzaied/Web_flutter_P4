@@ -27,6 +27,7 @@ class show_dialog {
             style: TextStyle(color: Colors.white, fontSize: 18),
           ),
           onPressed: () {
+            //GoRouter.of(context).go('/all_manager');
             Navigator.of(context).pop();
           },
         ),
@@ -54,7 +55,9 @@ class show_dialog {
           ),
           onPressed: () {
             Navigator.of(context).pop();
-            GoRouter.of(context).go(name);
+            GoRouter.of(context).go('/all_manager');
+
+            //GoRouter.of(context).go(name);
           },
         ),
       ],
@@ -67,6 +70,7 @@ class show_dialog {
         TextButton(
             onPressed: () {
               Navigator.of(context).pop();
+              //GoRouter.of(context).go('/all_manager');
             },
             child: Text(
               "Ok",
