@@ -25,13 +25,13 @@ class _new_orderState extends State<new_order> {
     'None',
   ];
   List sort = [
-    'Ascending',
-    'Descending',
+    'The recent',
+    'The oldest',
   ];
   List searchtypes = ['Search by Name', 'Search by ID'];
   List<dynamic> new_orders = [];
   String? selectedCity_from;
-  String sorting = 'Ascending';
+  String sorting = 'The recent';
   String? selectedCity_to;
   String? searchtype;
   String? serach_content;
@@ -147,7 +147,7 @@ class _new_orderState extends State<new_order> {
   @override
   Widget build(BuildContext context) {
     List<package_new> filteredOrders = _filterOrders();
-    sorting == 'Ascending'
+    sorting == 'The recent'
         ? filteredOrders.sort((a, b) => a.id.compareTo(b.id))
         : filteredOrders.sort((b, a) => a.id.compareTo(b.id));
 

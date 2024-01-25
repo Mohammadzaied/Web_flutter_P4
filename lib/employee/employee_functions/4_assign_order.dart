@@ -115,10 +115,10 @@ class _assign_orderState extends State<assign_order> {
   }
 
   List sort = [
-    'Ascending',
-    'Descending',
+    'The recent',
+    'The oldest',
   ];
-  String sorting = 'Ascending';
+  String sorting = 'The recent';
 
   List citylist = [
     'Nablus',
@@ -210,7 +210,7 @@ class _assign_orderState extends State<assign_order> {
   Widget build(BuildContext context) {
     List<package_assign> filteredOrders = _filterOrders();
 
-    sorting == 'Ascending'
+    sorting == 'The recent'
         ? filteredOrders.sort((a, b) => a.id.compareTo(b.id))
         : filteredOrders.sort((b, a) => a.id.compareTo(b.id));
     return ListView(children: [
@@ -303,7 +303,7 @@ class _assign_orderState extends State<assign_order> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Container(
-                  width: 200,
+                  width: 230,
                   child: DropdownButtonFormField(
                     hint: Text('Filterd by city',
                         style: TextStyle(color: Colors.grey)),
@@ -329,6 +329,9 @@ class _assign_orderState extends State<assign_order> {
                     }).toList(),
                   ),
                 ),
+              ),
+              SizedBox(
+                width: 5,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
