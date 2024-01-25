@@ -78,14 +78,15 @@ class _all_ordersState extends State<all_orders> {
     "Under review",
     "Rejected by employee",
     "Accepted",
-    //'assign to driver'
+    'Assigned to receive', // employee assign package to driver
     "Wait Driver",
     "Rejected by driver",
     "Complete Receive",
     "In Warehouse",
-    //"In Warehouse with driver",
+    "Assigned to deliver",
     "With Driver",
     "Delivered",
+    "Completed",
     "None",
   ];
   List packagetypes = ['Delivery', 'Receiving', 'None'];

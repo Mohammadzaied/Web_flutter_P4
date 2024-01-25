@@ -65,7 +65,8 @@ class _new_orderState extends State<new_order> {
           Latefrom: new_orders[i]['latFrom'],
           longto: new_orders[i]['longTo'],
           Lateto: new_orders[i]['latTo'],
-          refreshdata: () {
+          refreshdata: () async {
+            await Future.delayed(Duration(milliseconds: 500));
             fetchData_new_orders();
           },
           id: new_orders[i]['packageId'],

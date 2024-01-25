@@ -72,6 +72,7 @@ class _package_assignState extends State<package_assign> {
     'Saturday',
   ];
   String selecteddriver = '';
+  int selcted_index = 0;
 
   @override
   void initState() {
@@ -303,6 +304,9 @@ class _package_assignState extends State<package_assign> {
                         Container(
                           width: 300,
                           child: DropdownButtonFormField(
+                            value: filteredDrivers.length > 0
+                                ? filteredDrivers[selcted_index]
+                                : null,
                             hint: Text(
                                 filteredDrivers.length > 0
                                     ? 'Available drivers by date'
@@ -319,13 +323,16 @@ class _package_assignState extends State<package_assign> {
                             borderRadius: BorderRadius.circular(10),
                             onChanged: (newValue) {
                               setState(() {
-                                selecteddriver = newValue as String;
+                                selcted_index =
+                                    filteredDrivers.indexOf(newValue!);
+                                selecteddriver =
+                                    filteredDrivers[selcted_index].username;
                                 print(selecteddriver);
                               });
                             },
                             items: filteredDrivers.map((value) {
                               return DropdownMenuItem(
-                                value: value.username,
+                                value: value,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
