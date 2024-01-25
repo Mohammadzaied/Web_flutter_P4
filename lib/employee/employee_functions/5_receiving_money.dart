@@ -212,10 +212,10 @@ class _receiving_moneyState extends State<receiving_money> {
                 children: [
                   Center(
                     child: Container(
-                      height: 180,
-                      width: 180,
+                      height: 150,
+                      width: 170,
                       decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
+                          shape: BoxShape.circle,
                           //borderRadius: BorderRadius.circular(20),
                           image: DecorationImage(
                             fit: BoxFit.cover,
@@ -228,123 +228,148 @@ class _receiving_moneyState extends State<receiving_money> {
                           )),
                     ),
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text.rich(TextSpan(
-                      text: 'Driver name: ',
-                      style: TextStyle(fontSize: 20, color: Colors.grey),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: ' ${selected_driver.name}',
+                  Spacer(),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Driver name:',
+                            style: TextStyle(fontSize: 20, color: Colors.grey)),
+                        Text(
+                          ' ${selected_driver.name}',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ])),
-                  SizedBox(
-                    height: 15,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text.rich(TextSpan(
-                      text: 'Username: ',
-                      style: TextStyle(fontSize: 20, color: Colors.grey),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: ' ${selected_driver.username}',
+                  Spacer(),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Username:',
+                            style: TextStyle(fontSize: 20, color: Colors.grey)),
+                        Text(
+                          ' ${selected_driver.username}',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ])),
-                  SizedBox(
-                    height: 15,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text.rich(TextSpan(
-                      text: 'Number package delivery: ',
-                      style: TextStyle(fontSize: 20, color: Colors.grey),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: ' ${selected_driver.num_pkg_deliver}',
+                  Spacer(),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Number package delivery:',
+                            style: TextStyle(fontSize: 20, color: Colors.grey)),
+                        Text(
+                          ' ${selected_driver.num_pkg_deliver}',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ])),
-                  SizedBox(
-                    height: 15,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text.rich(TextSpan(
-                      text: 'Number package receive: ',
-                      style: TextStyle(fontSize: 20, color: Colors.grey),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: ' ${selected_driver.num_pkg_receive}',
+                  Spacer(),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Number package receive:',
+                            style: TextStyle(fontSize: 20, color: Colors.grey)),
+                        Text(
+                          ' ${selected_driver.num_pkg_receive}',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ])),
-                  SizedBox(
-                    height: 15,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text.rich(TextSpan(
-                      text: 'Money of delivery: ',
-                      style: TextStyle(fontSize: 20, color: Colors.grey),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text:
-                              ' ${selected_driver.total_delivery.toStringAsFixed(2)}\$',
+                  Spacer(),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Money of delivery:',
+                            style: TextStyle(fontSize: 20, color: Colors.grey)),
+                        Text(
+                          ' ${selected_driver.total_delivery.toStringAsFixed(2)}\$',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ])),
-                  SizedBox(
-                    height: 15,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text.rich(TextSpan(
-                      text: 'Money of purchase: ',
-                      style: TextStyle(fontSize: 20, color: Colors.grey),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: ' ${selected_driver.total_purchase}\$',
+                  Spacer(),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Money of purchase: ',
+                            style: TextStyle(fontSize: 20, color: Colors.grey)),
+                        Text(
+                          '${selected_driver.total_purchase}\$',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ])),
-                  SizedBox(
-                    height: 15,
+                        ),
+                      ],
+                    ),
                   ),
-                  Text.rich(TextSpan(
-                      text: 'Total amount: ',
-                      style: TextStyle(fontSize: 20, color: Colors.red),
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text:
-                              ' ${(selected_driver.total_delivery + selected_driver.total_purchase).toStringAsFixed(2)}\$',
+                  Spacer(),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Total amount: ',
+                            style: TextStyle(fontSize: 20, color: Colors.grey)),
+                        Text(
+                          '${(selected_driver.total_delivery + selected_driver.total_purchase).toStringAsFixed(2)}\$',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
-                      ])),
-                  SizedBox(
-                    height: 15,
+                        ),
+                      ],
+                    ),
                   ),
+                  Spacer(),
+                  Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

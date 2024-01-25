@@ -1,20 +1,17 @@
 import 'dart:async';
+import 'package:flutter_application_1/employee/main_page_employee.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Location_p extends StatefulWidget {
-  final double Latefrom;
-  final double longfrom;
-  final double Lateto;
-  final double longto;
+  final double? Latefrom;
+  final double? longfrom;
+  final double? Lateto;
+  final double? longto;
 
-  Location_p(
-      {required this.Latefrom,
-      required this.longfrom,
-      required this.Lateto,
-      required this.longto});
+  Location_p({this.Latefrom, this.longfrom, this.Lateto, this.longto});
 
   @override
   State<Location_p> createState() => _Location_pState();
@@ -29,10 +26,13 @@ class _Location_pState extends State<Location_p> {
   List<Marker> markers = [];
 
   void initState() {
-    longfrom = widget.longfrom;
-    Latefrom = widget.Latefrom;
-    Lateto = widget.Lateto;
-    longto = widget.longto;
+    setState(() {
+      TabController_.index = 0;
+    });
+    longfrom = widget.longfrom!;
+    Latefrom = widget.Latefrom!;
+    Lateto = widget.Lateto!;
+    longto = widget.longto!;
 
     _addMarker(LatLng(Latefrom, longfrom), 'Package From');
     _addMarker(LatLng(Lateto, longto), 'Package To');
@@ -70,9 +70,6 @@ class _Location_pState extends State<Location_p> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primarycolor,
-      ),
       body: Container(
           child: GoogleMap(
         markers: markers.toSet(),

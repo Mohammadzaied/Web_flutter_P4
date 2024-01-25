@@ -24,9 +24,14 @@ class _new_orderState extends State<new_order> {
     'Hebron',
     'None',
   ];
+  List sort = [
+    'Ascending',
+    'Descending',
+  ];
   List searchtypes = ['Search by Name', 'Search by ID'];
   List<dynamic> new_orders = [];
   String? selectedCity_from;
+  String sorting = 'Ascending';
   String? selectedCity_to;
   String? searchtype;
   String? serach_content;
@@ -142,7 +147,9 @@ class _new_orderState extends State<new_order> {
   @override
   Widget build(BuildContext context) {
     List<package_new> filteredOrders = _filterOrders();
-    filteredOrders.sort((a, b) => a.id.compareTo(b.id));
+    sorting == 'Ascending'
+        ? filteredOrders.sort((a, b) => a.id.compareTo(b.id))
+        : filteredOrders.sort((b, a) => a.id.compareTo(b.id));
 
     return ListView(children: [
       Row(
@@ -201,7 +208,37 @@ class _new_orderState extends State<new_order> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                child: Container(
+                  width: 200,
+                  child: DropdownButtonFormField(
+                    value: sorting,
+                    hint: Text('Sort', style: TextStyle(color: Colors.grey)),
+                    decoration: theme_helper().text_form_style(
+                      '',
+                      '',
+                      null,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    onChanged: (newValue) {
+                      setState(() {
+                        sorting = newValue as String;
+                      });
+                    },
+                    items: sort.map((value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Container(
                   width: 250,
                   child: DropdownButtonFormField(
@@ -231,10 +268,10 @@ class _new_orderState extends State<new_order> {
                 ),
               ),
               SizedBox(
-                width: 10,
+                width: 5,
               ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Container(
                   width: 250,
                   child: DropdownButtonFormField(

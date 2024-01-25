@@ -114,6 +114,12 @@ class _assign_orderState extends State<assign_order> {
     return orders;
   }
 
+  List sort = [
+    'Ascending',
+    'Descending',
+  ];
+  String sorting = 'Ascending';
+
   List citylist = [
     'Nablus',
     'Tulkarm',
@@ -204,6 +210,9 @@ class _assign_orderState extends State<assign_order> {
   Widget build(BuildContext context) {
     List<package_assign> filteredOrders = _filterOrders();
 
+    sorting == 'Ascending'
+        ? filteredOrders.sort((a, b) => a.id.compareTo(b.id))
+        : filteredOrders.sort((b, a) => a.id.compareTo(b.id));
     return ListView(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,7 +271,37 @@ class _assign_orderState extends State<assign_order> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                child: Container(
+                  width: 200,
+                  child: DropdownButtonFormField(
+                    value: sorting,
+                    hint: Text('Sort', style: TextStyle(color: Colors.grey)),
+                    decoration: theme_helper().text_form_style(
+                      '',
+                      '',
+                      null,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    onChanged: (newValue) {
+                      setState(() {
+                        sorting = newValue as String;
+                      });
+                    },
+                    items: sort.map((value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Container(
                   width: 200,
                   child: DropdownButtonFormField(
@@ -292,7 +331,7 @@ class _assign_orderState extends State<assign_order> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: Container(
                   width: 200,
                   child: DropdownButtonFormField(

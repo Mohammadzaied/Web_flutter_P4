@@ -17,6 +17,7 @@ import 'package:flutter_application_1/employee/employee_functions/5_receiving_mo
 import 'package:flutter_application_1/employee/employee_functions/9_track-package.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/5_set_location.dart';
+import 'package:flutter_application_1/employee/employee_functions/component/7_location_new_order.dart';
 import 'package:flutter_application_1/employee/employee_functions/data.dart';
 import 'package:flutter_application_1/sign_in_pages/2_forget_pass.dart';
 import 'package:flutter_application_1/sign_in_pages/4_new_password.dart';
@@ -97,7 +98,6 @@ class _main_pageState extends State<main_page>
             Tab(text: 'Receiving Money'),
             Tab(text: 'Distribution orders'),
             Tab(text: 'Tracking Packages'),
-            //Tab(text: 'Daily report'),
             Tab(text: 'Edit driver information'),
           ],
           labelStyle: TextStyle(
@@ -106,7 +106,7 @@ class _main_pageState extends State<main_page>
           ),
           unselectedLabelStyle: TextStyle(
             fontWeight: FontWeight.normal,
-            fontSize: 12,
+            fontSize: 13,
           ),
           labelColor: Colors.black,
           unselectedLabelColor: Colors.white,
@@ -252,9 +252,26 @@ final GoRouter Router_pages = GoRouter(
           },
         ),
         GoRoute(
+          path: '/location',
+          builder: (BuildContext context, GoRouterState state) {
+            return Location_p(
+              Latefrom: double.parse(
+                  state.uri.queryParameters['Latefrom'].toString()),
+              longfrom: double.parse(
+                  state.uri.queryParameters['Latefrom'].toString()),
+              Lateto: double.parse(
+                  state.uri.queryParameters['Latefrom'].toString()),
+              longto: double.parse(
+                  state.uri.queryParameters['Latefrom'].toString()),
+            );
+          },
+        ),
+        GoRoute(
           path: '/data',
           builder: (BuildContext context, GoRouterState state) {
-            return data_show();
+            return data_show(
+              id: int.parse(state.uri.queryParameters['id'].toString()),
+            );
           },
         ),
         GoRoute(

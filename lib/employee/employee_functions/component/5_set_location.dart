@@ -63,14 +63,26 @@ class _set_locationState extends State<set_location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primarycolor,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: primarycolor,
+      //   leading: Row(
+      //     children: [
+      //       IconButton(
+      //         icon: Icon(Icons.abc),
+      //         onPressed: () {
+      //           // Define the function when the back arrow is pressed
+      //           Navigator.pop(context);
+      //         },
+      //       ),
+      //       Text('back')
+      //     ],
+      //   ),
+      // ),
       body: OpenStreetMapSearchAndPick(
           center: current,
           locationPinIconColor: primarycolor,
           buttonColor: primarycolor,
-          buttonText: 'Set Current Location',
+          buttonText: 'Save and back',
           onPicked: (pickedData) async {
             try {
               String addressString = pickedData.address.toString();
@@ -84,36 +96,42 @@ class _set_locationState extends State<set_location> {
               addressParts[0] = 'Unknown location';
               addressParts[0] = 'Unknown location';
             }
-            // print(pickedData.latLong.latitude);
-            // print(pickedData.latLong.longitude);
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            widget.onDataReceived(
-                                "${addressParts[0]}','${addressParts[1]}','${addressParts[2]}','${addressParts[3]}",
-                                pickedData.latLong.latitude,
-                                pickedData.latLong.longitude);
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            "Ok",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          )),
-                    ],
-                    title: Text("Set Location"),
-                    content: Text(
-                        "you need to save this location\n\n${addressParts[0]}\n${addressParts[1]}\n${addressParts[2]}\n${addressParts[3]}"),
-                    titleTextStyle:
-                        TextStyle(color: Colors.white, fontSize: 25),
-                    contentTextStyle:
-                        TextStyle(color: Colors.white, fontSize: 16),
-                    backgroundColor: primarycolor,
-                  );
-                });
+            widget.onDataReceived(
+                "${addressParts[0]}','${addressParts[1]}','${addressParts[2]}','${addressParts[3]}",
+                pickedData.latLong.latitude,
+                pickedData.latLong.longitude);
+            Navigator.pop(context);
+
+            // showDialog(
+            //     context: context,
+            //     builder: (context) {
+            //       return AlertDialog(
+            //         actions: [
+            //           TextButton(
+            //               onPressed: () {
+            //                 widget.onDataReceived(
+            //                     "${addressParts[0]}','${addressParts[1]}','${addressParts[2]}','${addressParts[3]}",
+            //                     pickedData.latLong.latitude,
+            //                     pickedData.latLong.longitude);
+            //                 Navigator.pop(context);
+            //                 //Navigator.pop(context);
+            //                 //  Navigator.popAndPushNamed(context, '/create_order');
+            //               },
+            //               child: Text(
+            //                 "Ok",
+            //                 style: TextStyle(color: Colors.white, fontSize: 18),
+            //               )),
+            //         ],
+            //         title: Text("Set Location"),
+            //         content: Text(
+            //             "you need to save this location\n\n${addressParts[0]}\n${addressParts[1]}\n${addressParts[2]}\n${addressParts[3]}"),
+            //         titleTextStyle:
+            //             TextStyle(color: Colors.white, fontSize: 25),
+            //         contentTextStyle:
+            //             TextStyle(color: Colors.white, fontSize: 16),
+            //         backgroundColor: primarycolor,
+            //       );
+            //     });
           }),
     );
   }

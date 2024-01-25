@@ -1,4 +1,5 @@
 import 'package:flutter_application_1/employee/employee_functions/component/7_location_new_order.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
@@ -242,14 +243,16 @@ class _package_newState extends State<package_new> {
                                   color: Colors.white,
                                 )),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Location_p(
-                                          Latefrom: widget.Latefrom,
-                                          longfrom: widget.longfrom,
-                                          Lateto: widget.Lateto,
-                                          longto: widget.longto)));
+                              GoRouter.of(context).go(
+                                  '/location?Latefrom=${widget.Latefrom}&longfrom=${widget.longfrom}&Lateto=${widget.Lateto}&longto=${widget.longto}');
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => Location_p(
+                              //             Latefrom: widget.Latefrom,
+                              //             longfrom: widget.longfrom,
+                              //             Lateto: widget.Lateto,
+                              //             longto: widget.longto)));
                             },
                           ),
                         ),
