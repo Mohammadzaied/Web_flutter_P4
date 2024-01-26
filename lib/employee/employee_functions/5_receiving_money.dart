@@ -113,82 +113,152 @@ class _receiving_moneyState extends State<receiving_money> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 60),
-                child: Row(
+                child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        "Search by Name :",
-                        style: TextStyle(fontSize: 25, color: Colors.black),
-                      ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                              style:
+                                  TextStyle(fontSize: 25, color: Colors.black),
+                              "The Remind number Of driver to checkout: ${drivers.where((driver) => driver.num_pkg_deliver != 0 || driver.num_pkg_receive != 0).toList().length}"),
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              "Ok",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            )),
+                                      ],
+                                      title: Text("The remaining drivers"),
+                                      content: Container(
+                                          width: 400,
+                                          //height: 200,
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              return Text(
+                                                  "${index + 1}- ${drivers.where((driver) => driver.num_pkg_deliver != 0 || driver.num_pkg_receive != 0).toList()[index].name}");
+                                            },
+                                            itemCount: drivers
+                                                .where((driver) =>
+                                                    driver.num_pkg_deliver !=
+                                                        0 ||
+                                                    driver.num_pkg_receive != 0)
+                                                .toList()
+                                                .length,
+                                          )),
+                                      titleTextStyle: TextStyle(
+                                          color: Colors.white, fontSize: 25),
+                                      contentTextStyle: TextStyle(
+                                          color: Colors.white, fontSize: 16),
+                                      backgroundColor: primarycolor,
+                                    );
+                                  });
+                            },
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll(primarycolor)),
+                            child: Icon(Icons.info))
+                      ],
                     ),
-                    Container(
-                      width: 400,
-                      child: TypeAheadField(
-                        textFieldConfiguration: TextFieldConfiguration(
-                          controller: controller,
-                          decoration: InputDecoration(
-                            hintText: "Search by name driver",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            suffixIcon: controller.text.isNotEmpty
-                                ? IconButton(
-                                    icon: Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        controller.clear();
-                                      });
-                                    },
-                                  )
-                                : null,
-                            prefixIcon: Icon(
-                              Icons.search,
-                              color: primarycolor,
-                            ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                            "Search by Name :",
+                            style: TextStyle(fontSize: 25, color: Colors.black),
                           ),
                         ),
-                        suggestionsCallback: (pattern) {
-                          print('object');
-                          return drivers
-                              .where((driver) => driver.name
-                                  .toLowerCase()
-                                  .startsWith(pattern.toLowerCase()))
-                              .toList();
-                        },
-                        itemBuilder: (context, driver suggestion) {
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: primarycolor,
-                              backgroundImage: NetworkImage(
-                                  urlStarter + suggestion.img,
-                                  scale: 1,
-                                  headers: {
-                                    'ngrok-skip-browser-warning': 'true'
-                                  }),
-                              child: suggestion.img == ""
-                                  ? Text(
-                                      suggestion.name[0]
-                                          .toString()
-                                          .toUpperCase(),
-                                      style: TextStyle(color: Colors.white),
-                                    )
-                                  : null,
+                        Container(
+                          width: 400,
+                          child: TypeAheadField(
+                            textFieldConfiguration: TextFieldConfiguration(
+                              controller: controller,
+                              decoration: InputDecoration(
+                                hintText: "Search by name driver",
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                suffixIcon: controller.text.isNotEmpty
+                                    ? IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            controller.clear();
+                                          });
+                                        },
+                                      )
+                                    : null,
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: primarycolor,
+                                ),
+                              ),
                             ),
-                            title: Text(suggestion.name),
-                            subtitle: Text(suggestion.username),
-                          );
-                        },
-                        onSuggestionSelected: (driver suggestion) {
-                          setState(() {
-                            controller.text = suggestion.name;
-                            selected_driver = suggestion;
-                          });
-                        },
-                      ),
+                            suggestionsCallback: (pattern) {
+                              print('object');
+                              return drivers
+                                  .where((driver) => driver.name
+                                      .toLowerCase()
+                                      .startsWith(pattern.toLowerCase()))
+                                  .toList();
+                            },
+                            itemBuilder: (context, driver suggestion) {
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: primarycolor,
+                                  backgroundImage: NetworkImage(
+                                      urlStarter + suggestion.img,
+                                      scale: 1,
+                                      headers: {
+                                        'ngrok-skip-browser-warning': 'true'
+                                      }),
+                                  child: suggestion.img == ""
+                                      ? Text(
+                                          suggestion.name[0]
+                                              .toString()
+                                              .toUpperCase(),
+                                          style: TextStyle(color: Colors.white),
+                                        )
+                                      : null,
+                                ),
+                                title: Text(suggestion.name),
+                                subtitle: Text(suggestion.username),
+                              );
+                            },
+                            onSuggestionSelected: (driver suggestion) {
+                              setState(() {
+                                controller.text = suggestion.name;
+                                selected_driver = suggestion;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
