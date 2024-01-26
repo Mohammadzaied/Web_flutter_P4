@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 class CustomDrawer extends StatelessWidget {
   String username = GetStorage().read("userName");
   String email = GetStorage().read("email");
+  String type = GetStorage().read("userType");
   var imgUrl = urlStarter +
       '/image/' +
       GetStorage().read("userName") +
@@ -90,9 +91,37 @@ class CustomDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                   GoRouter.of(context).go('/change_pass');
-                  //Navigator.pushNamed(context, '/change_password');
                 },
               ),
+              //type
+              Visibility(
+                visible: type != 'admin',
+                child: Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 20)),
+                    ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      leading: Icon(
+                        Icons.report,
+                        color: primarycolor,
+                        size: 30,
+                      ),
+                      title: Text(
+                        "Report a problem",
+                        style: TextStyle(fontSize: 25),
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        GoRouter.of(context).go('/report');
+                      },
+                    ),
+                  ],
+                ),
+              ),
+
+              // type
               Padding(padding: EdgeInsets.only(top: 20)),
               // ListTile(
               //   shape: RoundedRectangleBorder(

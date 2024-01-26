@@ -19,48 +19,28 @@ class _problemsState extends State<problems> {
   ];
   String sorting = 'The recent';
   String typing = 'All';
-  List<content_p> p_new = [
-    content_p(
-      read: 'unread',
-      img: '',
-      title: 'p_new',
-      id_problem: 3,
-      username: 'HHDHD',
-      name: '111123',
-      date: '2023-02-10',
-      refreshdata: () {
-        // fetchData_problems();
-      },
-    ),
-    content_p(
-      read: 'read',
-      img: '',
-      title: 'p_new',
-      id_problem: 2,
-      username: 'HHDHD',
-      name: '22222',
-      date: '2024-01-08',
-      refreshdata: () {
-        // fetchData_problems();
-      },
-    ),
-    content_p(
-      read: 'unread',
-      img: '',
-      title: 'p_new',
-      id_problem: 2,
-      username: 'HHDHD',
-      name: '111123',
-      date: '2024-02-10',
-      refreshdata: () {
-        // fetchData_problems();
-      },
-    ),
-  ];
+  List<content_p> p_new = [];
+
+  String formatDate(DateTime dateTime) {
+    // Format the DateTime object as a string in 'yyyy-MM-dd' format
+    return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+  }
+
   List<dynamic> p_news = [];
+//
+  Future<void> delete_problems(int id) async {
+    var url = urlStarter + "/admin/deleteTechnicalReport/${id}";
+    final response = await http.delete(Uri.parse(url),
+        headers: {'ngrok-skip-browser-warning': 'true'});
+    if (response.statusCode == 200) {
+      setState(() {
+        fetchData_problems();
+      });
+    }
+  }
 
   Future<void> fetchData_problems() async {
-    var url = urlStarter + "/admin/managersList";
+    var url = urlStarter + "/admin/getTechnicalReports";
     print(url);
     final response = await http
         .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
@@ -80,18 +60,17 @@ class _problemsState extends State<problems> {
   List<content_p> buildMy_problems() {
     List<content_p> M = [];
     for (int i = 0; i < p_news.length; i++) {
+      DateTime dateTime = DateTime.parse(p_news[i]['createdAt']);
+      String dateOnly = formatDate(dateTime);
       M.add(
         content_p(
-          read: p_news[i]['username'],
-          img: urlStarter + p_news[i]['username'],
-          title: p_news[i]['username'],
-          id_problem: p_news[i]['username'],
+          read: p_news[i]['seen'],
+          img: urlStarter + p_news[i]['img'],
+          title: p_news[i]['title'],
+          id_problem: p_news[i]['id'],
           username: p_news[i]['username'],
           name: p_news[i]['name'],
-          date: p_news[i]['createdAt'],
-          refreshdata: () {
-            fetchData_problems();
-          },
+          date: dateOnly,
         ),
       );
     }
@@ -108,7 +87,7 @@ class _problemsState extends State<problems> {
     serach_content = '';
 
     super.initState();
-    //fetchData_managers();
+    fetchData_problems();
   }
 
   void dispose() {
@@ -116,17 +95,11 @@ class _problemsState extends State<problems> {
   }
 
   List<content_p> _filterOrders() {
-    // if (selectedCity_from!.isEmpty &&
-    //     searchtype!.isEmpty &&
-    //     selectedCity_to!.isNotEmpty) {
-    //   return pk_new;
-    // }
-
     return p_new.where((order) {
-      if (typing == 'Read' && order.read == 'unread') {
+      if (typing == 'Read' && order.read == false) {
         return false;
       }
-      if (typing == 'Unread' && order.read == 'read') {
+      if (typing == 'Unread' && order.read == true) {
         return false;
       }
 
@@ -394,6 +367,10 @@ class _problemsState extends State<problems> {
                                           actions: [
                                             TextButton(
                                                 onPressed: () {
+                                                  delete_problems(
+                                                      filteredReports[index]
+                                                          .id_problem);
+
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Text(
@@ -417,7 +394,7 @@ class _problemsState extends State<problems> {
                                           content: Container(
                                             width: 400,
                                             child: Text(
-                                              "Are you sure to delete report",
+                                              "Are you sure to delete report ${filteredReports[index].name}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18),
@@ -456,8 +433,7 @@ class content_p {
   final String name;
   final String username;
   final String img;
-  final String read;
-  final Function() refreshdata;
+  final bool read;
   final String title;
 
   content_p({
@@ -467,7 +443,6 @@ class content_p {
     required this.name,
     required this.username,
     required this.title,
-    required this.refreshdata,
     required this.id_problem,
   });
 }

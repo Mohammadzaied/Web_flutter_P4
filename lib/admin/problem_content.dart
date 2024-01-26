@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/admin/main_page_admin.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
+import 'package:flutter_application_1/style/showDialogShared/show_dialog.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
@@ -17,10 +18,10 @@ class problem_content extends StatefulWidget {
 }
 
 class _problem_contentState extends State<problem_content> {
-  String? img;
-  String? report_img;
+  String img = '';
+  String report_img = '';
   String? name;
-  String? user;
+  String? username;
   String? title;
   String? desc;
   String? date;
@@ -32,16 +33,87 @@ class _problem_contentState extends State<problem_content> {
     setState(() {
       TabController_2.index = 2;
     });
-
+    get_problem(widget.id!);
     super.initState();
   }
-  // Future post_delete_Manager(String user) async {
-  //   var url = urlStarter + "/admin/deleteManager/${user}";
-  //   var responce = await http.delete(Uri.parse(url), headers: {
-  //     'Content-type': 'application/json; charset=UTF-8',
-  //   });
-  //   if (responce.statusCode == 200) {}
-  // }
+
+  String formatDate(DateTime dateTime) {
+    // Format the DateTime object as a string in 'yyyy-MM-dd' format
+    return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+  }
+
+  String formatTime(DateTime dateTime) {
+    return '${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')} ${dateTime.hour < 12 ? 'AM' : 'PM'}';
+  }
+
+  Future postreply(int id, String rep) async {
+    var url = urlStarter + "/admin/sendReplyTechnicalReport";
+    var responce = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "id": id,
+          "reply": reply,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        });
+    var responceBody = jsonDecode(responce.body);
+    if (responceBody['message'] == "Success") {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(27.0), // Adjust the radius as needed
+              ),
+              title: Text('Done'),
+              content: Text('Reply Done!'),
+              titleTextStyle: TextStyle(color: Colors.white, fontSize: 25),
+              contentTextStyle: TextStyle(color: Colors.white, fontSize: 16),
+              backgroundColor: primarycolor,
+              actions: [
+                TextButton(
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    GoRouter.of(context).go('/problem_reports');
+                  },
+                ),
+              ],
+            );
+          });
+    }
+    //print(responceBody);
+  }
+
+  GlobalKey<FormState> formState = GlobalKey();
+
+  Future get_problem(int user) async {
+    var url = urlStarter + "/admin/getTechnicalReport?id=${user}";
+    var response = await http
+        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      print(data);
+      DateTime dateTime = DateTime.parse(data['createdAt']);
+      String datePart = formatDate(dateTime);
+      String timePart = formatTime(dateTime);
+      setState(() {
+        img = urlStarter + data['img'];
+        report_img = urlStarter + data['imageUrl'];
+        name = data['name'];
+        username = data['username'];
+        title = data['title'];
+        desc = data['message'];
+        date = datePart;
+        time = timePart;
+        reply = data['reply'];
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext) {
@@ -63,17 +135,18 @@ class _problem_contentState extends State<problem_content> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            //    Text('xssss')
                             Container(
-                              height: 100,
-                              width: 100,
+                              height: 130,
+                              width: 130,
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: NetworkImage('', scale: 1, headers: {
-                                      'ngrok-skip-browser-warning': 'true'
-                                    }),
+                                    image: NetworkImage(img,
+                                        scale: 1,
+                                        headers: {
+                                          'ngrok-skip-browser-warning': 'true'
+                                        }),
                                   )),
                             ),
                           ],
@@ -87,7 +160,7 @@ class _problem_contentState extends State<problem_content> {
                                 color: Colors.grey),
                             children: <InlineSpan>[
                               TextSpan(
-                                text: ' 111', //${name}
+                                text: '${name}', //${name}
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.black,
@@ -103,7 +176,7 @@ class _problem_contentState extends State<problem_content> {
                                 color: Colors.grey),
                             children: <InlineSpan>[
                               TextSpan(
-                                text: 'DDDDD', // ${user}
+                                text: '${username}', // ${user}
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.black,
@@ -119,7 +192,7 @@ class _problem_contentState extends State<problem_content> {
                                 color: Colors.grey),
                             children: <InlineSpan>[
                               TextSpan(
-                                text: ' SSSS', //${date}
+                                text: '${date}', //${date}
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.black,
@@ -135,7 +208,7 @@ class _problem_contentState extends State<problem_content> {
                                 color: Colors.grey),
                             children: <InlineSpan>[
                               TextSpan(
-                                text: '11111111 ', ////${time}
+                                text: '${time}', ////${time}
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.black,
@@ -154,8 +227,7 @@ class _problem_contentState extends State<problem_content> {
                                       color: Colors.grey),
                                   children: <InlineSpan>[
                                     TextSpan(
-                                      text:
-                                          ' 11111111111111111111111111111111111111112222222222222222222222222222222222222222222222222222222222222222222222222111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111\$',
+                                      text: '${desc}\$',
                                       style: TextStyle(
                                         fontSize: 18,
                                         color: Colors.black,
@@ -169,6 +241,7 @@ class _problem_contentState extends State<problem_content> {
                         Container(
                           height: 100,
                           child: Form(
+                            key: formState,
                             child: TextFormField(
                               onSaved: (newValue) {
                                 reply = newValue;
@@ -228,7 +301,12 @@ class _problem_contentState extends State<problem_content> {
                                         color: Colors.white),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (formState.currentState!.validate()) {
+                                    formState.currentState!.save();
+                                    postreply(widget.id!, reply!);
+                                  }
+                                },
                               ),
                             ),
                             SizedBox(
@@ -288,7 +366,7 @@ class _problem_contentState extends State<problem_content> {
                                     shape: BoxShape.rectangle,
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: NetworkImage('',
+                                      image: NetworkImage(report_img,
                                           scale: 1,
                                           headers: {
                                             'ngrok-skip-browser-warning': 'true'

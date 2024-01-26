@@ -8,6 +8,7 @@ import 'package:flutter_application_1/admin/problems.dart';
 import 'package:flutter_application_1/drawer/drawer.dart';
 import 'package:flutter_application_1/drawer/drawer_function/change_password.dart';
 import 'package:flutter_application_1/drawer/drawer_function/edit_profile.dart';
+import 'package:flutter_application_1/drawer/drawer_function/report.dart';
 import 'package:flutter_application_1/employee/employee_functions/3_all_orders.dart';
 import 'package:flutter_application_1/employee/employee_functions/4_assign_order.dart';
 import 'package:flutter_application_1/employee/employee_functions/6_distribution_orders.dart';
@@ -206,6 +207,12 @@ final GoRouter Router_pages = GoRouter(
         path: '/edit_profile',
         builder: (BuildContext context, GoRouterState state) {
           return edit_profile();
+        }),
+
+    GoRoute(
+        path: '/report',
+        builder: (BuildContext context, GoRouterState state) {
+          return report();
         }),
 
     //////////////////// route main page employee
