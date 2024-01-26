@@ -288,7 +288,11 @@ class _problem_contentState extends State<problem_content> {
                                     shape: BoxShape.rectangle,
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: AssetImage("assets/fff.png"),
+                                      image: NetworkImage('',
+                                          scale: 1,
+                                          headers: {
+                                            'ngrok-skip-browser-warning': 'true'
+                                          }), //AssetImage("assets/fff.png"),
                                     )),
                               ),
                             ),
