@@ -19,7 +19,7 @@ class main_page_admin extends StatefulWidget {
 class _main_page_adminState extends State<main_page_admin>
     with SingleTickerProviderStateMixin {
   void initState() {
-    TabController_2 = TabController(length: 2, vsync: this);
+    TabController_2 = TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -51,6 +51,7 @@ class _main_page_adminState extends State<main_page_admin>
           tabs: [
             Tab(text: 'All Managers'),
             Tab(text: 'Add Manager'),
+            Tab(text: 'Problem Reports'),
           ],
           labelStyle: TextStyle(
             fontWeight: FontWeight.bold,
@@ -87,6 +88,9 @@ void _onItemTapped(int index, BuildContext context) {
 
     case 1:
       GoRouter.of(context).go('/Add_manager');
+      break;
+    case 2:
+      GoRouter.of(context).go('/problem_reports');
       break;
   }
 }

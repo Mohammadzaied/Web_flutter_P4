@@ -3,6 +3,8 @@ import 'package:flutter_application_1/admin/add_manager.dart';
 import 'package:flutter_application_1/admin/all_mangers.dart';
 import 'package:flutter_application_1/admin/main_page_admin.dart';
 import 'package:flutter_application_1/admin/managers.dart';
+import 'package:flutter_application_1/admin/problem_content.dart';
+import 'package:flutter_application_1/admin/problems.dart';
 import 'package:flutter_application_1/drawer/drawer.dart';
 import 'package:flutter_application_1/drawer/drawer_function/change_password.dart';
 import 'package:flutter_application_1/drawer/drawer_function/edit_profile.dart';
@@ -310,6 +312,20 @@ final GoRouter Router_pages = GoRouter(
           path: '/Add_manager',
           builder: (BuildContext context, GoRouterState state) {
             return add_manager();
+          },
+        ),
+        GoRoute(
+          path: '/problem_reports',
+          builder: (BuildContext context, GoRouterState state) {
+            return problems();
+          },
+        ),
+        GoRoute(
+          path: '/problem',
+          builder: (BuildContext context, GoRouterState state) {
+            return problem_content(
+              id: int.parse(state.uri.queryParameters['id'].toString()),
+            );
           },
         ),
       ],

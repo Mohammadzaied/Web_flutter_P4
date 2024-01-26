@@ -124,7 +124,7 @@ class _add_managerState extends State<add_manager> {
                     children: [
                       TextFormField(
                         decoration: theme_helper().text_form_style(
-                            "Manager name",
+                            "Manager first name",
                             "Enter The manager's fisrt name",
                             Icons.person),
                         validator: (value) {
@@ -138,7 +138,7 @@ class _add_managerState extends State<add_manager> {
                       SizedBox(height: 10),
                       TextFormField(
                         decoration: theme_helper().text_form_style(
-                            "Manager name",
+                            "Manager last name",
                             "Enter The manager's last name",
                             Icons.person),
                         validator: (value) {
@@ -166,7 +166,7 @@ class _add_managerState extends State<add_manager> {
                           fetchData(value.toString());
                         },
                         onSaved: (newValue) {
-                          email = newValue;
+                          username = newValue;
                         },
                       ),
                       SizedBox(height: 10),

@@ -76,7 +76,8 @@ class _receiving_moneyState extends State<receiving_money> {
         num_pkg_deliver: new_drivers[i]['deliverdNumber'],
         num_pkg_receive: new_drivers[i]['receivedNumber'],
         total_delivery: new_drivers[i]['totalBalance'],
-        total_purchase: 0,
+        receive_p_price: new_drivers[i]['reciveAmount'],
+        paid_p_price: new_drivers[i]['paiedAmount'],
       ));
     }
     return d;
@@ -95,7 +96,8 @@ class _receiving_moneyState extends State<receiving_money> {
       num_pkg_deliver: 0,
       num_pkg_receive: 0,
       total_delivery: 0,
-      total_purchase: 0,
+      paid_p_price: 0,
+      receive_p_price: 0,
     );
 
     super.initState();
@@ -335,10 +337,10 @@ class _receiving_moneyState extends State<receiving_money> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Money of purchase: ',
+                        Text('Paid package price: ',
                             style: TextStyle(fontSize: 20, color: Colors.grey)),
                         Text(
-                          '${selected_driver.total_purchase}\$',
+                          '${selected_driver.paid_p_price}\$',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
@@ -355,10 +357,10 @@ class _receiving_moneyState extends State<receiving_money> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Total amount: ',
+                        Text('Receive packages price: ',
                             style: TextStyle(fontSize: 20, color: Colors.grey)),
                         Text(
-                          '${(selected_driver.total_delivery + selected_driver.total_purchase).toStringAsFixed(2)}\$',
+                          '${selected_driver.receive_p_price}\$',
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
@@ -371,8 +373,27 @@ class _receiving_moneyState extends State<receiving_money> {
                   Spacer(),
                   Divider(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Total amount: ',
+                                style:
+                                    TextStyle(fontSize: 20, color: Colors.red)),
+                            Text(
+                              '${(selected_driver.total_delivery + selected_driver.receive_p_price).toStringAsFixed(2)}\$',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Container(
                         child: MaterialButton(
                           shape: RoundedRectangleBorder(
@@ -457,14 +478,16 @@ class driver {
   final int num_pkg_receive;
   final int num_pkg_deliver;
   final double total_delivery;
-  final int total_purchase;
+  final double paid_p_price;
+  final double receive_p_price;
 
   driver({
+    required this.paid_p_price,
+    required this.receive_p_price,
     required this.num_pkg_receive,
     required this.username,
     required this.num_pkg_deliver,
     required this.total_delivery,
-    required this.total_purchase,
     required this.name,
     required this.img,
   });

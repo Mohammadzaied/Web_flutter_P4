@@ -12,6 +12,7 @@ class package_assign extends StatefulWidget {
   final String city;
   final String name;
   final String status;
+  late String selcted;
   final String? reason;
   final int id;
   final int package_size; // 0 doc  , 1 small ,2 meduim , 3 large
@@ -29,6 +30,7 @@ class package_assign extends StatefulWidget {
     required this.drivers,
     required this.status,
     required this.reason,
+    this.selcted = '',
   });
 
   @override
@@ -85,6 +87,10 @@ class _package_assignState extends State<package_assign> {
 
     List<driver_assign_to_order> filteredDrivers =
         filterDrivers(widget.drivers, dayselcted_num, widget.city);
+    if (filteredDrivers.length > 0) {
+      widget.selcted = filteredDrivers[selcted_index].username;
+      selecteddriver = widget.selcted;
+    }
 
     ////////////////////////////////////////////////////////////
 
@@ -388,14 +394,64 @@ class _package_assignState extends State<package_assign> {
                             ),
                             onPressed: filteredDrivers.length > 0
                                 ? () {
-                                    post_assign_order(
-                                        widget.id,
-                                        selecteddriver,
-                                        dayselcted_num + ' 11:11:11',
-                                        widget.package_type);
-                                    setState(() {
-                                      selecteddriver = '';
-                                    });
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    "Cancel",
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontSize: 18),
+                                                  )),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    post_assign_order(
+                                                        widget.id,
+                                                        selecteddriver,
+                                                        dayselcted_num +
+                                                            ' 11:11:11',
+                                                        widget.package_type);
+                                                    setState(() {
+                                                      selecteddriver = '';
+                                                    });
+                                                  },
+                                                  child: Text(
+                                                    "Ok",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18),
+                                                  )),
+                                            ],
+                                            title: Text('Assign order'),
+                                            content: Container(
+                                              width: 400,
+                                              child: Text(
+                                                "Are you sure assign order to driver's ${filteredDrivers[selcted_index].name} ",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                            titleTextStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 25),
+                                            contentTextStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16),
+                                            backgroundColor: primarycolor,
+                                          );
+                                        });
                                   }
                                 : null,
                           ),
