@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/admin/main_page_admin.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
-import 'package:flutter_application_1/style/showDialogShared/show_dialog.dart';
-import 'package:get_storage/get_storage.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-//  id: int.parse(state.uri.queryParameters['id'].toString()),
 class problem_content extends StatefulWidget {
   final int? id;
 
@@ -18,8 +16,8 @@ class problem_content extends StatefulWidget {
 }
 
 class _problem_contentState extends State<problem_content> {
-  String img = '';
-  String report_img = '';
+  String? img;
+  String? report_img;
   String? name;
   String? username;
   String? title;
@@ -27,7 +25,8 @@ class _problem_contentState extends State<problem_content> {
   String? date;
   String? time;
   String? reply;
-
+  // String? reply_data;
+  var controller = new TextEditingController();
   @override
   void initState() {
     setState(() {
@@ -103,7 +102,7 @@ class _problem_contentState extends State<problem_content> {
       String timePart = formatTime(dateTime);
       setState(() {
         img = urlStarter + data['img'];
-        report_img = urlStarter + data['imageUrl'];
+        report_img = data['imageUrl'];
         name = data['name'];
         username = data['username'];
         title = data['title'];
@@ -111,6 +110,7 @@ class _problem_contentState extends State<problem_content> {
         date = datePart;
         time = timePart;
         reply = data['reply'];
+        controller.text = (reply != null ? reply! : '');
       });
     }
   }
@@ -142,7 +142,7 @@ class _problem_contentState extends State<problem_content> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: NetworkImage(img,
+                                    image: NetworkImage(img != null ? img! : '',
                                         scale: 1,
                                         headers: {
                                           'ngrok-skip-browser-warning': 'true'
@@ -183,6 +183,7 @@ class _problem_contentState extends State<problem_content> {
                                 ),
                               )
                             ])),
+
                         Spacer(),
                         Text.rich(TextSpan(
                             text: 'Date: ',
@@ -238,11 +239,37 @@ class _problem_contentState extends State<problem_content> {
                           ],
                         ),
                         Spacer(),
+                        // if (reply != null)
+                        //   Row(
+                        //     children: [
+                        //       Expanded(
+                        //         child: Text.rich(TextSpan(
+                        //             text: 'Reply: ',
+                        //             style: TextStyle(
+                        //                 fontSize: 20,
+                        //                 fontWeight: FontWeight.bold,
+                        //                 color: Colors.grey),
+                        //             children: <InlineSpan>[
+                        //               TextSpan(
+                        //                 text: '${reply}',
+                        //                 style: TextStyle(
+                        //                   fontSize: 18,
+                        //                   color: Colors.black,
+                        //                 ),
+                        //               )
+                        //             ])),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // if (reply_data != null)
+                        Spacer(),
                         Container(
                           height: 100,
                           child: Form(
                             key: formState,
                             child: TextFormField(
+                              controller: controller,
+                              // initialValue: reply != null ? reply : '123',
                               onSaved: (newValue) {
                                 reply = newValue;
                               },
@@ -340,7 +367,7 @@ class _problem_contentState extends State<problem_content> {
                   ),
                   Spacer(),
                   Visibility(
-                      visible: img != null,
+                      visible: report_img != null,
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black),
@@ -366,7 +393,10 @@ class _problem_contentState extends State<problem_content> {
                                     shape: BoxShape.rectangle,
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: NetworkImage(report_img,
+                                      image: NetworkImage(
+                                          report_img != null
+                                              ? urlStarter + report_img!
+                                              : '',
                                           scale: 1,
                                           headers: {
                                             'ngrok-skip-browser-warning': 'true'

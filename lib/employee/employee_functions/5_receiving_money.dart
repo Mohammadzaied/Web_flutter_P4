@@ -119,10 +119,18 @@ class _receiving_moneyState extends State<receiving_money> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(20.0),
-                          child: Text(
-                              style:
-                                  TextStyle(fontSize: 25, color: Colors.black),
-                              "The Remind number Of driver to checkout: ${drivers.where((driver) => driver.num_pkg_deliver != 0 || driver.num_pkg_receive != 0).toList().length}"),
+                          child: Row(
+                            children: [
+                              Text(
+                                  style: TextStyle(
+                                      fontSize: 25, color: Colors.black),
+                                  "The Remind number Of driver to checkout: "),
+                              Text(
+                                  style: TextStyle(
+                                      fontSize: 25, color: Colors.red),
+                                  " ${drivers.where((driver) => driver.num_pkg_deliver != 0 || driver.num_pkg_receive != 0).toList().length}"),
+                            ],
+                          ),
                         ),
                         ElevatedButton(
                             onPressed: () {

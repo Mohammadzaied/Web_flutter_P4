@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/admin/add_manager.dart';
 import 'package:flutter_application_1/admin/all_mangers.dart';
 import 'package:flutter_application_1/admin/main_page_admin.dart';
-import 'package:flutter_application_1/admin/managers.dart';
 import 'package:flutter_application_1/admin/problem_content.dart';
 import 'package:flutter_application_1/admin/problems.dart';
 import 'package:flutter_application_1/drawer/drawer.dart';
+import 'package:flutter_application_1/drawer/drawer_function/TechnicalReport.dart';
 import 'package:flutter_application_1/drawer/drawer_function/change_password.dart';
 import 'package:flutter_application_1/drawer/drawer_function/edit_profile.dart';
-import 'package:flutter_application_1/drawer/drawer_function/report.dart';
+import 'package:flutter_application_1/drawer/drawer_function/send_report.dart';
 import 'package:flutter_application_1/employee/employee_functions/3_all_orders.dart';
 import 'package:flutter_application_1/employee/employee_functions/4_assign_order.dart';
 import 'package:flutter_application_1/employee/employee_functions/6_distribution_orders.dart';
@@ -19,7 +19,6 @@ import 'package:flutter_application_1/employee/employee_functions/1_new_orders.d
 import 'package:flutter_application_1/employee/employee_functions/5_receiving_money.dart';
 import 'package:flutter_application_1/employee/employee_functions/9_track-package.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/1_packages.dart';
-import 'package:flutter_application_1/employee/employee_functions/component/5_set_location.dart';
 import 'package:flutter_application_1/employee/employee_functions/component/7_location_new_order.dart';
 import 'package:flutter_application_1/employee/employee_functions/data.dart';
 import 'package:flutter_application_1/sign_in_pages/2_forget_pass.dart';
@@ -212,9 +211,21 @@ final GoRouter Router_pages = GoRouter(
     GoRoute(
         path: '/report',
         builder: (BuildContext context, GoRouterState state) {
-          return report();
+          return TechnicalReport();
         }),
-
+    GoRoute(
+        path: '/send_report',
+        builder: (BuildContext context, GoRouterState state) {
+          return SendTechnicalReport();
+        }),
+    // GoRoute(
+    //   path: '/show_report',
+    //   builder: (BuildContext context, GoRouterState state) {
+    //     return TechnicalReportDetails(
+    //       id: int.parse(state.uri.queryParameters['id'].toString()),
+    //     );
+    //   },
+    // ),
     //////////////////// route main page employee
     ShellRoute(
       navigatorKey: _shellNavigatorKey,

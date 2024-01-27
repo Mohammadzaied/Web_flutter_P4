@@ -67,18 +67,18 @@ class _data_showState extends State<data_show> {
     "Delivered",
     "Completed"
   ];
-  String? driver_operation;
-  bool? when_load;
+  String? driver_operation = '';
+  bool? when_load = false;
   //////
-  String? status;
-  String? reason;
-  String? id_package;
-  String? from;
-  String? to;
-  String? p_price;
-  double? d_price;
-  String? who_willpay;
-  int? shipp_type;
+  String? status = '';
+  String? reason = '';
+  String? id_package = '';
+  String? from = '';
+  String? to = '';
+  String? p_price = '';
+  double? d_price = 0;
+  String? who_willpay = '';
+  int? shipp_type = 0;
 //////////////
   String? sender_name;
   String? img_sender;
@@ -127,6 +127,7 @@ class _data_showState extends State<data_show> {
         driver_operation = data['PackageDeteils']['driver_userName'];
 
         /////////////////////////
+        reason = data['PackageDeteils']['reason'];
         status = data['PackageDeteils']['status'];
         id_package = data['PackageDeteils']['packageId'].toString();
         from = data['PackageDeteils']['fromCity'];

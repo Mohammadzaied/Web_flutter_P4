@@ -12,13 +12,16 @@ class problems extends StatefulWidget {
 }
 
 class _problemsState extends State<problems> {
-  List type = ['Read', 'Unread', 'All'];
+  List type = ['Read', 'Unread', 'Replied', 'Not Replied', 'All'];
+  List type_user = ['Customer', 'Manager', 'Employee', 'Driver', 'All'];
   List sort = [
     'The recent',
     'The oldest',
   ];
   String sorting = 'The recent';
   String typing = 'All';
+  // String reply = 'All';
+  String typing_user = 'All';
   List<content_p> p_new = [];
 
   String formatDate(DateTime dateTime) {
@@ -47,7 +50,7 @@ class _problemsState extends State<problems> {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       p_news = data;
-      //print(data);
+      print(data);
       setState(() {
         p_new = buildMy_problems();
       });
@@ -64,12 +67,14 @@ class _problemsState extends State<problems> {
       String dateOnly = formatDate(dateTime);
       M.add(
         content_p(
+          type: p_news[i]['userType'],
           read: p_news[i]['seen'],
           img: urlStarter + p_news[i]['img'],
           title: p_news[i]['title'],
           id_problem: p_news[i]['id'],
           username: p_news[i]['username'],
           name: p_news[i]['name'],
+          reply: p_news[i]['reply'],
           date: dateOnly,
         ),
       );
@@ -100,6 +105,24 @@ class _problemsState extends State<problems> {
         return false;
       }
       if (typing == 'Unread' && order.read == true) {
+        return false;
+      }
+      if (typing == 'Replied' && order.reply == null) {
+        return false;
+      }
+      if (typing == 'Not Replied' && order.reply != null) {
+        return false;
+      }
+      if (typing_user == 'Customer' && order.type != 'customer') {
+        return false;
+      }
+      if (typing_user == 'Driver' && order.type != 'driver') {
+        return false;
+      }
+      if (typing_user == 'Manager' && order.type != 'manager') {
+        return false;
+      }
+      if (typing_user == 'Employee' && order.type != 'employee') {
         return false;
       }
 
@@ -147,7 +170,7 @@ class _problemsState extends State<problems> {
                 padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
                 width: 200,
                 child: DropdownButtonFormField(
-                  value: sorting,
+                  // value: sorting,
                   hint: Text('Sort', style: TextStyle(color: Colors.grey)),
                   decoration: theme_helper().text_form_style(
                     '',
@@ -172,7 +195,7 @@ class _problemsState extends State<problems> {
                 padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
                 width: 200,
                 child: DropdownButtonFormField(
-                  value: typing,
+                  //  value: typing,
                   hint: Text('Type', style: TextStyle(color: Colors.grey)),
                   decoration: theme_helper().text_form_style(
                     '',
@@ -186,6 +209,31 @@ class _problemsState extends State<problems> {
                     });
                   },
                   items: type.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
+                width: 200,
+                child: DropdownButtonFormField(
+                  // value: typing_user,
+                  hint: Text('User type', style: TextStyle(color: Colors.grey)),
+                  decoration: theme_helper().text_form_style(
+                    '',
+                    '',
+                    null,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                  onChanged: (newValue) {
+                    setState(() {
+                      typing_user = newValue as String;
+                    });
+                  },
+                  items: type_user.map((value) {
                     return DropdownMenuItem(
                       value: value,
                       child: Text(value),
@@ -275,6 +323,20 @@ class _problemsState extends State<problems> {
                             children: <InlineSpan>[
                               TextSpan(
                                 text: filteredReports[index].username,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ])),
+                        Spacer(),
+                        Text.rich(TextSpan(
+                            text: 'User type: ',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            children: <InlineSpan>[
+                              TextSpan(
+                                text: filteredReports[index].type,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
@@ -429,14 +491,18 @@ class _problemsState extends State<problems> {
 
 class content_p {
   final String date;
+  final String type;
   final int id_problem;
   final String name;
   final String username;
   final String img;
   final bool read;
   final String title;
+  final String? reply;
 
   content_p({
+    required this.reply,
+    required this.type,
     required this.read,
     required this.img,
     required this.date,
