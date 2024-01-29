@@ -14,16 +14,7 @@ class new_order extends StatefulWidget {
 
 class _new_orderState extends State<new_order> {
   List<package_new> pk_new = [];
-  List citylist = [
-    'Nablus',
-    'Tulkarm',
-    'Ramallah',
-    'Jenin',
-    'Qalqilya',
-    'Salfit',
-    'Hebron',
-    'None',
-  ];
+  List cities = [];
   List sort = [
     'The recent',
     'The oldest',
@@ -45,7 +36,7 @@ class _new_orderState extends State<new_order> {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       new_orders = data['result'];
-      print(new_orders);
+      // print(new_orders);
       setState(() {
         pk_new = buildMy_new_orders();
       });
@@ -96,6 +87,12 @@ class _new_orderState extends State<new_order> {
   @override
   void initState() {
     super.initState();
+    fetch_cities().then((List result) {
+      setState(() {
+        cities = result;
+        cities.add('None');
+      });
+    });
     fetchData_new_orders();
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
       await fetchData_new_orders();
@@ -123,11 +120,13 @@ class _new_orderState extends State<new_order> {
     }
 
     return pk_new.where((order) {
-      if (selectedCity_from!.isNotEmpty && (order.from != selectedCity_from)) {
+      if (selectedCity_from!.isNotEmpty &&
+          (order.from.toLowerCase() != selectedCity_from!.toLowerCase())) {
         return false;
       }
 
-      if (selectedCity_to!.isNotEmpty && (order.to != selectedCity_to)) {
+      if (selectedCity_to!.isNotEmpty &&
+          (order.to.toLowerCase() != selectedCity_to!.toLowerCase())) {
         return false;
       }
 
@@ -259,7 +258,7 @@ class _new_orderState extends State<new_order> {
                           selectedCity_from = newValue as String?;
                       });
                     },
-                    items: citylist.map((value) {
+                    items: cities.map((value) {
                       return DropdownMenuItem(
                         value: value,
                         child: Text(value),
@@ -292,7 +291,7 @@ class _new_orderState extends State<new_order> {
                           selectedCity_to = newValue as String?;
                       });
                     },
-                    items: citylist.map((value) {
+                    items: cities.map((value) {
                       return DropdownMenuItem(
                         value: value,
                         child: Text(value),

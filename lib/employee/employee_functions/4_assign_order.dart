@@ -47,6 +47,7 @@ class _assign_orderState extends State<assign_order> {
 
       new_drivers.add(
         driver_assign_to_order(
+          num: drivers_[i]['assignedPackagesNumber'],
           vacation: drivers_[i]['notAvailableDate'].toString(),
           city: drivers_[i]['city'],
           username: drivers_[i]['username'],
@@ -120,16 +121,7 @@ class _assign_orderState extends State<assign_order> {
   ];
   String sorting = 'The recent';
 
-  List citylist = [
-    'Nablus',
-    'Tulkarm',
-    'Ramallah',
-    'Jenin',
-    'Qalqilya',
-    'Salfit',
-    'Hebron',
-    'None'
-  ];
+  List cities = [];
   List packagetypes = ['Delivery', 'Receiving', 'None'];
   List searchtypes = ['Search by Name', 'Search by ID'];
 
@@ -140,6 +132,12 @@ class _assign_orderState extends State<assign_order> {
 
   @override
   void initState() {
+    fetch_cities().then((List result) {
+      setState(() {
+        cities = result;
+        cities.add('None');
+      });
+    });
     //fetchData_assign_orders();
     fetchData_drivers().then((value) => fetchData_assign_orders());
 
@@ -162,25 +160,25 @@ class _assign_orderState extends State<assign_order> {
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 0 &&
-          (order.city != selectedCity)) {
+          (order.city.toLowerCase() != selectedCity!.toLowerCase())) {
         return false;
       }
 
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 1 &&
-          (order.city != selectedCity)) {
+          (order.city.toLowerCase() != selectedCity!.toLowerCase())) {
         return false;
       }
 
       if (selectedtype == 'Delivery' &&
           selectedCity!.isNotEmpty &&
-          order.city != selectedCity) {
+          order.city.toLowerCase() != selectedCity!.toLowerCase()) {
         return false;
       }
       if (selectedtype == 'Receiving' &&
           selectedCity!.isNotEmpty &&
-          order.city != selectedCity) {
+          order.city.toLowerCase() != selectedCity!.toLowerCase()) {
         return false;
       }
 
@@ -321,7 +319,7 @@ class _assign_orderState extends State<assign_order> {
                           selectedCity = newValue as String?;
                       });
                     },
-                    items: citylist.map((value) {
+                    items: cities.map((value) {
                       return DropdownMenuItem(
                         value: value,
                         child: Text(value),

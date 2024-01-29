@@ -50,21 +50,18 @@ class _distribution_ordersState extends State<distribution_orders> {
     return p;
   }
 
-  List citylist = [
-    'Nablus',
-    'Tulkarm',
-    'Ramallah',
-    'Jenin',
-    'Qalqilya',
-    'Salfit',
-    'Hebron',
-    'None'
-  ];
+  List cities = [];
   String? serach_content;
 
   String? selectedCity;
 
   void initState() {
+    fetch_cities().then((List result) {
+      setState(() {
+        cities = result;
+        cities.add('None');
+      });
+    });
     setState(() {
       TabController_.index = 5;
     });
@@ -80,7 +77,8 @@ class _distribution_ordersState extends State<distribution_orders> {
     }
 
     return all_p.where((order) {
-      if (selectedCity!.isNotEmpty && (order.address != selectedCity)) {
+      if (selectedCity!.isNotEmpty &&
+          (order.address.toLowerCase() != selectedCity!.toLowerCase())) {
         return false;
       }
       if (serach_content!.isNotEmpty &&
@@ -145,7 +143,7 @@ class _distribution_ordersState extends State<distribution_orders> {
                             selectedCity = newValue as String?;
                         });
                       },
-                      items: citylist.map((value) {
+                      items: cities.map((value) {
                         return DropdownMenuItem(
                           value: value,
                           child: Text(value),

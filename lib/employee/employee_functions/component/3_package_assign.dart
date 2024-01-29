@@ -340,27 +340,46 @@ class _package_assignState extends State<package_assign> {
                               return DropdownMenuItem(
                                 value: value,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(value.img,
-                                                scale: 1,
-                                                headers: {
-                                                  'ngrok-skip-browser-warning':
-                                                      'true'
-                                                }),
-                                          )),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          width: 40,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(value.img,
+                                                    scale: 1,
+                                                    headers: {
+                                                      'ngrok-skip-browser-warning':
+                                                          'true'
+                                                    }),
+                                              )),
+                                        ),
+                                        SizedBox(
+                                          width: 3,
+                                        ),
+                                        Text('${value.name}  '),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text(value.name),
+                                    Text.rich(TextSpan(
+                                        text: 'N: ',
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.grey),
+                                        children: <InlineSpan>[
+                                          TextSpan(
+                                            text: '${value.num}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ])),
                                   ],
                                 ),
                               );
@@ -493,8 +512,10 @@ class driver_assign_to_order {
   final List<String> working_days;
   final String city;
   final String vacation;
+  final int num;
 
   driver_assign_to_order({
+    required this.num,
     required this.city,
     required this.vacation,
     required this.working_days,

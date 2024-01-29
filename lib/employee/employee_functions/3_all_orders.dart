@@ -63,16 +63,7 @@ class _all_ordersState extends State<all_orders> {
     return orders;
   }
 
-  List citylist = [
-    'Nablus',
-    'Tulkarm',
-    'Ramallah',
-    'Jenin',
-    'Qalqilya',
-    'Salfit',
-    'Hebron',
-    'None'
-  ];
+  List cities = [];
 
   List<String> status = [
     "Under review",
@@ -100,6 +91,12 @@ class _all_ordersState extends State<all_orders> {
 
   @override
   void initState() {
+    fetch_cities().then((List result) {
+      setState(() {
+        cities = result;
+        cities.add('None');
+      });
+    });
     fetchData_all_orders();
     setState(() {
       TabController_.index = 3;
@@ -125,25 +122,25 @@ class _all_ordersState extends State<all_orders> {
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 0 &&
-          (order.city != selectedCity)) {
+          (order.city.toLowerCase() != selectedCity!.toLowerCase())) {
         return false;
       }
 
       if (selectedtype == '' &&
           selectedCity!.isNotEmpty &&
           order.package_type == 1 &&
-          (order.city != selectedCity)) {
+          (order.city.toLowerCase() != selectedCity!.toLowerCase())) {
         return false;
       }
 
       if (selectedtype == 'Delivery' &&
           selectedCity!.isNotEmpty &&
-          order.city != selectedCity) {
+          order.city.toLowerCase() != selectedCity!.toLowerCase()) {
         return false;
       }
       if (selectedtype == 'Receiving' &&
           selectedCity!.isNotEmpty &&
-          order.city != selectedCity) {
+          order.city.toLowerCase() != selectedCity!.toLowerCase()) {
         return false;
       }
 
@@ -282,7 +279,7 @@ class _all_ordersState extends State<all_orders> {
                           selectedCity = newValue as String?;
                       });
                     },
-                    items: citylist.map((value) {
+                    items: cities.map((value) {
                       return DropdownMenuItem(
                         value: value,
                         child: Text(value),

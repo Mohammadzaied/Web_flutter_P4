@@ -126,20 +126,17 @@ class _create_orderState extends State<create_order> {
     'Paypal',
     'Cash delivery',
   ];
-  List citylist = [
-    'Nablus',
-    'Tulkarm',
-    'Ramallah',
-    'Jenin',
-    'Qalqilya',
-    'Salfit',
-    'Hebron'
-  ];
+  List cities = [];
   String? toCity;
   late int selectedValue;
 
   @override
   void initState() {
+    fetch_cities().then((List result) {
+      setState(() {
+        cities = result;
+      });
+    });
     fetchData();
     setState(() {
       TabController_.index = 1;
@@ -909,7 +906,7 @@ class _create_orderState extends State<create_order> {
                                 '',
                                 Icons.location_city,
                               ),
-                              items: citylist.map((value) {
+                              items: cities.map((value) {
                                 return DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -992,7 +989,8 @@ class _create_orderState extends State<create_order> {
                                         Text(
                                           '+ Opening price:',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: 20),
+                                              color: Colors.black,
+                                              fontSize: 20),
                                         ),
                                         Text(
                                           openingPrice.toString() + '\$',
@@ -1012,7 +1010,8 @@ class _create_orderState extends State<create_order> {
                                         Text(
                                           '+ Package size price:',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: 20),
+                                              color: Colors.black,
+                                              fontSize: 20),
                                         ),
                                         Text(
                                           boxSizePrice.toString() + '\$',
@@ -1032,7 +1031,8 @@ class _create_orderState extends State<create_order> {
                                         Text(
                                           '   Delivery Price/Km:',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: 20),
+                                              color: Colors.black,
+                                              fontSize: 20),
                                         ),
                                         Text(
                                           pricePerKm.toStringAsFixed(2),
@@ -1052,7 +1052,8 @@ class _create_orderState extends State<create_order> {
                                         Text(
                                           '   Distance:',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: 20),
+                                              color: Colors.black,
+                                              fontSize: 20),
                                         ),
                                         distance > 0
                                             ? Text(
@@ -1075,7 +1076,8 @@ class _create_orderState extends State<create_order> {
                                         Text(
                                           '+ Distance delivery price:',
                                           style: TextStyle(
-                                              color: Colors.grey, fontSize: 20),
+                                              color: Colors.black,
+                                              fontSize: 20),
                                         ),
                                         distance > 0
                                             ? Text(
@@ -1105,7 +1107,7 @@ class _create_orderState extends State<create_order> {
                                           Text(
                                             '% Discount:',
                                             style: TextStyle(
-                                                color: Colors.grey,
+                                                color: Colors.black,
                                                 fontSize: 20),
                                           ),
                                           Text('${discount}%',

@@ -30,16 +30,7 @@ class _edit_driverState extends State<edit_driver> {
   bool isHovered4 = false;
 
   /////////////////////
-  List citylist = [
-    'Nablus',
-    'Tulkarm',
-    'Ramallah',
-    'Jenin',
-    'Qalqilya',
-    'Salfit',
-    'Hebron',
-    'None'
-  ];
+  List cities = [];
   String? selectedCity;
   String? new_vehicle_id;
 
@@ -259,6 +250,11 @@ class _edit_driverState extends State<edit_driver> {
 
   @override
   void initState() {
+    fetch_cities().then((List result) {
+      setState(() {
+        cities = result;
+      });
+    });
     setState(() {
       TabController_.index = 7;
     });
@@ -992,16 +988,16 @@ class _edit_driverState extends State<edit_driver> {
                                 borderRadius: BorderRadius.circular(10),
                                 onChanged: (newValue) {
                                   setState(() {
-                                    if (newValue == 'None') {
-                                      selectedCity = '';
-                                      is_selected = false;
-                                    } else {
-                                      selectedCity = newValue as String?;
-                                      is_selected = true;
-                                    }
+                                    // if (newValue == 'None') {
+                                    //   selectedCity = '';
+                                    //   is_selected = false;
+                                    // } else {
+                                    selectedCity = newValue as String?;
+                                    is_selected = true;
+                                    //}
                                   });
                                 },
-                                items: citylist.map((value) {
+                                items: cities.map((value) {
                                   return DropdownMenuItem(
                                     value: value,
                                     child: Text(value),

@@ -46,18 +46,15 @@ class _edit_profileState extends State<edit_profile> {
   String? street;
   String? phone;
   String? townStreet;
-  List citylist = [
-    'Nablus',
-    'Tulkarm',
-    'Ramallah',
-    'Jenin',
-    'Qalqilya',
-    'Salfit',
-    'Hebron'
-  ];
+  List cities = [];
 
   @override
   void initState() {
+    fetch_cities().then((List result) {
+      setState(() {
+        cities = result;
+      });
+    });
     super.initState();
     fname = GetStorage().read("Fname");
     lname = GetStorage().read("Lname");
@@ -376,7 +373,7 @@ class _edit_profileState extends State<edit_profile> {
                                 isExpanded: true,
                                 hint: Text('Select City',
                                     style: TextStyle(color: Colors.grey)),
-                                items: citylist.map((value) {
+                                items: cities.map((value) {
                                   return DropdownMenuItem(
                                     value: value,
                                     child: Text(value),
