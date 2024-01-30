@@ -36,8 +36,13 @@ late Widget widget5;
 late Widget widget6;
 late Widget widget7;
 late Widget widget8;
-
 late TabController TabController_;
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
+final GlobalKey<NavigatorState> shellNavigatorKey2 =
+    GlobalKey<NavigatorState>(debugLabel: 'shell2');
 
 class main_page extends StatefulWidget {
   const main_page({
@@ -161,12 +166,7 @@ void _onItemTapped(int index, BuildContext context) {
 }
 
 /////////////////////////////////
-final GlobalKey<NavigatorState> _rootNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _shellNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shell');
-final GlobalKey<NavigatorState> _shellNavigatorKey2 =
-    GlobalKey<NavigatorState>(debugLabel: 'shell2');
+
 final GoRouter Router_pages = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/',
@@ -315,7 +315,7 @@ final GoRouter Router_pages = GoRouter(
       ],
     ),
     ShellRoute(
-      navigatorKey: _shellNavigatorKey2,
+      navigatorKey: shellNavigatorKey2,
       builder: (BuildContext context, GoRouterState state, Widget child) {
         return main_page_admin(child: child);
       },

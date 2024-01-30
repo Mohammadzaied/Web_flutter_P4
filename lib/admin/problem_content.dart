@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/admin/main_page_admin.dart';
+import 'package:flutter_application_1/employee/main_page_employee.dart';
 import 'package:flutter_application_1/style/common/theme_h.dart';
 
 import 'package:go_router/go_router.dart';
@@ -356,6 +357,8 @@ class _problem_contentState extends State<problem_content> {
                                   ),
                                 ),
                                 onPressed: () {
+                                  //GoRouter.of(context).go('/problem');
+
                                   GoRouter.of(context).go('/problem_reports');
                                 },
                               ),

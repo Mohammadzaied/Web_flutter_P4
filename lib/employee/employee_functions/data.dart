@@ -127,7 +127,7 @@ class _data_showState extends State<data_show> {
         driver_operation = data['PackageDeteils']['driver_userName'];
 
         /////////////////////////
-        reason = data['PackageDeteils']['reason'];
+        reason = data['PackageDeteils']['driverComment'];
         status = data['PackageDeteils']['status'];
         id_package = data['PackageDeteils']['packageId'].toString();
         from = data['PackageDeteils']['fromCity'];
@@ -142,7 +142,6 @@ class _data_showState extends State<data_show> {
                 : data['PackageDeteils']['shippingType'] == 'Package1'
                     ? 2
                     : 3;
-
 // //////////////
         sender_name = data['PackageDeteils']['send_user']['Fname'] +
             ' ' +
