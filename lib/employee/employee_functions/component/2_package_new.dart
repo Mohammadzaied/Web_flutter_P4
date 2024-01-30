@@ -217,7 +217,7 @@ class _package_newState extends State<package_new> {
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                         children: <InlineSpan>[
                           TextSpan(
-                            text: '${widget.price}₪',
+                            text: '${widget.price} \$',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black,
