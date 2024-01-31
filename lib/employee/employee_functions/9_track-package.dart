@@ -47,12 +47,12 @@ class _track_pState extends State<track_p> {
   bool result = false;
   bool isAllowdExpand = true;
   Future<void> fetchData() async {
+   isAllowdExpand = true;
     var url = urlStarter +
         "/customer/packageState?packageId=" +
         tracking_number.toString();
     print(url);
-    final response = await http
-        .get(Uri.parse(url), headers: {'ngrok-skip-browser-warning': 'true'});
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       print(data);
@@ -72,7 +72,6 @@ class _track_pState extends State<track_p> {
               DateFormat('yyyy-MM-ddTHH:mm:ss').parse(recieveDateString);
           deliverDate =
               DateFormat('yyyy-MM-ddTHH:mm:ss').parse(deliverDateString);
-          print(driver);
           if (driver == null) {
             driverName = " ";
             vehicleNumber = " ";
@@ -118,10 +117,10 @@ class _track_pState extends State<track_p> {
   }
 
   void initState() {
-    _focusNode.requestFocus();
     setState(() {
       TabController_.index = 6;
     });
+    _focusNode.requestFocus();
     super.initState();
     if (widget.isSearchBox) {
       result = false;
@@ -149,42 +148,43 @@ class _track_pState extends State<track_p> {
               ),
               Column(
                 children: [
-                  Form(
-                    key: formState2,
-                    child: Center(
+                  Center(
+                    child: Form(
+                      key: formState2,
                       child: Container(
                         width: 400,
-                        child: TextFormField(
-                          onSaved: (newValue) {
-                            tracking_number = newValue;
-                          },
-                          validator: (val) {
-                            if (val!.isEmpty)
-                              return "Please enter tracking number";
-
-                            return null;
-                          },
-                          focusNode: _focusNode,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: 'Enter tracking package number',
-                            filled: true,
-                            fillColor: Colors.white,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(color: Colors.grey)),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Colors.grey.shade400)),
-                            errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 2)),
-                            focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 2)),
+                        child: Center(
+                          child: TextFormField(
+                            onSaved: (newValue) {
+                              tracking_number = newValue;
+                            },
+                            validator: (val) {
+                              if (val!.isEmpty)
+                                return "Please enter tracking number";
+                              return null;
+                            },
+                            focusNode: _focusNode,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: 'Enter tracking package number',
+                              filled: true,
+                              fillColor: Colors.white,
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: Colors.grey)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide:
+                                      BorderSide(color: Colors.grey.shade400)),
+                              errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide:
+                                      BorderSide(color: Colors.red, width: 2)),
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide:
+                                      BorderSide(color: Colors.red, width: 2)),
+                            ),
                           ),
                         ),
                       ),
