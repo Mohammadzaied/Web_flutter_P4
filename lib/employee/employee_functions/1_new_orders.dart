@@ -148,8 +148,8 @@ class _new_orderState extends State<new_order> {
   Widget build(BuildContext context) {
     List<package_new> filteredOrders = _filterOrders();
     sorting == 'The recent'
-        ? filteredOrders.sort((a, b) => a.id.compareTo(b.id))
-        : filteredOrders.sort((b, a) => a.id.compareTo(b.id));
+        ? filteredOrders.sort((b, a) => a.id.compareTo(b.id))
+        : filteredOrders.sort((a, b) => a.id.compareTo(b.id));
 
     return ListView(children: [
       Row(
