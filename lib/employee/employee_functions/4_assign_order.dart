@@ -209,8 +209,9 @@ class _assign_orderState extends State<assign_order> {
     List<package_assign> filteredOrders = _filterOrders();
 
     sorting == 'The recent'
-        ? filteredOrders.sort((a, b) => a.id.compareTo(b.id))
-        : filteredOrders.sort((b, a) => a.id.compareTo(b.id));
+        ? filteredOrders.sort((b, a) => a.id.compareTo(b.id))
+        : filteredOrders.sort((a, b) => a.id.compareTo(b.id));
+
     return ListView(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
