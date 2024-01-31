@@ -33,7 +33,13 @@ class _Location_pState extends State<Location_p> {
     Latefrom = widget.Latefrom!;
     Lateto = widget.Lateto!;
     longto = widget.longto!;
+    print('////////////////////////////////////////');
+    print(Latefrom);
 
+    print(longfrom);
+    print(Lateto);
+
+    print(longto);
     _addMarker(LatLng(Latefrom, longfrom), 'Package From');
     _addMarker(LatLng(Lateto, longto), 'Package To');
     super.initState();
