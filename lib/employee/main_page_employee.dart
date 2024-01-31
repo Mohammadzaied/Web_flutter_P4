@@ -278,11 +278,11 @@ final GoRouter Router_pages = GoRouter(
               Latefrom: double.parse(
                   state.uri.queryParameters['Latefrom'].toString()),
               longfrom: double.parse(
-                  state.uri.queryParameters['Latefrom'].toString()),
-              Lateto: double.parse(
-                  state.uri.queryParameters['Latefrom'].toString()),
-              longto: double.parse(
-                  state.uri.queryParameters['Latefrom'].toString()),
+                  state.uri.queryParameters['longfrom'].toString()),
+              Lateto:
+                  double.parse(state.uri.queryParameters['Lateto'].toString()),
+              longto:
+                  double.parse(state.uri.queryParameters['longto'].toString()),
             );
           },
         ),
