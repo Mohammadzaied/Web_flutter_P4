@@ -186,7 +186,7 @@ class _data_showState extends State<data_show> {
           driver_rec_time = time;
         }
 
-        if (status == 'Delivered' || status == 'Completed') {
+        if (status == 'Completed') {
           driver_send_name = data['packagePriceDetails']['deliverDriver']
                   ['Fname'] +
               ' ' +
@@ -198,6 +198,24 @@ class _data_showState extends State<data_show> {
 
           DateTime dateTime =
               DateTime.parse(data['packagePriceDetails']['deliverDate']);
+          // Extract date and time components
+          String date =
+              "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+          String time =
+              "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}";
+          driver_send_date = date;
+          driver_send_timr = time;
+        }
+        if (status == 'Delivered') {
+          driver_send_name = data['PackageDeteils']['driver']['Fname'] +
+              ' ' +
+              data['PackageDeteils']['driver']['Lname'];
+          driver_send_username = data['PackageDeteils']['driver']['userName'];
+          driver_send_paidmoney =
+              data['PackageDeteils']['packagePrice'].toString();
+
+          DateTime dateTime =
+              DateTime.parse(data['PackageDeteils']['deliverDate']);
           // Extract date and time components
           String date =
               "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
